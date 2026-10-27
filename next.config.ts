@@ -1,9 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
+  // App interamente dietro login: le pagine si generano a ogni richiesta.
   turbopack: {
     rules: {
       "*.css": {

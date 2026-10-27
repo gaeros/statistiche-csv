@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Statistiche da CSV
 
-## Getting Started
+App web per caricare file CSV ed Excel, trasformarli in tabelle del database e vederli in grafici
+con filtri. Ogni utente vede solo i propri dati. Registrazione solo su invito.
 
-First, run the development server:
+Stack: Next.js (App Router, TypeScript), Supabase (PostgreSQL, Auth, Storage), Tailwind CSS.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Avvio sul PC:** [docs/AVVIO-LOCALE.md](docs/AVVIO-LOCALE.md)
+- **Specifica funzionale:** `SPEC.md` del progetto (v0.6)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Comandi
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Comando | Cosa fa |
+|---------|---------|
+| `npm run dev` | avvia l'app su http://localhost:3000 |
+| `npm run build` | compila la versione di produzione |
+| `npm run lint` | controlla il codice |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Struttura
 
-## Learn More
+| Percorso | Contenuto |
+|----------|-----------|
+| `src/app/accedi`, `password-dimenticata`, `imposta-password`, `auth/*` | login, recupero password, ritorno da email e Google |
+| `src/app/(app)` | pagine riservate agli utenti collegati |
+| `src/lib/supabase` | client Supabase (browser, server, proxy, admin solo lato server) |
+| `src/proxy.ts` | rinnova la sessione e manda al login chi non è collegato |
+| `supabase/migrations` | struttura del database, regole RLS e funzioni |
+| `supabase/templates` | modelli delle email di invito e recupero password |
 
-To learn more about Next.js, take a look at the following resources:
+## Stato
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [x] Fase 0: base locale, login solo su invito, email/password e Google
+- [ ] Fase 1: import CSV/Excel
+- [ ] Fase 2: statistiche
+- [ ] Fase 3: grafici e filtri
+- [ ] Fase 4: rilascio su Vercel
