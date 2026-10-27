@@ -50,7 +50,9 @@ applicarle, scegline **uno**:
 
 **Modo A, il più semplice (dal pannello):**
 apri *SQL Editor → New query*, incolla il contenuto di ogni file di `supabase/migrations/` **in ordine
-di nome** e premi **Run**. Deve comparire "Success. No rows returned".
+di nome** (uno alla volta, una query per file) e premi **Run**. Deve comparire "Success. No rows returned".
+Quando arrivano nuove versioni dell'app con nuovi file di migrazione, si applicano allo stesso modo solo
+i file nuovi; con il Modo B basta rilanciare `npx supabase db push`.
 
 **Modo B, con la Supabase CLI (quello che useremo per la produzione):**
 

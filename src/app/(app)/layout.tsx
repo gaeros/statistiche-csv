@@ -14,6 +14,7 @@ export default async function LayoutApp({ children }: LayoutProps<"/">) {
           </Link>
           <nav className="flex gap-4 text-sm">
             <Link href="/dataset" className="link">I miei dataset</Link>
+            <Link href="/importa" className="link">Importa</Link>
             {amministratore && (
               <Link href="/admin/inviti" className="link">Inviti</Link>
             )}
@@ -26,7 +27,7 @@ export default async function LayoutApp({ children }: LayoutProps<"/">) {
           </div>
         </div>
       </header>
-      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">{children}</main>
+      <main className="mx-auto w-full min-w-0 max-w-6xl flex-1 px-4 py-8">{children}</main>
     </>
   );
 }
