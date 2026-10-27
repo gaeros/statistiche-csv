@@ -1,4 +1,4 @@
-// Barre orizzontali semplici in CSS: i grafici veri arrivano con la Fase 3.
+// Barre orizzontali semplici in CSS, per elenchi ordinati come le correlazioni.
 export function Barre({
   righe,
   formattaValore = (n) => n.toLocaleString("it-IT"),
