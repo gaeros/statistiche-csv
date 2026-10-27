@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { formattaDataOra, formattaNumero, formattaValore } from "@/lib/formato";
+import { formattaValore } from "@/lib/formato";
 import { createClient } from "@/lib/supabase/server";
 import { Azioni } from "./Azioni";
+import { Intestazione } from "./Intestazione";
 
 const PER_PAGINA = 50;
 
@@ -44,15 +45,16 @@ export default async function PaginaDettaglio({ params, searchParams }: PageProp
 
   return (
     <div className="space-y-6">
-      <div className="space-y-1">
-        <Link href="/dataset" className="link text-sm">← I miei dataset</Link>
-        <h1 className="font-mono text-2xl font-semibold break-all">{d.nome}</h1>
-        <p className="text-sm text-slate-500 break-all">
-          {d.nome_originale}
-          {d.foglio ? ` · foglio ${d.foglio}` : ""} · importato il {formattaDataOra(d.created_at)} ·{" "}
-          {formattaNumero(d.righe)} righe · {colonne.length} colonne
-        </p>
-      </div>
+      <Intestazione
+        id={d.id}
+        nome={d.nome}
+        nomeOriginale={d.nome_originale}
+        foglio={d.foglio}
+        createdAt={d.created_at}
+        righe={d.righe}
+        colonne={colonne.length}
+        attiva="dati"
+      />
 
       {avvisi.length > 0 && (
         <details className="scheda text-sm">

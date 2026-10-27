@@ -35,3 +35,16 @@ export function formattaValore(valore: unknown, tipo: string): string {
       return String(valore);
   }
 }
+
+const statistica = new Intl.NumberFormat("it-IT", { maximumFractionDigits: 2 });
+
+// Numeri calcolati (medie, quartili...): al massimo due decimali.
+export function formattaStatistica(n: number | string | null | undefined): string {
+  if (n === null || n === undefined || n === "") return "–";
+  return statistica.format(Number(n));
+}
+
+export function formattaPercentuale(parte: number, totale: number): string {
+  if (!totale) return "–";
+  return `${statistica.format((parte / totale) * 100)}%`;
+}
