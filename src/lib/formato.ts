@@ -1,10 +1,13 @@
 // Formattazione italiana di numeri e date (SPEC §6.3).
 
 const numero = new Intl.NumberFormat("it-IT", { maximumFractionDigits: 10 });
-const data = new Intl.DateTimeFormat("it-IT", { dateStyle: "short", timeZone: "UTC" });
+const data = new Intl.DateTimeFormat("it-IT", { day: "2-digit", month: "2-digit", year: "numeric", timeZone: "UTC" });
 const dataOra = new Intl.DateTimeFormat("it-IT", {
-  dateStyle: "short",
-  timeStyle: "short",
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
   timeZone: "Europe/Rome",
 });
 

@@ -72,7 +72,12 @@ export default async function PaginaDettaglio({ params, searchParams }: PageProp
               {colonne.map((c) => {
                 const attiva = ordina === c.nome;
                 return (
-                  <th key={c.nome} className="whitespace-nowrap px-3 py-2 font-medium">
+                  <th
+                    key={c.nome}
+                    className={`whitespace-nowrap px-3 py-2 font-medium ${
+                      c.tipo === "intero" || c.tipo === "decimale" ? "text-right" : ""
+                    }`}
+                  >
                     <Link
                       href={link({ ordina: c.nome, dir: attiva && !discendente ? "desc" : "asc", pagina: 1 })}
                       className="hover:underline"
