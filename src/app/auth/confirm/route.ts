@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { destinazioneSicura } from "@/lib/redirect";
 
 // Link delle email di Supabase (invito, recupero password, conferma email).
-// I modelli email devono puntare qui con token_hash: vedi docs/AVVIO-LOCALE.md.
+// Usato dai modelli email personalizzati di supabase/templates (link con token_hash).
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = request.nextUrl;
   const tokenHash = searchParams.get("token_hash");

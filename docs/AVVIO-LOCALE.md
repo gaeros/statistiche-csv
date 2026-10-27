@@ -70,12 +70,9 @@ npx supabase db push          # applica le migrazioni mancanti
 2. **Solo su invito** — *Authentication → Hooks* (in alcune versioni *Auth Hooks*) → **Add hook** →
    **Before User Created** → tipo **Postgres** → schema `public`, funzione `hook_solo_su_invito` →
    **Create**. Da questo momento nessuno può creare un account se la sua email non è nell'elenco inviti.
-3. **Modelli email** — *Authentication → Emails → Templates*. Sostituisci il testo di due modelli con
-   quello dei file nel repository:
-   - **Invite user** → contenuto di `supabase/templates/invito.html`
-   - **Reset password** → contenuto di `supabase/templates/recupero.html`
-
-   Servono perché i link delle email portino alla pagina dell'app che completa l'accesso.
+3. **Modelli email**: non serve toccarli. L'app funziona con i modelli predefiniti di Supabase.
+   (Sul piano gratuito si possono modificare solo dopo aver configurato un servizio SMTP proprio; in
+   quel caso i testi in italiano sono pronti in `supabase/templates/`.)
 
 ## 6. Diventare amministratore e creare il tuo account
 
@@ -133,6 +130,6 @@ Prova: esci dall'app e premi **Accedi con Google**. Un'email non invitata riceve
 |---------|-----------------|
 | `Variabile d'ambiente mancante` all'avvio | `.env.local` non c'è o ha una riga vuota; dopo averlo modificato riavvia `npm run dev` |
 | "Email o password non corretti" | password sbagliata, o utente non creato (punto 6) |
-| Il link dell'email porta a "Link non valido" | i modelli email non sono stati aggiornati (punto 5.3) o il link è scaduto |
+| Il link dell'email porta a "Link non valido" | il link è scaduto o è già stato usato: richiedine uno nuovo; controlla anche Site URL e Redirect URLs (punto 5.1) |
 | Login Google: "redirect_uri_mismatch" | l'indirizzo di callback in Google non coincide con quello mostrato da Supabase |
 | Il progetto Supabase non risponde | il progetto gratuito va in pausa dopo giorni di inattività: riattivalo dal pannello |

@@ -29,7 +29,7 @@ export async function invita(_prev: StatoForm, formData: FormData): Promise<Stat
 
   if (inviaEmail) {
     const { error: errInvito } = await createAdminClient().auth.admin.inviteUserByEmail(email, {
-      redirectTo: `${siteUrl()}/imposta-password`,
+      redirectTo: `${siteUrl()}/auth/benvenuto`,
     });
     if (errInvito) {
       revalidatePath("/admin/inviti");
