@@ -13,4 +13,6 @@ psql -d "$DB" -q -v ON_ERROR_STOP=1 -f supabase/tests/stub-supabase.sql
 for migrazione in supabase/migrations/*.sql; do
   psql -d "$DB" -q -v ON_ERROR_STOP=1 -f "$migrazione"
 done
-psql -d "$DB" -q -v ON_ERROR_STOP=1 -o /dev/null -f supabase/tests/isolamento.sql 2>&1 | sed "s/^psql:[^ ]* //"
+for test in supabase/tests/isolamento.sql supabase/tests/statistiche.sql; do
+  psql -d "$DB" -q -v ON_ERROR_STOP=1 -o /dev/null -f "$test" 2>&1 | sed "s/^psql:[^ ]* //"
+done

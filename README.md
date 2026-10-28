@@ -34,6 +34,6 @@ Stack: Next.js (App Router, TypeScript), Supabase (PostgreSQL, Auth, Storage), T
 
 - [x] Fase 0: base locale, login solo su invito, email/password e Google
 - [x] Fase 1: import CSV/Excel
-- [ ] Fase 2: statistiche
+- [x] Fase 2: statistiche
 - [ ] Fase 3: grafici e filtri
 - [ ] Fase 4: rilascio su Vercel
