@@ -1,11 +1,13 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useActionState } from "react";
 import { Messaggio } from "@/components/Messaggio";
 import { accedi, accediConGoogle } from "./actions";
 
 export function FormAccesso({ errore, ok }: { errore?: string; ok?: string }) {
+  const t = useTranslations("accedi");
   const [stato, azione, inCorso] = useActionState(accedi, undefined);
 
   return (
@@ -21,42 +23,40 @@ export function FormAccesso({ errore, ok }: { errore?: string; ok?: string }) {
             <path fill="#FBBC05" d="M5.3 14.3a7.2 7.2 0 0 1 0-4.6V6.6h-4a12 12 0 0 0 0 10.8l4-3.1z" />
             <path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 1.3 6.6l4 3.1c.9-2.9 3.6-4.9 6.7-4.9z" />
           </svg>
-          Accedi con Google
+          {t("google")}
         </button>
       </form>
 
       <div className="flex items-center gap-3 text-xs text-slate-500">
         <span className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
-        oppure con email
+        {t("oppureEmail")}
         <span className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
       </div>
 
       <form action={azione} className="space-y-4">
         <label className="block space-y-1">
-          <span className="text-sm font-medium">Email</span>
+          <span className="text-sm font-medium">{t("email")}</span>
           <input name="email" type="email" autoComplete="email" required className="campo" />
         </label>
         <label className="block space-y-1">
-          <span className="text-sm font-medium">Password</span>
+          <span className="text-sm font-medium">{t("password")}</span>
           <input name="password" type="password" autoComplete="current-password" required className="campo" />
         </label>
         <button type="submit" disabled={inCorso} className="bottone w-full">
-          {inCorso ? "Accesso in corso…" : "Accedi"}
+          {inCorso ? t("inCorso") : t("invio")}
         </button>
       </form>
 
       <div className="space-y-2 text-center text-sm">
         <Link href="/password-dimenticata" className="link">
-          Password dimenticata?
+          {t("dimenticata")}
         </Link>
-        <p className="text-slate-500">
-          Non hai un account? La registrazione è solo su invito.
-        </p>
+        <p className="text-slate-500">{t("soloInvito")}</p>
         <Link href="/benvenuto" className="block text-xs text-slate-500 hover:underline">
-          Cos&apos;è questa app?
+          {t("cosE")}
         </Link>
         <Link href="/privacy" className="block text-xs text-slate-500 hover:underline">
-          Informativa privacy
+          {t("privacy")}
         </Link>
       </div>
     </div>

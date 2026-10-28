@@ -20,7 +20,15 @@ export type FileLetto = {
   separatore?: string;
 };
 
-export class ErroreLettura extends Error {}
+// L'errore porta una chiave del gruppo "importa" (e_...): chi lo mostra lo traduce nella lingua dell'utente.
+export class ErroreLettura extends Error {
+  constructor(
+    public chiave: string,
+    public valori?: Record<string, string | number>,
+  ) {
+    super(chiave);
+  }
+}
 
 export const ESTENSIONI_CSV = ["csv", "tsv", "txt"];
 export const ESTENSIONI_EXCEL = ["xlsx", "xls"];
@@ -74,7 +82,7 @@ export function leggiCsv(testo: string, separatore?: string): { righe: string[][
   });
   const gravi = esito.errors.filter((e) => e.type === "Quotes");
   if (gravi.length > 0 && esito.data.length === 0) {
-    throw new ErroreLettura("Il file CSV non è leggibile: virgolette non chiuse.");
+    throw new ErroreLettura("e_csvVirgolette");
   }
   return { righe: togliRigheVuoteInFondo(esito.data), separatore: esito.meta.delimiter };
 }
@@ -117,9 +125,9 @@ export function leggiExcel(dati: ArrayBuffer): Foglio[] {
   } catch (e) {
     const msg = String((e as Error)?.message ?? "").toLowerCase();
     if (msg.includes("password") || msg.includes("encrypt")) {
-      throw new ErroreLettura("Il file Excel è protetto da password.");
+      throw new ErroreLettura("e_excelPassword");
     }
-    throw new ErroreLettura("Il file Excel è danneggiato o non è un vero file Excel.");
+    throw new ErroreLettura("e_excelDanneggiato");
   }
 
   return libro.SheetNames.map((nome) => {
@@ -150,23 +158,23 @@ export async function leggiFile(
 ): Promise<FileLetto> {
   const est = estensione(file.name);
   const dati = await file.arrayBuffer();
-  if (dati.byteLength === 0) throw new ErroreLettura("Il file è vuoto.");
+  if (dati.byteLength === 0) throw new ErroreLettura("e_vuoto");
 
   if (ESTENSIONI_EXCEL.includes(est)) {
     return { tipo: "excel", fogli: leggiExcel(dati) };
   }
   if (!ESTENSIONI_CSV.includes(est)) {
-    throw new ErroreLettura(`Formato non supportato (.${est}). Usa CSV, TSV, TXT, XLSX o XLS.`);
+    throw new ErroreLettura("e_formato", { est });
   }
 
   const byte = new Uint8Array(dati);
   // Un file di testo non contiene byte nulli: se ci sono, non è un CSV.
   if (byte.subarray(0, 4096).includes(0)) {
-    throw new ErroreLettura("Il file non sembra un CSV di testo (contenuto binario).");
+    throw new ErroreLettura("e_binario");
   }
   const { testo, encoding } = decodifica(byte, opzioni.encoding);
   const { righe, separatore } = leggiCsv(testo, opzioni.separatore ?? (est === "tsv" ? "\t" : undefined));
-  if (righe.length === 0) throw new ErroreLettura("Il file è vuoto.");
+  if (righe.length === 0) throw new ErroreLettura("e_vuoto");
   return {
     tipo: "csv",
     encoding,

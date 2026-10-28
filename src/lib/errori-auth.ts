@@ -1,18 +1,17 @@
-// Traduce in italiano i messaggi più comuni di Supabase Auth.
-export function erroreAuth(messaggio: string | undefined | null): string {
-  if (!messaggio) return "Si è verificato un errore. Riprova.";
+// Traduce i messaggi più comuni di Supabase Auth. `t` è il traduttore del gruppo "erroriAuth".
+import type { Traduttore } from "@/i18n/lingue";
+
+export type { Traduttore };
+
+export function erroreAuth(t: Traduttore, messaggio: string | undefined | null): string {
+  if (!messaggio) return t("generico");
   const m = messaggio.toLowerCase();
-  if (m.includes("invalid login credentials")) return "Email o password non corretti.";
-  if (m.includes("email not confirmed")) return "Devi prima confermare l'email: controlla la posta.";
-  if (m.includes("invito") || m.includes("signups not allowed") || m.includes("not allowed"))
-    return "Registrazione solo su invito: questo indirizzo email non è stato invitato.";
-  if (m.includes("password should be") || m.includes("weak password"))
-    return "La password è troppo debole: usa almeno 8 caratteri.";
-  if (m.includes("same password") || m.includes("different from the old"))
-    return "La nuova password deve essere diversa da quella attuale.";
-  if (m.includes("rate limit") || m.includes("too many"))
-    return "Troppi tentativi. Aspetta qualche minuto e riprova.";
-  if (m.includes("expired") || m.includes("invalid") && m.includes("token"))
-    return "Il link è scaduto o non è più valido. Richiedine uno nuovo.";
+  if (m.includes("invalid login credentials")) return t("credenziali");
+  if (m.includes("email not confirmed")) return t("nonConfermata");
+  if (m.includes("invito") || m.includes("signups not allowed") || m.includes("not allowed")) return t("soloInvito");
+  if (m.includes("password should be") || m.includes("weak password")) return t("passwordDebole");
+  if (m.includes("same password") || m.includes("different from the old")) return t("passwordUguale");
+  if (m.includes("rate limit") || m.includes("too many")) return t("troppiTentativi");
+  if (m.includes("expired") || (m.includes("invalid") && m.includes("token"))) return t("linkScaduto");
   return messaggio;
 }

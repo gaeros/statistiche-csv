@@ -1,4 +1,5 @@
 import type { EmailOtpType } from "@supabase/supabase-js";
+import { getTranslations } from "next-intl/server";
 import { NextResponse, type NextRequest } from "next/server";
 import { erroreAuth } from "@/lib/errori-auth";
 import { createClient } from "@/lib/supabase/server";
@@ -11,6 +12,7 @@ export async function GET(request: NextRequest) {
   const tokenHash = searchParams.get("token_hash");
   const tipo = searchParams.get("type") as EmailOtpType | null;
   const next = destinazioneSicura(searchParams.get("next"));
+  const te = await getTranslations("erroriAuth");
 
   if (tokenHash && tipo) {
     const supabase = await createClient();
@@ -20,11 +22,11 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(`${origin}${dopo}`);
     }
     return NextResponse.redirect(
-      `${origin}/accedi?errore=${encodeURIComponent(erroreAuth(error.message))}`,
+      `${origin}/accedi?errore=${encodeURIComponent(erroreAuth(te, error.message))}`,
     );
   }
 
   return NextResponse.redirect(
-    `${origin}/accedi?errore=${encodeURIComponent("Link non valido.")}`,
+    `${origin}/accedi?errore=${encodeURIComponent(te("linkNonValido"))}`,
   );
 }

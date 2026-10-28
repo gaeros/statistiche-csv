@@ -4,7 +4,7 @@
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { preparaRighe, type Anteprima, type RigaDati } from "./anteprima";
-import { ETICHETTE_TIPO } from "./tipi";
+import { tradotto, type Traduttore } from "@/i18n/lingue";
 
 export const RIGHE_PER_BLOCCO = 2000;
 export const LIMITE_FILE_BYTE = 50 * 1024 * 1024;
@@ -43,35 +43,34 @@ export function colonneScelte(a: Anteprima) {
 }
 
 // Si può accodare solo se colonne e tipi coincidono, nello stesso ordine.
-export function compatibilePerAccodare(a: Anteprima, esistente: DatasetEsistente): string | null {
+// `t` è il traduttore del gruppo "importa".
+export function compatibilePerAccodare(a: Anteprima, esistente: DatasetEsistente, t: Traduttore): string | null {
   const nuove = colonneScelte(a);
   const vecchie = esistente.colonne;
   if (nuove.length !== vecchie.length) {
-    return `Il dataset esistente ha ${vecchie.length} colonne, questo file ne ha ${nuove.length}.`;
+    return t("accodaColonne", { vecchie: vecchie.length, nuove: nuove.length });
   }
   for (let i = 0; i < nuove.length; i++) {
     if (nuove[i].nome !== vecchie[i].nome) {
-      return `La colonna ${i + 1} si chiama "${nuove[i].nome}" ma nel dataset esistente è "${vecchie[i].nome}".`;
+      return t("accodaNome", { i: i + 1, nuovo: nuove[i].nome, vecchio: vecchie[i].nome });
     }
     if (nuove[i].tipo !== vecchie[i].tipo) {
-      return `La colonna "${nuove[i].nome}" è ${ETICHETTE_TIPO[nuove[i].tipo]}, nel dataset esistente è ${
-        ETICHETTE_TIPO[vecchie[i].tipo as keyof typeof ETICHETTE_TIPO] ?? vecchie[i].tipo
-      }.`;
+      return t("accodaTipo", { nome: nuove[i].nome, nuovo: t(`tipo_${nuove[i].tipo}`), vecchio: t(`tipo_${vecchie[i].tipo}`) });
     }
   }
   return null;
 }
 
-function avvisiImportazione(a: Anteprima, nonConvertiti: Record<string, number>): string[] {
-  const avvisi = [...a.avvisi];
+function avvisiImportazione(a: Anteprima, nonConvertiti: Record<string, number>, t: Traduttore): string[] {
+  const avvisi = a.avvisi.map((x) => tradotto(t, x));
   for (const c of a.colonne) {
     if (!c.includi) {
-      avvisi.push(`Colonna "${c.originale}" non importata.`);
+      avvisi.push(t("avvNonImportata", { nome: c.originale }));
       continue;
     }
-    for (const x of c.avvisi) avvisi.push(`${c.originale}: ${x}`);
+    for (const x of c.avvisi) avvisi.push(t("avvColonna", { nome: c.originale, avviso: tradotto(t, x) }));
     const n = nonConvertiti[c.nome];
-    if (n) avvisi.push(`${c.originale}: ${n} valori non convertibili in ${ETICHETTE_TIPO[c.tipo]}, lasciati vuoti.`);
+    if (n) avvisi.push(t("avvNonConvertibili", { nome: c.originale, n, tipo: t(`tipo_${c.tipo}`) }));
   }
   return avvisi;
 }
@@ -80,11 +79,11 @@ function percorsoSicuro(nomeFile: string): string {
   return nomeFile.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^\w.-]+/g, "_").slice(-150);
 }
 
-export function messaggioErrore(e: unknown): string {
+export function messaggioErrore(e: unknown, t: Traduttore): string {
   const m = (e as { message?: string })?.message ?? String(e);
-  if (/quota/i.test(m)) return "Quota di spazio superata (100 MB): elimina qualche dataset e riprova.";
-  if (/exceeded the maximum allowed size|payload too large|413/i.test(m)) return "File troppo grande (massimo 50 MB).";
-  if (/failed to fetch|network/i.test(m)) return "Connessione interrotta. Controlla la rete e premi Riprova.";
+  if (/quota/i.test(m)) return t("erroreQuota");
+  if (/exceeded the maximum allowed size|payload too large|413/i.test(m)) return t("erroreGrande");
+  if (/failed to fetch|network/i.test(m)) return t("erroreRete");
   return m;
 }
 
@@ -119,10 +118,11 @@ export async function importa(
   destinazioni: Destinazione[],
   ripresa: Ripresa,
   aggiorna: (p: Progresso, r: Ripresa) => void,
+  t: Traduttore,
 ): Promise<Ripresa> {
   const { data: sessione } = await supabase.auth.getUser();
   const utente = sessione.user;
-  if (!utente) throw new Error("Sessione scaduta: accedi di nuovo.");
+  if (!utente) throw new Error(t("sessioneScaduta"));
 
   const preparate = destinazioni.map((d) => preparaRighe(d.anteprima));
   const totali = preparate.reduce((s, p) => s + p.righe.length, 0);
@@ -134,7 +134,7 @@ export async function importa(
 
   // 1. Record padre dell'importazione
   if (!r.importazioneId) {
-    segnala("Registrazione dell'importazione…");
+    segnala(t("faseRegistrazione"));
     const { data, error } = await supabase
       .from("importazioni")
       .insert({ nome_file: file.name, tipo_file: file.type || "sconosciuto", dimensione_byte: file.size })
@@ -148,7 +148,7 @@ export async function importa(
   try {
     // 2. File originale nella cartella privata dell'utente
     if (!r.caricato) {
-      segnala("Caricamento del file originale…");
+      segnala(t("faseCaricamento"));
       const percorso = `${utente.id}/${importazioneId}/${percorsoSicuro(file.name)}`;
       const { error } = await supabase.storage.from("originali").upload(percorso, file, { upsert: true });
       if (error) throw error;
@@ -166,12 +166,12 @@ export async function importa(
           r = { ...r, datasetId: d.esistente.id };
         } else {
           if (d.modalita === "sostituisci" && d.esistente) {
-            segnala(`Sostituzione di ${d.esistente.nome}…`);
+            segnala(t("faseSostituzione", { nome: d.esistente.nome }));
             const { error } = await supabase.from("dataset").delete().eq("id", d.esistente.id);
             if (error) throw error;
             await pulisciImportazione(supabase, d.esistente.importazione_id);
           }
-          segnala(`Creazione della tabella ${d.anteprima.nomeTabella}…`);
+          segnala(t("faseCreazione", { nome: d.anteprima.nomeTabella }));
           const creato = await conRiprova<{ id: string; nome: string }>(() =>
             supabase
               .rpc("crea_dataset", {
@@ -180,7 +180,7 @@ export async function importa(
                 p_nome_originale: d.anteprima.nomeOriginale,
                 p_foglio: d.anteprima.foglio,
                 p_colonne: colonneScelte(d.anteprima),
-                p_avvisi: avvisiImportazione(d.anteprima, nonConvertiti),
+                p_avvisi: avvisiImportazione(d.anteprima, nonConvertiti, t),
               })
               .single(),
           );
@@ -190,7 +190,7 @@ export async function importa(
 
       const nomeTabella = d.modalita === "accoda" && d.esistente ? d.esistente.nome : d.anteprima.nomeTabella;
       for (; r.blocco * RIGHE_PER_BLOCCO < righe.length; r = { ...r, blocco: r.blocco + 1 }) {
-        segnala(`Invio delle righe di ${nomeTabella}…`);
+        segnala(t("faseInvio", { nome: nomeTabella }));
         const blocco: RigaDati[] = righe.slice(r.blocco * RIGHE_PER_BLOCCO, (r.blocco + 1) * RIGHE_PER_BLOCCO);
         await conRiprova(() => supabase.rpc("inserisci_righe", { p_dataset: r.datasetId, p_righe: blocco }));
       }
@@ -201,14 +201,14 @@ export async function importa(
       .from("importazioni")
       .update({ stato: "completata", completata_at: new Date().toISOString(), messaggio_errore: null })
       .eq("id", importazioneId);
-    segnala("Completata");
+    segnala(t("faseCompletata"));
     return r;
   } catch (e) {
     await supabase
       .from("importazioni")
-      .update({ stato: "errore", messaggio_errore: messaggioErrore(e) })
+      .update({ stato: "errore", messaggio_errore: messaggioErrore(e, t) })
       .eq("id", importazioneId);
-    aggiorna({ fatte: fatteFinora(r), totali, fase: "Interrotta" }, r);
-    throw Object.assign(new Error(messaggioErrore(e)), { ripresa: r });
+    aggiorna({ fatte: fatteFinora(r), totali, fase: t("faseInterrotta") }, r);
+    throw Object.assign(new Error(messaggioErrore(e, t)), { ripresa: r });
   }
 }

@@ -1,6 +1,8 @@
 "use client";
 
+import { useLocale } from "next-intl";
 import { useEffect, useRef } from "react";
+import { LOCALE_INTL, LINGUA_BASE, èLingua } from "@/i18n/lingue";
 import * as echarts from "echarts/core";
 import { BarChart, BoxplotChart, LineChart, PieChart, ScatterChart } from "echarts/charts";
 import { DataZoomComponent, GridComponent, LegendComponent, MarkLineComponent, TooltipComponent } from "echarts/components";
@@ -37,6 +39,8 @@ export function Grafico({
   const riquadro = useRef<HTMLDivElement>(null);
   const grafico = useRef<echarts.ECharts | null>(null);
   const scuro = false; // l'app usa solo il tema chiaro
+  const lingua = useLocale();
+  const locale = LOCALE_INTL[èLingua(lingua) ? lingua : LINGUA_BASE];
 
   useEffect(() => {
     const el = riquadro.current;
@@ -55,8 +59,8 @@ export function Grafico({
   }, [riferimento]);
 
   useEffect(() => {
-    grafico.current?.setOption(opzioni(colori(scuro)), true);
-  }, [opzioni, scuro]);
+    grafico.current?.setOption(opzioni(colori(scuro, locale)), true);
+  }, [opzioni, scuro, locale]);
 
   return <div ref={riquadro} role="img" aria-label={descrizione} style={{ height: altezza }} className="w-full" />;
 }

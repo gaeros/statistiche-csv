@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
+import { formatiIt, traduttore } from "@/test/traduttore";
 import { conParametri, intervalloScorciatoia, leggiFiltri, oggiRoma, type Colonna } from "./filtri";
+
+const ctx = { t: traduttore("filtri"), f: formatiIt };
 
 const colonne: Colonna[] = [
   { nome: "data", originale: "Data", tipo: "data" },
@@ -11,7 +14,7 @@ const colonne: Colonna[] = [
 
 describe("leggiFiltri", () => {
   it("legge scorciatoia di periodo e categorie (criterio 9)", () => {
-    const { filtri, etichette } = leggiFiltri({ "f.data.p": "30", "f.momento.v": "Mattina" }, colonne, "2026-10-28");
+    const { filtri, etichette } = leggiFiltri({ "f.data.p": "30", "f.momento.v": "Mattina" }, colonne, ctx, "2026-10-28");
     expect(filtri).toEqual([
       { colonna: "data", tipo: "intervallo", da: "2026-09-29", a: "2026-10-28" },
       { colonna: "momento", tipo: "valori", valori: ["Mattina"] },
@@ -23,6 +26,7 @@ describe("leggiFiltri", () => {
     const { filtri, etichette } = leggiFiltri(
       { "f.sistolica.da": "100,5", "f.sistolica.a": "abc", "f.data.da": "2026-13-45", "f.ignota.v": "x" },
       colonne,
+      ctx,
       "2026-10-28",
     );
     expect(filtri).toEqual([{ colonna: "sistolica", tipo: "intervallo", da: "100.5", a: undefined }]);
@@ -33,6 +37,7 @@ describe("leggiFiltri", () => {
     const { filtri, etichette } = leggiFiltri(
       { "f.misurata.dalle": "6", "f.misurata.alle": "12", "f.misurata.g": ["1", "3"], "f.a_digiuno.v": "true" },
       colonne,
+      ctx,
     );
     expect(filtri).toContainEqual({ colonna: "misurata", tipo: "ore", da: 6, a: 12 });
     expect(filtri).toContainEqual({ colonna: "misurata", tipo: "giorni", valori: [1, 3] });

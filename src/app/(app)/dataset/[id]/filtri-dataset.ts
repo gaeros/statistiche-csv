@@ -1,4 +1,6 @@
 import "server-only";
+import { getLocale, getTranslations } from "next-intl/server";
+import { creaFormati } from "@/lib/formato";
 import { conParametri, leggiFiltri, soloFiltri, type Colonna, type Parametri } from "@/lib/filtri";
 import type { createClient } from "@/lib/supabase/server";
 
@@ -12,7 +14,9 @@ export async function filtriDataset(
   colonne: Colonna[],
   sp: Parametri,
 ) {
-  const { filtri, etichette } = leggiFiltri(sp, colonne);
+  const t = await getTranslations("filtri");
+  const f = creaFormati(await getLocale());
+  const { filtri, etichette } = leggiFiltri(sp, colonne, { t, f });
   const categorie = colonne.filter((c) => c.tipo === "testo" || c.tipo === "booleano");
   const risposte = await Promise.all(
     categorie.map((c) => supabase.rpc("valori_colonna", { p_dataset: id, p_colonna: c.nome, p_limite: MAX_CASELLE + 1 })),

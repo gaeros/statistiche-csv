@@ -21,7 +21,7 @@ const dataOra = new Intl.DateTimeFormat("it-IT", {
 });
 
 // Valore di una colonna del dataset, secondo il suo tipo.
-export function cella(valore: unknown, tipo: string): string {
+export function cella(valore: unknown, tipo: string, si = "Sì", no = "No"): string {
   if (valore === null || valore === undefined) return "";
   switch (tipo) {
     case "intero":
@@ -34,7 +34,7 @@ export function cella(valore: unknown, tipo: string): string {
     case "data_ora":
       return dataOra.format(new Date(String(valore))).replace(",", "");
     case "booleano":
-      return valore ? "Sì" : "No";
+      return valore ? si : no;
     default:
       return cellaTesto(String(valore));
   }

@@ -1,8 +1,11 @@
+import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
-import { formattaDataOra, formattaNumero } from "@/lib/formato";
+import { creaFormati } from "@/lib/formato";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function PaginaDataset({ searchParams }: PageProps<"/dataset">) {
+  const t = await getTranslations("elenco");
+  const f = creaFormati(await getLocale());
   const { q } = await searchParams;
   const ricerca = typeof q === "string" ? q.trim() : "";
 
@@ -20,27 +23,27 @@ export default async function PaginaDataset({ searchParams }: PageProps<"/datase
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold">I miei dataset</h1>
+        <h1 className="text-2xl font-semibold">{t("titolo")}</h1>
         <Link href="/importa" className="bottone">
-          Importa file
+          {t("importaFile")}
         </Link>
       </div>
 
       <form className="flex gap-2">
-        <input name="q" defaultValue={ricerca} placeholder="Cerca per nome o file…" className="campo max-w-sm" />
-        <button type="submit" className="bottone-secondario">Cerca</button>
+        <input name="q" defaultValue={ricerca} placeholder={t("cerca")} className="campo max-w-sm" />
+        <button type="submit" className="bottone-secondario">{t("cercaBtn")}</button>
       </form>
 
-      {error && <p className="text-red-600">Impossibile leggere i dataset: {error.message}</p>}
+      {error && <p className="text-red-600">{t("errore", { dettaglio: error.message })}</p>}
 
       {elenco && elenco.length === 0 && (
         <div className="scheda text-slate-600 dark:text-slate-300">
           {ricerca ? (
-            "Nessun dataset corrisponde alla ricerca."
+            t("nessunRisultato")
           ) : (
             <>
-              Non hai ancora dataset.{" "}
-              <Link href="/importa" className="link">Importa il primo file</Link>.
+              {t("vuoto")}{" "}
+              <Link href="/importa" className="link">{t("importaPrimo")}</Link>.
             </>
           )}
         </div>
@@ -54,12 +57,12 @@ export default async function PaginaDataset({ searchParams }: PageProps<"/datase
                 <p className="font-mono font-medium break-all">{d.nome}</p>
                 <p className="text-sm text-slate-500 break-all">
                   {d.nome_originale}
-                  {d.foglio ? ` · foglio ${d.foglio}` : ""}
+                  {d.foglio ? ` · ${t("foglio", { nome: d.foglio })}` : ""}
                 </p>
                 <p className="text-sm">
-                  {formattaNumero(d.righe)} righe · {(d.colonne as unknown[]).length} colonne
+                  {t("righeColonne", { righe: f.numero(d.righe), colonne: (d.colonne as unknown[]).length })}
                 </p>
-                <p className="text-xs text-slate-500">Importato il {formattaDataOra(d.created_at)}</p>
+                <p className="text-xs text-slate-500">{t("importatoIl", { data: f.dataOra(d.created_at) })}</p>
               </Link>
             </li>
           ))}

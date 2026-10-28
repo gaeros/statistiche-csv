@@ -8,6 +8,9 @@
 //   f.x.dalle  f.x.alle  fascia oraria     data e ora
 //   f.x.g      giorni della settimana, ripetuto (1 = lunedì)
 
+import type { Traduttore } from "@/i18n/lingue";
+import { creaFormati, type Formati } from "./formato";
+
 export type Colonna = { nome: string; originale: string; tipo: string };
 
 export type Filtro =
@@ -21,16 +24,11 @@ export type Parametri = Record<string, string | string[] | undefined>;
 
 export type Etichetta = { testo: string; chiavi: string[] };
 
-export const SCORCIATOIE = {
-  "7": "ultimi 7 giorni",
-  "30": "ultimi 30 giorni",
-  "90": "ultimi 90 giorni",
-  anno: "quest'anno",
-  anno_scorso: "l'anno scorso",
-} as const;
-export type Scorciatoia = keyof typeof SCORCIATOIE;
+// Etichette nei messaggi (gruppo "filtri"): scorciatoia_<chiave> e giorno_1…giorno_7 (1 = lunedì).
+export const SCORCIATOIE = ["7", "30", "90", "anno", "anno_scorso"] as const;
+export type Scorciatoia = (typeof SCORCIATOIE)[number];
 
-export const GIORNI = ["lun", "mar", "mer", "gio", "ven", "sab", "dom"];
+export const GIORNI = [1, 2, 3, 4, 5, 6, 7];
 
 const NUMERICI = ["intero", "decimale"];
 const DATE = ["data", "data_ora"];
@@ -77,17 +75,23 @@ const numeroValido = (s: string | undefined) => {
   const n = Number(s.replace(",", "."));
   return Number.isFinite(n) ? String(n) : undefined;
 };
-const dataIt = (iso: string) => `${iso.slice(8, 10)}/${iso.slice(5, 7)}/${iso.slice(0, 4)}`;
-const numeroIt = (s: string) => Number(s).toLocaleString("it-IT");
 
-function daA(da: string | undefined, a: string | undefined, fmt: (s: string) => string): string {
-  if (da && a) return `da ${fmt(da)} a ${fmt(a)}`;
-  if (da) return `da ${fmt(da)} in su`;
-  return `fino a ${fmt(a!)}`;
+function daA(t: Traduttore, da: string | undefined, a: string | undefined, fmt: (s: string) => string): string {
+  if (da && a) return t("daA", { da: fmt(da), a: fmt(a) });
+  if (da) return t("daInSu", { da: fmt(da) });
+  return t("finoA", { a: fmt(a!) });
 }
 
 // Legge i filtri validi dall'indirizzo; quelli non validi o su colonne inesistenti vengono ignorati.
-export function leggiFiltri(sp: Parametri, colonne: Colonna[], oggi = oggiRoma()): { filtri: Filtro[]; etichette: Etichetta[] } {
+// `t` è il traduttore del gruppo "filtri", `f` i formati della lingua: servono alle etichette.
+// Senza, le etichette non sono tradotte (va bene quando serve solo `filtri`).
+export function leggiFiltri(
+  sp: Parametri,
+  colonne: Colonna[],
+  ctx?: { t: Traduttore; f: Formati },
+  oggi = oggiRoma(),
+): { filtri: Filtro[]; etichette: Etichetta[] } {
+  const { t, f } = ctx ?? { t: (k: string) => k, f: creaFormati("it") };
   const filtri: Filtro[] = [];
   const etichette: Etichetta[] = [];
 
@@ -96,22 +100,22 @@ export function leggiFiltri(sp: Parametri, colonne: Colonna[], oggi = oggiRoma()
 
     if (DATE.includes(c.tipo)) {
       const s = uno(sp, k("p"));
-      if (s && s in SCORCIATOIE) {
+      if (s && (SCORCIATOIE as readonly string[]).includes(s)) {
         filtri.push({ colonna: c.nome, tipo: "intervallo", ...intervalloScorciatoia(s as Scorciatoia, oggi) });
-        etichette.push({ testo: `${c.originale}: ${SCORCIATOIE[s as Scorciatoia]}`, chiavi: [k("p"), k("da"), k("a")] });
+        etichette.push({ testo: `${c.originale}: ${t(`scorciatoia_${s}`)}`, chiavi: [k("p"), k("da"), k("a")] });
       } else {
         const da = dataValida(uno(sp, k("da")));
         const a = dataValida(uno(sp, k("a")));
         if (da || a) {
           filtri.push({ colonna: c.nome, tipo: "intervallo", da, a });
-          etichette.push({ testo: `${c.originale}: ${daA(da, a, dataIt)}`, chiavi: [k("p"), k("da"), k("a")] });
+          etichette.push({ testo: `${c.originale}: ${daA(t, da, a, (x) => f.valore(x, "data"))}`, chiavi: [k("p"), k("da"), k("a")] });
         }
       }
 
       const giorni = [...new Set(tutti(sp, k("g")).map(Number).filter((n) => Number.isInteger(n) && n >= 1 && n <= 7))].sort();
       if (giorni.length > 0 && giorni.length < 7) {
         filtri.push({ colonna: c.nome, tipo: "giorni", valori: giorni });
-        etichette.push({ testo: `${c.originale}: ${giorni.map((g) => GIORNI[g - 1]).join(", ")}`, chiavi: [k("g")] });
+        etichette.push({ testo: `${c.originale}: ${giorni.map((g) => t(`giorno_${g}`)).join(", ")}`, chiavi: [k("g")] });
       }
 
       if (c.tipo === "data_ora") {
@@ -120,7 +124,7 @@ export function leggiFiltri(sp: Parametri, colonne: Colonna[], oggi = oggiRoma()
         const ok = (n: number) => Number.isInteger(n) && n >= 0 && n <= 24;
         if (uno(sp, k("dalle")) && uno(sp, k("alle")) && ok(dalle) && ok(alle) && dalle !== alle) {
           filtri.push({ colonna: c.nome, tipo: "ore", da: dalle, a: alle });
-          etichette.push({ testo: `${c.originale}: dalle ${dalle} alle ${alle}`, chiavi: [k("dalle"), k("alle")] });
+          etichette.push({ testo: `${c.originale}: ${t("dalleAlle", { da: dalle, a: alle })}`, chiavi: [k("dalle"), k("alle")] });
         }
       }
     } else if (NUMERICI.includes(c.tipo)) {
@@ -128,19 +132,19 @@ export function leggiFiltri(sp: Parametri, colonne: Colonna[], oggi = oggiRoma()
       const a = numeroValido(uno(sp, k("a")));
       if (da !== undefined || a !== undefined) {
         filtri.push({ colonna: c.nome, tipo: "intervallo", da, a });
-        etichette.push({ testo: `${c.originale}: ${daA(da, a, numeroIt)}`, chiavi: [k("da"), k("a")] });
+        etichette.push({ testo: `${c.originale}: ${daA(t, da, a, (x) => f.numero(Number(x)))}`, chiavi: [k("da"), k("a")] });
       }
     } else if (c.tipo === "testo" || c.tipo === "booleano") {
       const valori = [...new Set(tutti(sp, k("v")))];
       if (valori.length > 0) {
         filtri.push({ colonna: c.nome, tipo: "valori", valori });
-        const testo = c.tipo === "booleano" ? valori.map((v) => (v === "true" ? "Sì" : "No")) : valori;
+        const testo = c.tipo === "booleano" ? valori.map((v) => (v === "true" ? f.si : f.no)) : valori;
         etichette.push({ testo: `${c.originale}: ${testo.join(", ")}`, chiavi: [k("v")] });
       }
-      const t = uno(sp, k("t"));
-      if (c.tipo === "testo" && t) {
-        filtri.push({ colonna: c.nome, tipo: "testo", testo: t.slice(0, 200) });
-        etichette.push({ testo: `${c.originale} contiene “${t.slice(0, 200)}”`, chiavi: [k("t")] });
+      const cerca = uno(sp, k("t"));
+      if (c.tipo === "testo" && cerca) {
+        filtri.push({ colonna: c.nome, tipo: "testo", testo: cerca.slice(0, 200) });
+        etichette.push({ testo: t("contiene", { colonna: c.originale, testo: cerca.slice(0, 200) }), chiavi: [k("t")] });
       }
     }
   }

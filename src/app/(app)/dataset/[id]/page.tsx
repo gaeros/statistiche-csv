@@ -1,7 +1,8 @@
+import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { conParametri } from "@/lib/filtri";
-import { formattaValore } from "@/lib/formato";
+import { creaFormati } from "@/lib/formato";
 import { createClient } from "@/lib/supabase/server";
 import { Azioni } from "./Azioni";
 import { BarraFiltri } from "./BarraFiltri";
@@ -14,6 +15,8 @@ type Colonna = { nome: string; originale: string; tipo: string };
 
 export default async function PaginaDettaglio({ params, searchParams }: PageProps<"/dataset/[id]">) {
   const { id } = await params;
+  const t = await getTranslations("dettaglio");
+  const f = creaFormati(await getLocale());
   const sp = await searchParams;
   const pagina = Math.max(1, Number(sp.pagina) || 1);
   const ordina = typeof sp.ordina === "string" ? sp.ordina : "id";
@@ -70,14 +73,14 @@ export default async function PaginaDettaglio({ params, searchParams }: PageProp
 
       {avvisi.length > 0 && (
         <details className="scheda text-sm">
-          <summary className="cursor-pointer font-medium">Avvisi dell&apos;importazione ({avvisi.length})</summary>
+          <summary className="cursor-pointer font-medium">{t("avvisi", { n: avvisi.length })}</summary>
           <ul className="mt-2 list-inside list-disc text-slate-600 dark:text-slate-300">
             {avvisi.map((a) => <li key={a}>{a}</li>)}
           </ul>
         </details>
       )}
 
-      {error && <p className="text-red-600">Impossibile leggere le righe: {error.message}</p>}
+      {error && <p className="text-red-600">{t("erroreRighe", { dettaglio: error.message })}</p>}
 
       <div className="scheda overflow-x-auto p-0">
         <table className="w-full text-left text-sm">
@@ -115,7 +118,7 @@ export default async function PaginaDettaglio({ params, searchParams }: PageProp
                       c.tipo === "intero" || c.tipo === "decimale" ? "text-right tabular-nums" : ""
                     }`}
                   >
-                    {formattaValore(r[c.nome], c.tipo)}
+                    {f.valore(r[c.nome], c.tipo)}
                   </td>
                 ))}
               </tr>
@@ -126,14 +129,14 @@ export default async function PaginaDettaglio({ params, searchParams }: PageProp
 
       <nav className="flex flex-wrap items-center justify-between gap-3 text-sm">
         <span className="text-slate-500">
-          {etichette.length > 0 && `${totale.toLocaleString("it-IT")} righe con i filtri · `}Pagina {pagina} di {pagine}
+          {etichette.length > 0 && t("conFiltri", { n: f.numero(totale) })}{t("pagina", { pagina, pagine })}
         </span>
         <div className="flex flex-wrap gap-2">
           <a href={`/dataset/${id}/esporta${queryFiltri}`} className="bottone-secondario px-3 py-1" download>
-            Scarica CSV{etichette.length ? " (con i filtri)" : ""}
+            {etichette.length ? t("scaricaCsvFiltri") : t("scaricaCsv")}
           </a>
-          {pagina > 1 && <Link href={link({ pagina: pagina - 1 })} className="bottone-secondario px-3 py-1">← Precedente</Link>}
-          {pagina < pagine && <Link href={link({ pagina: pagina + 1 })} className="bottone-secondario px-3 py-1">Successiva →</Link>}
+          {pagina > 1 && <Link href={link({ pagina: pagina - 1 })} className="bottone-secondario px-3 py-1">{t("precedente")}</Link>}
+          {pagina < pagine && <Link href={link({ pagina: pagina + 1 })} className="bottone-secondario px-3 py-1">{t("successiva")}</Link>}
         </div>
       </nav>
 

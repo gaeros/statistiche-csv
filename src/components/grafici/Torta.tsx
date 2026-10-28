@@ -1,7 +1,7 @@
 "use client";
 
 import { Grafico } from "./Grafico";
-import { formatta, stileTooltip } from "./tema";
+import { stileTooltip } from "./tema";
 
 // Grafico a ciambella: per poche categorie (al massimo 8 fette, le altre vanno raccolte in "Altri").
 export function Torta({ fette, descrizione }: { fette: { nome: string; valore: number }[]; descrizione: string }) {
@@ -18,7 +18,7 @@ export function Torta({ fette, descrizione }: { fette: { nome: string; valore: n
           trigger: "item",
           ...stileTooltip(c),
           formatter: (p: { name: string; value: number; percent: number }) =>
-            `${p.name}: <b>${formatta(p.value)}</b> (${formatta(p.percent)}%)`,
+            `${p.name}: <b>${c.formatta(p.value)}</b> (${c.formatta(p.percent)}%)`,
         },
         legend: {
           show: fette.length >= 2,
