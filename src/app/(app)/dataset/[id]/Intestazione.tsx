@@ -24,7 +24,7 @@ export async function Intestazione({ id, nome, nomeOriginale, foglio, createdAt,
       aria-current={attiva === valore ? "page" : undefined}
       className={`border-b-2 px-1 pb-2 text-sm font-medium ${
         attiva === valore
-          ? "border-blue-600 text-blue-700 dark:text-blue-300"
+          ? "border-black text-black dark:text-blue-300"
           : "border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200"
       }`}
     >
@@ -36,7 +36,7 @@ export async function Intestazione({ id, nome, nomeOriginale, foglio, createdAt,
     <div className="space-y-4">
       <div className="space-y-1">
         <Link href="/dataset" className="link text-sm">{t("tornaElenco")}</Link>
-        <h1 className="font-mono text-2xl font-semibold break-all">{nome}</h1>
+        <h1 className="font-mono text-3xl font-semibold tracking-tight break-all">{nome}</h1>
         <p className="text-sm text-slate-500 break-all">
           {nomeOriginale}
           {foglio ? ` · ${t("foglio", { nome: foglio })} · ` : " · "}
