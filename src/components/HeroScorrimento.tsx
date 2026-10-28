@@ -171,7 +171,7 @@ export function HeroScorrimento({ a, b, descrizione, scorri }: { a: string; b: s
   }
 
   // Appena si comincia a scorrere: la seconda scritta sale dal basso e copre la prima,
-  // i numeri si dissolvono e poi, sotto le scritte, salgono i grafici.
+  // i numeri si dissolvono e poi, dietro le scritte, salgono i grafici.
   const entrata = liscia(p / 0.2);
   const opA = 1 - liscia((p - 0.06) / 0.14);
   const opNumeri = 1 - liscia((p - 0.02) / 0.2);
@@ -202,6 +202,17 @@ export function HeroScorrimento({ a, b, descrizione, scorri }: { a: string; b: s
           ))}
         </div>
 
+        <div
+          aria-hidden
+          className="absolute inset-0 z-0 flex items-center justify-center px-4"
+          style={{ opacity: grafici, transform: `translateY(calc(${1 - grafici} * 40svh))` }}
+        >
+          <div className="flex flex-wrap items-end justify-center gap-8 sm:gap-14">
+            <Barre attivo={p > 0.2} />
+            <Torta attivo={p > 0.2} />
+          </div>
+        </div>
+
         <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col items-center justify-center px-4 text-center">
           <h1 className={`grid ${titolo}`}>
             <span className="sr-only">{descrizione}</span>
@@ -214,17 +225,6 @@ export function HeroScorrimento({ a, b, descrizione, scorri }: { a: string; b: s
               {b}
             </span>
           </h1>
-
-          <div
-            aria-hidden
-            className="flex h-32 items-start justify-center pt-8 sm:h-60"
-            style={{ opacity: grafici, transform: `translateY(calc(${1 - grafici} * 30svh))` }}
-          >
-            <div className="flex flex-wrap items-end justify-center gap-8 sm:gap-14">
-              <Barre attivo={p > 0.2} />
-              <Torta attivo={p > 0.2} />
-            </div>
-          </div>
         </div>
 
         <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-4 z-10 text-center text-sm font-medium text-slate-400" style={{ opacity: opSuggerimento }}>
