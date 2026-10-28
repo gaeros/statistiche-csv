@@ -6,12 +6,12 @@ import { impostaLingua } from "@/i18n/azioni";
 import { LINGUE } from "@/i18n/lingue";
 
 // Due pulsanti IT | EN: scelgono la lingua per tutto il sito.
-export function SelettoreLingua({ className = "" }: { className?: string }) {
+export function SelettoreLingua({ className = "", nero = false }: { className?: string; nero?: boolean }) {
   const attuale = useLocale();
   const t = useTranslations("lingua");
   const [, avvia] = useTransition();
   return (
-    <div role="group" aria-label={t("etichetta")} className={`inline-flex overflow-hidden rounded-md border border-slate-300 text-sm ${className}`}>
+    <div role="group" aria-label={t("etichetta")} className={`inline-flex overflow-hidden ${nero ? "rounded-full" : "rounded-md"} border border-slate-300 text-sm ${className}`}>
       {LINGUE.map((l) => (
         <button
           key={l}
@@ -20,7 +20,7 @@ export function SelettoreLingua({ className = "" }: { className?: string }) {
           aria-pressed={l === attuale}
           title={t(l)}
           onClick={() => avvia(() => impostaLingua(l))}
-          className={`px-3 py-1.5 font-medium uppercase ${l === attuale ? "bg-blue-600 text-white" : "bg-white text-slate-700 hover:bg-slate-100"}`}
+          className={`px-3 py-1.5 font-medium uppercase ${l === attuale ? (nero ? "bg-black text-white" : "bg-blue-600 text-white") : "bg-white text-slate-700 hover:bg-slate-100"}`}
         >
           {l}
         </button>

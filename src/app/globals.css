@@ -66,3 +66,14 @@ body {
   .anim-numero { animation: none; opacity: 0; }
   .anim-barra, .anim-freccia, .anim-evidenzia { animation: none; }
 }
+
+/* Pulsanti a pillola, bianco e nero (pagina di benvenuto) */
+@layer components {
+  .bottone-nero {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-black px-5 py-2 font-semibold text-white hover:bg-slate-800;
+  }
+  .bottone-bordo {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-5 py-2 font-semibold text-black hover:bg-slate-100;
+  }
+  .bottone-nero-grande { @apply px-8 py-4 text-lg; }
+}
