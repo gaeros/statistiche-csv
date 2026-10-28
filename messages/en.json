@@ -206,6 +206,8 @@
     "schedaGrafici": "Charts",
     "avvisi": "Import warnings ({n})",
     "erroreRighe": "Could not read the rows: {dettaglio}",
+    "didascalia": "Rows of “{nome}”: {da} to {a} of {totale}. Use the headers to sort.",
+    "colonneNascoste": "{n, plural, one {Column hidden because it is empty} other {Columns hidden because they are empty}} in the whole dataset: {nomi}. They are still in the downloaded CSV.",
     "conFiltri": "{n} rows with the filters · ",
     "pagina": "Page {pagina} of {pagine}",
     "scaricaCsv": "Download CSV",
