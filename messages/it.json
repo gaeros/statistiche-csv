@@ -206,6 +206,8 @@
     "schedaGrafici": "Grafici",
     "avvisi": "Avvisi dell'importazione ({n})",
     "erroreRighe": "Impossibile leggere le righe: {dettaglio}",
+    "didascalia": "Righe di «{nome}»: da {da} a {a} di {totale}. Usa le intestazioni per ordinare.",
+    "colonneNascoste": "{n, plural, one {Colonna nascosta perché vuota} other {Colonne nascoste perché vuote}} in tutto il dataset: {nomi}. Restano nel CSV scaricato.",
     "conFiltri": "{n} righe con i filtri · ",
     "pagina": "Pagina {pagina} di {pagine}",
     "scaricaCsv": "Scarica CSV",

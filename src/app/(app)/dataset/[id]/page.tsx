@@ -8,6 +8,7 @@ import { Azioni } from "./Azioni";
 import { BarraFiltri } from "./BarraFiltri";
 import { filtriDataset } from "./filtri-dataset";
 import { Intestazione } from "./Intestazione";
+import { TabellaDati } from "./TabellaDati";
 
 const PER_PAGINA = 50;
 
@@ -82,50 +83,17 @@ export default async function PaginaDettaglio({ params, searchParams }: PageProp
 
       {error && <p className="text-red-600">{t("erroreRighe", { dettaglio: error.message })}</p>}
 
-      <div className="scheda overflow-x-auto p-0">
-        <table className="w-full text-left text-sm">
-          <thead className="border-b border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-800/50">
-            <tr>
-              {colonne.map((c) => {
-                const attiva = ordina === c.nome;
-                return (
-                  <th
-                    key={c.nome}
-                    className={`whitespace-nowrap px-3 py-2 font-medium ${
-                      c.tipo === "intero" || c.tipo === "decimale" ? "text-right" : ""
-                    }`}
-                  >
-                    <Link
-                      href={link({ ordina: c.nome, dir: attiva && !discendente ? "desc" : "asc", pagina: 1 })}
-                      className="hover:underline"
-                      title={`${c.nome} (${c.tipo})`}
-                    >
-                      {c.originale}
-                      {attiva ? (discendente ? " ↓" : " ↑") : ""}
-                    </Link>
-                  </th>
-                );
-              })}
-            </tr>
-          </thead>
-          <tbody>
-            {righe.map((r) => (
-              <tr key={String(r.id)} className="border-b border-slate-100 last:border-0 dark:border-slate-800">
-                {colonne.map((c) => (
-                  <td
-                    key={c.nome}
-                    className={`max-w-xs truncate whitespace-nowrap px-3 py-1.5 ${
-                      c.tipo === "intero" || c.tipo === "decimale" ? "text-right tabular-nums" : ""
-                    }`}
-                  >
-                    {f.valore(r[c.nome], c.tipo)}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <TabellaDati
+        nome={d.nome}
+        colonne={colonne}
+        valori={valori}
+        righe={righe}
+        primaRiga={(pagina - 1) * PER_PAGINA + 1}
+        totale={totale}
+        ordina={ordina}
+        discendente={discendente}
+        hrefOrdina={(c, dir) => link({ ordina: c, dir, pagina: 1 })}
+      />
 
       <nav className="flex flex-wrap items-center justify-between gap-3 text-sm">
         <span className="text-slate-500">
