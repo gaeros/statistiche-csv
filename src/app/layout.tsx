@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import "@fontsource-variable/inter-tight";
+import { AvvisoCookie } from "@/components/AvvisoCookie";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -20,7 +21,10 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     <html lang={lingua} className="h-full antialiased">
       {/* Le estensioni del browser (es. ColorZilla) aggiungono attributi al body: non è un errore dell'app */}
       <body className="flex min-h-full flex-col" suppressHydrationWarning>
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          {children}
+          <AvvisoCookie />
+        </NextIntlClientProvider>
       </body>
     </html>
   );
