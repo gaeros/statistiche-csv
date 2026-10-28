@@ -25,7 +25,7 @@ export type StatColonna = Colonna & {
   giorni?: number;
 };
 
-export type Statistiche = { totale: number; colonne: StatColonna[] };
+export type Statistiche = { totale: number; complessivo: number; colonne: StatColonna[] };
 
 export const NUMERICI = ["intero", "decimale"];
 export const DATE = ["data", "data_ora"];

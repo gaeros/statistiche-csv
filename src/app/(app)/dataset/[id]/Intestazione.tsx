@@ -10,9 +10,11 @@ type Props = {
   righe: number;
   colonne: number;
   attiva: "dati" | "statistiche";
+  // Filtri attivi ("?f.data.p=30..."), mantenuti passando da una scheda all'altra
+  query?: string;
 };
 
-export function Intestazione({ id, nome, nomeOriginale, foglio, createdAt, righe, colonne, attiva }: Props) {
+export function Intestazione({ id, nome, nomeOriginale, foglio, createdAt, righe, colonne, attiva, query = "" }: Props) {
   const scheda = (valore: Props["attiva"], href: string, etichetta: string) => (
     <Link
       href={href}
@@ -39,8 +41,8 @@ export function Intestazione({ id, nome, nomeOriginale, foglio, createdAt, righe
         </p>
       </div>
       <nav className="flex gap-6 border-b border-slate-200 dark:border-slate-800">
-        {scheda("dati", `/dataset/${id}`, "Dati")}
-        {scheda("statistiche", `/dataset/${id}/statistiche`, "Statistiche")}
+        {scheda("dati", `/dataset/${id}${query}`, "Dati")}
+        {scheda("statistiche", `/dataset/${id}/statistiche${query}`, "Statistiche")}
       </nav>
     </div>
   );

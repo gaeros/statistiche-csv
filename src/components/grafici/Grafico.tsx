@@ -3,11 +3,21 @@
 import { useEffect, useRef, useSyncExternalStore } from "react";
 import * as echarts from "echarts/core";
 import { BarChart, LineChart, PieChart } from "echarts/charts";
-import { DataZoomComponent, GridComponent, LegendComponent, TooltipComponent } from "echarts/components";
+import { DataZoomComponent, GridComponent, LegendComponent, MarkLineComponent, TooltipComponent } from "echarts/components";
 import { SVGRenderer } from "echarts/renderers";
 import { colori, type Colori } from "./tema";
 
-echarts.use([BarChart, LineChart, PieChart, GridComponent, TooltipComponent, LegendComponent, DataZoomComponent, SVGRenderer]);
+echarts.use([
+  BarChart,
+  LineChart,
+  PieChart,
+  GridComponent,
+  TooltipComponent,
+  LegendComponent,
+  DataZoomComponent,
+  MarkLineComponent,
+  SVGRenderer,
+]);
 
 const scuroQuery = "(prefers-color-scheme: dark)";
 
