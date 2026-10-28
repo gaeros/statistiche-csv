@@ -170,52 +170,65 @@ export function HeroScorrimento({ a, b, descrizione, scorri }: { a: string; b: s
     );
   }
 
-  const opA = 1 - liscia((p - 0.25) / 0.1);
-  const opB = liscia((p - 0.29) / 0.1);
-  const opNumeri = 1 - liscia((p - 0.1) / 0.2);
-  const opGrafici = liscia((p - 0.36) / 0.1);
-  const opSuggerimento = 1 - liscia(p / 0.06);
+  // Appena si comincia a scorrere: la seconda scritta sale dal basso e copre la prima,
+  // i numeri si dissolvono e poi, sotto le scritte, salgono i grafici.
+  const entrata = liscia(p / 0.2);
+  const opA = 1 - liscia((p - 0.06) / 0.14);
+  const opNumeri = 1 - liscia((p - 0.02) / 0.2);
+  const grafici = liscia((p - 0.18) / 0.12);
+  const opSuggerimento = 1 - liscia(p / 0.04);
 
   return (
     <div ref={contenitore} className="relative" style={{ height: "220svh" }}>
       <div ref={fisso} className="sticky overflow-hidden" style={{ top: SCARTO_INTESTAZIONE, height: `calc(100svh - ${SCARTO_INTESTAZIONE}px)` }}>
-        <div className="mx-auto flex h-full max-w-6xl flex-col px-4 text-center">
-          <div aria-hidden className="relative min-h-0 flex-1" style={{ opacity: opNumeri }}>
-            {numeri.map((n) => (
-              <span
-                key={n.id}
-                className="anim-deriva absolute whitespace-nowrap font-mono font-semibold"
-                style={{
-                  left: `${n.x}%`,
-                  top: `${n.y}%`,
-                  fontSize: n.dim,
-                  color: n.scuro ? "#09090b" : "#94a3b8",
-                  animationDuration: `${n.dur}s`,
-                  animationDelay: `${n.ritardo}s`,
-                  ["--dx" as string]: `${n.dx}px`,
-                  ["--dy" as string]: `${n.dy}px`,
-                }}
-              >
-                {n.testo}
-              </span>
-            ))}
-          </div>
+        <div aria-hidden className="absolute inset-0 z-0" style={{ opacity: opNumeri }}>
+          {numeri.map((n) => (
+            <span
+              key={n.id}
+              className="anim-deriva absolute whitespace-nowrap font-mono font-semibold"
+              style={{
+                left: `${n.x}%`,
+                top: `${n.y}%`,
+                fontSize: n.dim,
+                color: n.scuro ? "#09090b" : "#94a3b8",
+                animationDuration: `${n.dur}s`,
+                animationDelay: `${n.ritardo}s`,
+                ["--dx" as string]: `${n.dx}px`,
+                ["--dy" as string]: `${n.dy}px`,
+              }}
+            >
+              {n.testo}
+            </span>
+          ))}
+        </div>
 
+        <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col items-center justify-center px-4 text-center">
           <h1 className={`grid ${titolo}`}>
             <span className="sr-only">{descrizione}</span>
-            <span aria-hidden className="col-start-1 row-start-1 text-slate-400" style={{ opacity: opA, transform: `translateY(${(1 - opA) * -14}px)` }}>{a}</span>
-            <span aria-hidden className="col-start-1 row-start-1 text-foreground" style={{ opacity: opB, transform: `translateY(${(1 - opB) * 14}px)` }}>{b}</span>
+            <span aria-hidden className="col-start-1 row-start-1 text-slate-400" style={{ opacity: opA }}>{a}</span>
+            <span
+              aria-hidden
+              className="col-start-1 row-start-1 text-foreground"
+              style={{ opacity: Math.min(1, entrata * 5), transform: `translateY(calc(${1 - entrata} * 70svh))` }}
+            >
+              {b}
+            </span>
           </h1>
 
-          <div aria-hidden className="relative flex flex-1 items-start justify-center pt-6" style={{ opacity: opGrafici }}>
+          <div
+            aria-hidden
+            className="flex h-32 items-start justify-center pt-8 sm:h-60"
+            style={{ opacity: grafici, transform: `translateY(calc(${1 - grafici} * 30svh))` }}
+          >
             <div className="flex flex-wrap items-end justify-center gap-8 sm:gap-14">
-              <Barre attivo={p > 0.4} />
-              <Torta attivo={p > 0.4} />
+              <Barre attivo={p > 0.2} />
+              <Torta attivo={p > 0.2} />
             </div>
           </div>
-          <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-4 text-sm font-medium text-slate-400" style={{ opacity: opSuggerimento }}>
-            <span className="anim-suggerimento inline-block">{scorri} ↓</span>
-          </div>
+        </div>
+
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-4 z-10 text-center text-sm font-medium text-slate-400" style={{ opacity: opSuggerimento }}>
+          <span className="anim-suggerimento inline-block">{scorri} ↓</span>
         </div>
       </div>
     </div>
