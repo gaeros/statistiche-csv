@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { siteUrl } from "@/lib/env";
@@ -10,11 +11,13 @@ import { utenteCorrente } from "@/lib/utente";
 import type { StatoForm } from "@/app/accedi/actions";
 
 export async function invita(_prev: StatoForm, formData: FormData): Promise<StatoForm> {
+  const t = await getTranslations("inviti");
+  const te = await getTranslations("erroriAuth");
   const { utente, amministratore } = await utenteCorrente();
-  if (!amministratore) return { errore: "Solo l'amministratore può invitare." };
+  if (!amministratore) return { errore: t("soloAdmin") };
 
   const parsed = z.email().safeParse(String(formData.get("email") ?? "").trim().toLowerCase());
-  if (!parsed.success) return { errore: "Inserisci un indirizzo email valido." };
+  if (!parsed.success) return { errore: (await getTranslations("accedi"))("emailNonValida") };
   const email = parsed.data;
   const inviaEmail = formData.get("invia_email") === "on";
 
@@ -23,7 +26,7 @@ export async function invita(_prev: StatoForm, formData: FormData): Promise<Stat
   const { error } = await supabase.from("inviti").insert({ email, invitato_da: utente.id });
   if (error) {
     return {
-      errore: error.code === "23505" ? "Questo indirizzo è già stato invitato." : error.message,
+      errore: error.code === "23505" ? t("giaInvitato") : error.message,
     };
   }
 
@@ -34,16 +37,14 @@ export async function invita(_prev: StatoForm, formData: FormData): Promise<Stat
     if (errInvito) {
       revalidatePath("/admin/inviti");
       return {
-        errore: `Indirizzo autorizzato, ma l'email non è partita: ${erroreAuth(errInvito.message)}`,
+        errore: t("emailNonPartita", { dettaglio: erroreAuth(te, errInvito.message) }),
       };
     }
   }
 
   revalidatePath("/admin/inviti");
   return {
-    ok: inviaEmail
-      ? `Invito inviato a ${email}.`
-      : `${email} è autorizzato: può registrarsi entrando con Google.`,
+    ok: inviaEmail ? t("invitoInviato", { email }) : t("autorizzato", { email }),
   };
 }
 

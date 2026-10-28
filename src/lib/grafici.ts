@@ -1,32 +1,18 @@
 // Costruttore di grafici (SPEC §6.1): configurazione di un grafico e preparazione dei dati da disegnare.
 import type { Colonna, Parametri } from "./filtri";
 import { BOM, cellaNumero, cellaTesto, riga } from "./csv";
-import { etichettaPeriodo, formattaValore } from "./formato";
+import type { Traduttore } from "@/i18n/lingue";
+import type { Formati } from "./formato";
 
-export const TIPI = {
-  barre: "Barre",
-  barre_impilate: "Barre impilate",
-  linee: "Linee",
-  area: "Area",
-  torta: "Torta / ciambella",
-  dispersione: "Dispersione (un numero contro un altro)",
-  istogramma: "Istogramma (distribuzione di un numero)",
-  box: "Box plot (mediana e quartili)",
-} as const;
-export type TipoGrafico = keyof typeof TIPI;
+// Le etichette si trovano nei messaggi (gruppo "grafici"): tipo_<chiave>, agg_<chiave>, per_<chiave>.
+export const TIPI = ["barre", "barre_impilate", "linee", "area", "torta", "dispersione", "istogramma", "box"] as const;
+export type TipoGrafico = (typeof TIPI)[number];
 
-export const AGGREGAZIONI = {
-  conteggio: "Conteggio righe",
-  somma: "Somma",
-  media: "Media",
-  mediana: "Mediana",
-  minimo: "Minimo",
-  massimo: "Massimo",
-} as const;
-export type Aggregazione = keyof typeof AGGREGAZIONI;
+export const AGGREGAZIONI = ["conteggio", "somma", "media", "mediana", "minimo", "massimo"] as const;
+export type Aggregazione = (typeof AGGREGAZIONI)[number];
 
-export const PERIODI = { day: "giorno", week: "settimana", month: "mese", year: "anno" } as const;
-export type Periodo = keyof typeof PERIODI;
+export const PERIODI = ["day", "week", "month", "year"] as const;
+export type Periodo = (typeof PERIODI)[number];
 
 export type Configurazione = {
   tipo: TipoGrafico;
@@ -37,7 +23,7 @@ export type Configurazione = {
   suddividi?: string;
 };
 
-// Dati pronti da disegnare (etichette già in italiano)
+// Dati pronti da disegnare (etichette già nella lingua dell'utente)
 export type Preparato =
   | { forma: "serie"; tipo: "barre" | "barre_impilate" | "linee" | "area"; categorie: string[]; serie: { nome: string; valori: (number | null)[] }[]; asseX: string; asseY: string }
   | { forma: "torta"; fette: { nome: string; valore: number }[]; asseY: string }
@@ -76,7 +62,7 @@ function uno(sp: Parametri, k: string): string | undefined {
 // Legge la configurazione dai parametri "c.*" dell'indirizzo, correggendo le scelte non adatte.
 export function leggiConfigurazione(sp: Parametri, colonne: Colonna[]): Configurazione {
   const tipo = (uno(sp, "c.tipo") ?? "barre") as TipoGrafico;
-  const t: TipoGrafico = tipo in TIPI ? tipo : "barre";
+  const t: TipoGrafico = TIPI.includes(tipo) ? tipo : "barre";
   const adatte = colonneAdatte(t, colonne);
   const nomi = (l: Colonna[]) => l.map((c) => c.nome);
 
@@ -94,14 +80,14 @@ export function leggiConfigurazione(sp: Parametri, colonne: Colonna[]): Configur
   y = y.slice(0, 8);
 
   const agg = uno(sp, "c.agg") as Aggregazione | undefined;
-  let aggregazione: Aggregazione = agg && agg in AGGREGAZIONI ? agg : adatte.y.length ? "media" : "conteggio";
+  let aggregazione: Aggregazione = agg && AGGREGAZIONI.includes(agg) ? agg : adatte.y.length ? "media" : "conteggio";
   if (!adatte.y.length) aggregazione = "conteggio";
   if (t === "torta" && !agg) aggregazione = "conteggio";
   // Impilare medie o massimi non ha senso: le barre impilate sommano
   if (t === "barre_impilate" && aggregazione !== "somma") aggregazione = "conteggio";
 
   const per = uno(sp, "c.per") as Periodo | undefined;
-  const periodo: Periodo = per && per in PERIODI ? per : "month";
+  const periodo: Periodo = per && PERIODI.includes(per) ? per : "month";
 
   let suddividi = uno(sp, "c.sudd");
   if (!suddividi || !nomi(adatte.suddividi).includes(suddividi) || suddividi === x) suddividi = undefined;
@@ -122,21 +108,23 @@ export function parametriConfigurazione(c: Configurazione): Record<string, strin
   };
 }
 
-export function titoloAutomatico(c: Configurazione, colonne: Colonna[]): string {
+export function titoloAutomatico(c: Configurazione, colonne: Colonna[], t: Traduttore): string {
   const nome = (n?: string) => colonne.find((x) => x.nome === n)?.originale ?? n ?? "";
   const valori = c.y.map(nome).join(", ");
   switch (c.tipo) {
     case "dispersione":
-      return `${nome(c.y[0])} rispetto a ${nome(c.x)}`;
+      return t("titoloDispersione", { y: nome(c.y[0]), x: nome(c.x) });
     case "istogramma":
-      return `Distribuzione di ${valori}`;
+      return t("titoloIstogramma", { valori });
     case "box":
-      return c.x ? `${valori} per ${nome(c.x).toLowerCase()}` : valori;
+      return c.x ? t("titoloPer", { misura: valori, per: nome(c.x).toLowerCase() }) : valori;
   }
-  const misura = c.aggregazione === "conteggio" ? "Righe" : `${AGGREGAZIONI[c.aggregazione]} di ${valori.toLowerCase()}`;
+  const misura = c.aggregazione === "conteggio" ? t("righe") : t("misuraDi", { agg: t(`agg_${c.aggregazione}`), valori: valori.toLowerCase() });
   const dataX = colonne.find((x) => x.nome === c.x && DATE.includes(x.tipo));
-  const per = dataX ? `per ${PERIODI[c.periodo ?? "month"]}` : `per ${nome(c.x).toLowerCase()}`;
-  return `${misura} ${per}${c.suddividi ? ` e ${nome(c.suddividi).toLowerCase()}` : ""}`;
+  const per = dataX ? t(`per_${c.periodo ?? "month"}`) : nome(c.x).toLowerCase();
+  return c.suddividi
+    ? t("titoloPerE", { misura, per, sudd: nome(c.suddividi).toLowerCase() })
+    : t("titoloPer", { misura, per });
 }
 
 type Risultato = {
@@ -146,31 +134,36 @@ type Risultato = {
   scatole?: { x: string | null; minimo: number; q1: number; mediana: number; q3: number; massimo: number; n: number }[];
 };
 
-export function prepara(c: Configurazione, r: Risultato, colonne: Colonna[]): Preparato {
+export function prepara(c: Configurazione, r: Risultato, colonne: Colonna[], f: Formati, t: Traduttore): Preparato {
   const col = (n?: string) => colonne.find((x) => x.nome === n);
   const nome = (n?: string) => col(n)?.originale ?? n ?? "";
   const tipoX = col(c.x)?.tipo;
   const etichettaX = (v: string | null) => {
-    if (v === null) return "(vuoto)";
-    if (tipoX && DATE.includes(tipoX)) return etichettaPeriodo(v, c.periodo ?? "month");
-    if (tipoX === "booleano") return v === "true" ? "Sì" : "No";
+    if (v === null) return t("vuoto");
+    if (tipoX && DATE.includes(tipoX)) return f.periodo(v, c.periodo ?? "month");
+    if (tipoX === "booleano") return v === "true" ? f.si : f.no;
     return v;
   };
   const etichettaS = (s: string) =>
-    c.suddividi ? (col(c.suddividi)?.tipo === "booleano" ? (s === "true" ? "Sì" : s === "false" ? "No" : s) : s ?? "(vuoto)") : s === "conteggio" ? "Righe" : nome(s);
-  const asseY = c.aggregazione === "conteggio" ? "Righe" : `${AGGREGAZIONI[c.aggregazione]}${c.y.length === 1 ? ` di ${nome(c.y[0])}` : ""}`;
+    c.suddividi ? (col(c.suddividi)?.tipo === "booleano" ? (s === "true" ? f.si : s === "false" ? f.no : s) : s ?? t("vuoto")) : s === "conteggio" ? t("righe") : nome(s);
+  const asseY =
+    c.aggregazione === "conteggio"
+      ? t("righe")
+      : c.y.length === 1
+        ? t("misuraDi", { agg: t(`agg_${c.aggregazione}`), valori: nome(c.y[0]) })
+        : t(`agg_${c.aggregazione}`);
 
   if (c.tipo === "dispersione") {
     return { forma: "dispersione", punti: (r.punti ?? []).map(([a, b]) => [Number(a), Number(b)]), asseX: nome(c.x), asseY: nome(c.y[0]) };
   }
   if (c.tipo === "istogramma") {
     const intero = col(c.y[0])?.tipo === "intero";
-    const f = (n: number) => formattaValore(Math.round(n * 100) / 100, "decimale");
+    const fmt = (n: number) => f.valore(Math.round(n * 100) / 100, "decimale");
     return {
       forma: "istogramma",
-      categorie: (r.barre ?? []).map((b) => (b.da === b.a ? f(b.da) : `${f(intero ? Math.ceil(b.da) : b.da)}–${f(b.a)}`)),
+      categorie: (r.barre ?? []).map((b) => (b.da === b.a ? fmt(b.da) : `${fmt(intero ? Math.ceil(b.da) : b.da)}–${fmt(b.a)}`)),
       valori: (r.barre ?? []).map((b) => Number(b.conteggio)),
-      asseY: `Righe per fascia di ${nome(c.y[0])}`,
+      asseY: t("righePerFascia", { nome: nome(c.y[0]) }),
     };
   }
   if (c.tipo === "box") {
@@ -214,8 +207,8 @@ export function prepara(c: Configurazione, r: Risultato, colonne: Colonna[]): Pr
   };
 }
 
-// Dati del grafico in CSV (separatore ";" e virgola decimale, come vuole Excel in italiano)
-export function csvPreparato(p: Preparato): string {
+// Dati del grafico in CSV (separatore ";" e virgola decimale, come vuole Excel in italiano e nei paesi europei)
+export function csvPreparato(p: Preparato, t: Traduttore): string {
   const n = cellaNumero;
   const q = cellaTesto;
   let righe: string[][];
@@ -224,16 +217,16 @@ export function csvPreparato(p: Preparato): string {
       righe = [[q(p.asseX), ...p.serie.map((s) => q(s.nome))], ...p.categorie.map((c, i) => [q(c), ...p.serie.map((s) => n(s.valori[i]))])];
       break;
     case "torta":
-      righe = [["Valore", q(p.asseY)], ...p.fette.map((f) => [q(f.nome), n(f.valore)])];
+      righe = [[t("csvValore"), q(p.asseY)], ...p.fette.map((f) => [q(f.nome), n(f.valore)])];
       break;
     case "dispersione":
       righe = [[q(p.asseX), q(p.asseY)], ...p.punti.map(([a, b]) => [n(a), n(b)])];
       break;
     case "istogramma":
-      righe = [["Fascia", "Righe"], ...p.categorie.map((c, i) => [q(c), n(p.valori[i])])];
+      righe = [[t("csvFascia"), t("righe")], ...p.categorie.map((c, i) => [q(c), n(p.valori[i])])];
       break;
     case "box":
-      righe = [["Gruppo", "Minimo", "1° quartile", "Mediana", "3° quartile", "Massimo"], ...p.categorie.map((c, i) => [q(c), ...p.scatole[i].map(n)])];
+      righe = [[t("csvGruppo"), t("agg_minimo"), t("csvQ1"), t("agg_mediana"), t("csvQ3"), t("agg_massimo")], ...p.categorie.map((c, i) => [q(c), ...p.scatole[i].map(n)])];
       break;
   }
   return BOM + righe.map(riga).join("");

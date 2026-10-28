@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -7,13 +8,9 @@ import type { StatoForm } from "@/app/accedi/actions";
 import { pulisciImportazione } from "@/lib/import/carica";
 import { createClient } from "@/lib/supabase/server";
 
-const nome = z
-  .string()
-  .trim()
-  .min(1, "Il nome non può essere vuoto.")
-  .max(100, "Il nome può avere al massimo 100 caratteri.");
-
 export async function rinomina(id: string, _prev: StatoForm, formData: FormData): Promise<StatoForm> {
+  const t = await getTranslations("dettaglio");
+  const nome = z.string().trim().min(1, t("nomeVuoto")).max(100, t("nomeLungo"));
   const parsed = nome.safeParse(formData.get("nome"));
   if (!parsed.success) return { errore: parsed.error.issues[0].message };
 
@@ -23,20 +20,21 @@ export async function rinomina(id: string, _prev: StatoForm, formData: FormData)
     .update({ nome: parsed.data, updated_at: new Date().toISOString() })
     .eq("id", id);
   if (error) {
-    return { errore: error.code === "23505" ? "Hai già un dataset con questo nome." : error.message };
+    return { errore: error.code === "23505" ? t("nomeDuplicato") : error.message };
   }
   revalidatePath(`/dataset/${id}`);
-  return { ok: "Nome aggiornato." };
+  return { ok: t("nomeAggiornato") };
 }
 
 // Elimina tabella e voce di catalogo; se l'importazione resta vuota, anche il file originale.
 export async function elimina(id: string) {
+  const t = await getTranslations("dettaglio");
   const supabase = await createClient();
   const { data: dataset } = await supabase.from("dataset").select("importazione_id").eq("id", id).single();
   if (!dataset) redirect("/dataset");
 
   const { error } = await supabase.from("dataset").delete().eq("id", id);
-  if (error) throw new Error(`Eliminazione non riuscita: ${error.message}`);
+  if (error) throw new Error(t("eliminazioneFallita", { dettaglio: error.message }));
   await pulisciImportazione(supabase, dataset.importazione_id);
 
   revalidatePath("/dataset");

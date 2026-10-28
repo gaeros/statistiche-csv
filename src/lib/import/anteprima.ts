@@ -1,5 +1,6 @@
 // Dalla griglia letta dal file all'anteprima modificabile, e poi alle righe da inserire.
 
+import type { Messaggio } from "@/i18n/lingue";
 import {
   deduplica,
   MAX_NOME_TABELLA,
@@ -20,7 +21,7 @@ export type ColonnaAnteprima = {
   includi: boolean;
   vuota: boolean;
   mancanti: number;
-  avvisi: string[];
+  avvisi: Messaggio[];
 };
 
 export type Anteprima = {
@@ -32,7 +33,7 @@ export type Anteprima = {
   senzaIntestazione: boolean;
   colonne: ColonnaAnteprima[];
   righe: string[][]; // righe di dati, senza intestazione
-  avvisi: string[];
+  avvisi: Messaggio[];
 };
 
 function sembraDato(v: string): boolean {
@@ -53,17 +54,17 @@ export function creaAnteprima(
   const senzaIntestazione = opzioni.senzaIntestazione ?? false;
 
   const datiGrezzi = senzaIntestazione ? griglia : griglia.slice(1);
-  const avvisi: string[] = [];
+  const avvisi: Messaggio[] = [];
 
   // Righe completamente vuote in mezzo al file: scartate.
   const righe = datiGrezzi.filter((r) => r.some((c) => (c ?? "").trim() !== ""));
   const scartate = datiGrezzi.length - righe.length;
-  if (scartate > 0) avvisi.push(`${scartate} righe vuote scartate.`);
+  if (scartate > 0) avvisi.push({ chiave: "righeVuoteScartate", valori: { n: scartate } });
 
   const numColonne = Math.max(intestazione.length, ...righe.map((r) => r.length), 0);
   const conCelleInPiu = righe.filter((r) => r.length > intestazione.length && r.slice(intestazione.length).some((c) => c.trim() !== "")).length;
   if (!senzaIntestazione && conCelleInPiu > 0) {
-    avvisi.push(`${conCelleInPiu} righe hanno più celle delle intestazioni: le colonne in più si chiamano colonna_N.`);
+    avvisi.push({ chiave: "celleInPiu", valori: { n: conCelleInPiu } });
   }
 
   const originali = Array.from({ length: numColonne }, (_, i) =>
@@ -74,12 +75,12 @@ export function creaAnteprima(
   const colonne: ColonnaAnteprima[] = originali.map((originale, i) => {
     const valori = righe.map((r) => r[i] ?? "");
     const ril = rilevaTipo(valori, foglio.formatoNumero);
-    const avvisiColonna: string[] = [];
+    const avvisiColonna: Messaggio[] = [];
     const vuota = ril.valori === 0;
-    if (vuota) avvisiColonna.push("Colonna sempre vuota: proposta di non importarla.");
+    if (vuota) avvisiColonna.push({ chiave: "colonnaSempreVuota" });
     else if (ril.avviso) avvisiColonna.push(ril.avviso);
     const mostrato = originale || `colonna_${i + 1}`;
-    if (originale && nomi[i] !== originale.toLowerCase()) avvisiColonna.push(`Rinominata da "${originale}".`);
+    if (originale && nomi[i] !== originale.toLowerCase()) avvisiColonna.push({ chiave: "rinominata", valori: { originale } });
     return {
       indice: i,
       originale: mostrato,

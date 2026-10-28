@@ -70,8 +70,8 @@ describe("lettura CSV (SPEC §4.3)", () => {
   });
 
   it("rifiuta formati non supportati e file vuoti", async () => {
-    await expect(leggiFile(new File(["x"], "foto.png"))).rejects.toThrow("Formato non supportato");
-    await expect(leggiFile(new File([], "vuoto.csv"))).rejects.toThrow("vuoto");
+    await expect(leggiFile(new File(["x"], "foto.png"))).rejects.toMatchObject({ chiave: "e_formato" });
+    await expect(leggiFile(new File([], "vuoto.csv"))).rejects.toMatchObject({ chiave: "e_vuoto" });
   });
 });
 

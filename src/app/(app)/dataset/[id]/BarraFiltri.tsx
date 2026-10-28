@@ -1,6 +1,8 @@
+import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { CampiNascosti } from "@/components/CampiNascosti";
 import { FormPulito } from "@/components/FormPulito";
+import { creaFormati } from "@/lib/formato";
 import {
   chiave,
   conParametri,
@@ -43,7 +45,7 @@ function Casella({ nome, valore, etichetta, scelta }: { nome: string; valore: st
 }
 
 // Barra dei filtri: vale per tutte le schede del dataset (dati, statistiche e grafici).
-export function BarraFiltri({
+export async function BarraFiltri({
   colonne,
   sp,
   etichette,
@@ -58,6 +60,9 @@ export function BarraFiltri({
   totale?: number;
   complessivo?: number;
 }) {
+  const t = await getTranslations("barraFiltri");
+  const tf = await getTranslations("filtri");
+  const f = creaFormati(await getLocale());
   const attivi = etichette.length > 0;
   const campo = "campo py-1.5 text-sm";
 
@@ -66,15 +71,15 @@ export function BarraFiltri({
       <details className="scheda p-0" open={false}>
         <summary className="flex cursor-pointer list-none flex-wrap items-center justify-between gap-2 px-4 py-3 select-none">
           <span className="font-medium">
-            Filtra i dati{" "}
+            {t("titolo")}{" "}
             {attivi && (
               <span className="ml-1 rounded-full bg-blue-600 px-2 py-0.5 text-xs font-semibold text-white">{etichette.length}</span>
             )}
           </span>
           <span className="text-sm text-slate-500">
             {totale !== undefined && complessivo !== undefined && attivi
-              ? `${totale.toLocaleString("it-IT")} righe su ${complessivo.toLocaleString("it-IT")}`
-              : "Scegli periodo, categorie, valori…"}
+              ? t("righeSu", { totale: f.numero(totale), complessivo: f.numero(complessivo) })
+              : t("suggerimento")}
           </span>
         </summary>
 
@@ -88,21 +93,24 @@ export function BarraFiltri({
                 const giorni = elenco(sp, k("g"));
                 return (
                   <Gruppo key={c.nome} titolo={c.originale}>
-                    <select name={k("p")} defaultValue={primo(sp, k("p"))} className={campo} aria-label={`Periodo di ${c.originale}`}>
-                      <option value="">Tutto il periodo, o le date qui sotto</option>
-                      {Object.entries(SCORCIATOIE).map(([v, e]) => (
-                        <option key={v} value={v}>
-                          {e.charAt(0).toUpperCase() + e.slice(1)}
-                        </option>
-                      ))}
+                    <select name={k("p")} defaultValue={primo(sp, k("p"))} className={campo} aria-label={t("periodoDi", { colonna: c.originale })}>
+                      <option value="">{t("tuttoPeriodo")}</option>
+                      {SCORCIATOIE.map((v) => {
+                        const e = tf(`scorciatoia_${v}`);
+                        return (
+                          <option key={v} value={v}>
+                            {e.charAt(0).toUpperCase() + e.slice(1)}
+                          </option>
+                        );
+                      })}
                     </select>
                     <div className="grid grid-cols-2 gap-2">
                       <label className="space-y-1 text-xs text-slate-500">
-                        <span>dal</span>
+                        <span>{t("dal")}</span>
                         <input type="date" name={k("da")} defaultValue={primo(sp, k("da"))} className={campo} />
                       </label>
                       <label className="space-y-1 text-xs text-slate-500">
-                        <span>al</span>
+                        <span>{t("al")}</span>
                         <input type="date" name={k("a")} defaultValue={primo(sp, k("a"))} className={campo} />
                       </label>
                     </div>
@@ -110,7 +118,7 @@ export function BarraFiltri({
                       <div className="grid grid-cols-2 gap-2">
                         {(["dalle", "alle"] as const).map((x) => (
                           <label key={x} className="space-y-1 text-xs text-slate-500">
-                            <span>{x} ore</span>
+                            <span>{t(x === "dalle" ? "dalleOre" : "alleOre")}</span>
                             <select name={k(x)} defaultValue={primo(sp, k(x))} className={campo}>
                               <option value="">–</option>
                               {Array.from({ length: 25 }, (_, h) => (
@@ -122,8 +130,8 @@ export function BarraFiltri({
                       </div>
                     )}
                     <div className="flex flex-wrap gap-x-3 gap-y-1">
-                      {GIORNI.map((g, i) => (
-                        <Casella key={g} nome={k("g")} valore={String(i + 1)} etichetta={g} scelta={giorni.includes(String(i + 1))} />
+                      {GIORNI.map((g) => (
+                        <Casella key={g} nome={k("g")} valore={String(g)} etichetta={tf(`giorno_${g}`)} scelta={giorni.includes(String(g))} />
                       ))}
                     </div>
                   </Gruppo>
@@ -135,11 +143,11 @@ export function BarraFiltri({
                   <Gruppo key={c.nome} titolo={c.originale}>
                     <div className="grid grid-cols-2 gap-2">
                       <label className="space-y-1 text-xs text-slate-500">
-                        <span>da</span>
+                        <span>{t("da")}</span>
                         <input type="number" step="any" name={k("da")} defaultValue={primo(sp, k("da"))} className={campo} />
                       </label>
                       <label className="space-y-1 text-xs text-slate-500">
-                        <span>a</span>
+                        <span>{t("a")}</span>
                         <input type="number" step="any" name={k("a")} defaultValue={primo(sp, k("a"))} className={campo} />
                       </label>
                     </div>
@@ -158,23 +166,23 @@ export function BarraFiltri({
                           key={o.valore}
                           nome={k("v")}
                           valore={o.valore}
-                          etichetta={c.tipo === "booleano" ? (o.valore === "true" ? "Sì" : "No") : o.valore}
+                          etichetta={c.tipo === "booleano" ? (o.valore === "true" ? f.si : f.no) : o.valore}
                           scelta={scelti.includes(o.valore)}
                         />
                       ))}
                     </div>
                   ) : (
-                    <input type="search" name={k("t")} defaultValue={primo(sp, k("t"))} placeholder="contiene…" className={campo} />
+                    <input type="search" name={k("t")} defaultValue={primo(sp, k("t"))} placeholder={t("contiene")} className={campo} />
                   )}
                 </Gruppo>
               );
             })}
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <button type="submit" className="bottone">Applica i filtri</button>
+            <button type="submit" className="bottone">{t("applica")}</button>
             {attivi && (
               <Link href={conParametri(senzaFiltri(sp), { pagina: null })} className="link text-sm">
-                Azzera filtri
+                {t("azzera")}
               </Link>
             )}
           </div>
@@ -188,15 +196,15 @@ export function BarraFiltri({
               key={e.testo}
               href={conParametri(sp, Object.fromEntries([...e.chiavi, "pagina"].map((x) => [x, null])))}
               className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 text-blue-800 hover:bg-blue-100 dark:bg-blue-950 dark:text-blue-200 dark:hover:bg-blue-900"
-              title="Togli questo filtro"
+              title={t("togli")}
             >
               {e.testo}
               <span aria-hidden>✕</span>
-              <span className="sr-only">(togli)</span>
+              <span className="sr-only">{t("tolgoSr")}</span>
             </Link>
           ))}
           <Link href={conParametri(senzaFiltri(sp), { pagina: null })} className="link ml-1">
-            Azzera filtri
+            {t("azzera")}
           </Link>
         </div>
       )}

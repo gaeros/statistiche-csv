@@ -1,5 +1,6 @@
+import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
-import { formattaDataOra, formattaNumero } from "@/lib/formato";
+import { creaFormati } from "@/lib/formato";
 
 type Props = {
   id: string;
@@ -14,7 +15,9 @@ type Props = {
   query?: string;
 };
 
-export function Intestazione({ id, nome, nomeOriginale, foglio, createdAt, righe, colonne, attiva, query = "" }: Props) {
+export async function Intestazione({ id, nome, nomeOriginale, foglio, createdAt, righe, colonne, attiva, query = "" }: Props) {
+  const t = await getTranslations("dettaglio");
+  const f = creaFormati(await getLocale());
   const scheda = (valore: Props["attiva"], href: string, etichetta: string) => (
     <Link
       href={href}
@@ -32,18 +35,18 @@ export function Intestazione({ id, nome, nomeOriginale, foglio, createdAt, righe
   return (
     <div className="space-y-4">
       <div className="space-y-1">
-        <Link href="/dataset" className="link text-sm">← I miei dataset</Link>
+        <Link href="/dataset" className="link text-sm">{t("tornaElenco")}</Link>
         <h1 className="font-mono text-2xl font-semibold break-all">{nome}</h1>
         <p className="text-sm text-slate-500 break-all">
           {nomeOriginale}
-          {foglio ? ` · foglio ${foglio}` : ""} · importato il {formattaDataOra(createdAt)} ·{" "}
-          {formattaNumero(righe)} righe · {colonne} colonne
+          {foglio ? ` · ${t("foglio", { nome: foglio })} · ` : " · "}
+          {t("info", { data: f.dataOra(createdAt), righe: f.numero(righe), colonne })}
         </p>
       </div>
       <nav className="flex gap-6 border-b border-slate-200 dark:border-slate-800">
-        {scheda("dati", `/dataset/${id}${query}`, "Dati")}
-        {scheda("statistiche", `/dataset/${id}/statistiche${query}`, "Statistiche")}
-        {scheda("grafici", `/dataset/${id}/grafici${query}`, "Grafici")}
+        {scheda("dati", `/dataset/${id}${query}`, t("schedaDati"))}
+        {scheda("statistiche", `/dataset/${id}/statistiche${query}`, t("schedaStatistiche"))}
+        {scheda("grafici", `/dataset/${id}/grafici${query}`, t("schedaGrafici"))}
       </nav>
     </div>
   );

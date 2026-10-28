@@ -1,7 +1,10 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { creaFormati, type Formati } from "@/lib/formato";
+import type { Traduttore } from "@/i18n/lingue";
 import { Messaggio } from "@/components/Messaggio";
 import { creaAnteprima, type Anteprima } from "@/lib/import/anteprima";
 import {
@@ -38,10 +41,10 @@ type Voce = {
   ripresa?: Ripresa;
 };
 
-const formatoMB = (byte: number) =>
+const formatoMB = (byte: number, f: Formati) =>
   byte < 1024 * 1024
-    ? `${Math.max(1, Math.round(byte / 1024)).toLocaleString("it-IT")} KB`
-    : `${(byte / 1024 / 1024).toLocaleString("it-IT", { maximumFractionDigits: 1 })} MB`;
+    ? `${f.numeroCon(Math.max(1, Math.round(byte / 1024)), 0)} KB`
+    : `${f.numeroCon(byte / 1024 / 1024, 1)} MB`;
 
 function nuoveSchede(letto: FileLetto, file: File): Scheda[] {
   return letto.fogli.map((f, i) => {
@@ -57,6 +60,8 @@ function nuoveSchede(letto: FileLetto, file: File): Scheda[] {
 }
 
 export function Importatore() {
+  const t = useTranslations("importa");
+  const f = creaFormati(useLocale());
   const supabase = useMemo(() => createClient(), []);
   const [voci, setVoci] = useState<Voce[]>([]);
   const [esistenti, setEsistenti] = useState<DatasetEsistente[]>([]);
@@ -80,7 +85,7 @@ export function Importatore() {
     async (voce: Voce, opzioni: { encoding?: Encoding; separatore?: string } = {}) => {
       try {
         const letto = await leggiFile(voce.file, opzioni);
-        if (letto.fogli.every((f) => f.righe.length === 0)) throw new ErroreLettura("Il file è vuoto.");
+        if (letto.fogli.every((f) => f.righe.length === 0)) throw new ErroreLettura("e_vuoto");
         aggiornaVoce(voce.id, (v) => ({
           ...v,
           stato: "pronto",
@@ -94,11 +99,11 @@ export function Importatore() {
         aggiornaVoce(voce.id, (v) => ({
           ...v,
           stato: "errore",
-          errore: e instanceof ErroreLettura ? e.message : "Il file non è leggibile o è danneggiato.",
+          errore: e instanceof ErroreLettura ? t(e.chiave, e.valori) : t("errNonLeggibile"),
         }));
       }
     },
-    [aggiornaVoce],
+    [aggiornaVoce, t],
   );
 
   const aggiungiFile = useCallback(
@@ -106,18 +111,18 @@ export function Importatore() {
       const nuove: Voce[] = Array.from(elenco).map((file) => {
         const base: Voce = { id: crypto.randomUUID(), file, stato: "lettura", schede: [] };
         if (!ESTENSIONI.includes(estensione(file.name))) {
-          return { ...base, stato: "errore", errore: "Formato non supportato. Usa CSV, TSV, TXT, XLSX o XLS." };
+          return { ...base, stato: "errore", errore: t("errFormato") };
         }
         if (file.size > LIMITE_FILE_BYTE) {
-          return { ...base, stato: "errore", errore: `File troppo grande (${formatoMB(file.size)}): il massimo è 50 MB.` };
+          return { ...base, stato: "errore", errore: t("errGrande", { dim: formatoMB(file.size, f) }) };
         }
-        if (file.size === 0) return { ...base, stato: "errore", errore: "Il file è vuoto." };
+        if (file.size === 0) return { ...base, stato: "errore", errore: t("errVuoto") };
         return base;
       });
       setVoci((v) => [...v, ...nuove]);
       nuove.filter((v) => v.stato === "lettura").forEach((v) => leggi(v));
     },
-    [leggi],
+    [leggi, t, f],
   );
 
   async function avvia(voce: Voce) {
@@ -135,6 +140,7 @@ export function Importatore() {
         destinazioni,
         voce.ripresa ?? { destinazione: 0, blocco: 0, completati: [] },
         (progresso, ripresa) => aggiornaVoce(voce.id, (v) => ({ ...v, progresso, ripresa })),
+        t,
       );
       aggiornaVoce(voce.id, (v) => ({ ...v, stato: "completata", ripresa }));
       caricaEsistenti();
@@ -167,10 +173,10 @@ export function Importatore() {
             : "border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-900"
         }`}
       >
-        <p className="font-medium">Trascina qui i file</p>
-        <p className="text-sm text-slate-500">oppure</p>
+        <p className="font-medium">{t("trascina")}</p>
+        <p className="text-sm text-slate-500">{t("oppure")}</p>
         <button type="button" className="bottone" onClick={() => input.current?.click()}>
-          Scegli file
+          {t("scegli")}
         </button>
         <input
           ref={input}
@@ -191,11 +197,12 @@ export function Importatore() {
             <div>
               <h2 className="font-semibold break-all">{voce.file.name}</h2>
               <p className="text-sm text-slate-500">
-                {formatoMB(voce.file.size)}
+                {formatoMB(voce.file.size, f)}
                 {voce.letto?.tipo === "csv" &&
-                  ` · ${voce.letto.encoding === "utf-8" ? "UTF-8" : "Windows-1252"} · separatore ${
-                    voce.letto.separatore === "\t" ? "tabulazione" : `"${voce.letto.separatore}"`
-                  }`}
+                  ` · ${t("infoCsv", {
+                    enc: voce.letto.encoding === "utf-8" ? "UTF-8" : "Windows-1252",
+                    sep: voce.letto.separatore === "\t" ? t("sepTabMin") : `"${voce.letto.separatore}"`,
+                  })}`}
               </p>
             </div>
             {(voce.stato === "pronto" || voce.stato === "errore" || voce.stato === "completata") && (
@@ -204,12 +211,12 @@ export function Importatore() {
                 className="text-sm text-slate-500 hover:underline"
                 onClick={() => setVoci((v) => v.filter((x) => x.id !== voce.id))}
               >
-                Togli dall&apos;elenco
+                {t("togli")}
               </button>
             )}
           </div>
 
-          {voce.stato === "lettura" && <p className="text-sm text-slate-500">Lettura del file…</p>}
+          {voce.stato === "lettura" && <p className="text-sm text-slate-500">{t("lettura")}</p>}
           {voce.stato === "errore" && <Messaggio tipo="errore" testo={voce.errore} />}
 
           {voce.stato === "pronto" && voce.letto && (
@@ -217,7 +224,7 @@ export function Importatore() {
               {voce.letto.tipo === "csv" && (
                 <div className="flex flex-wrap gap-4 text-sm">
                   <label className="flex items-center gap-2">
-                    Codifica
+                    {t("codifica")}
                     <select
                       className="campo w-auto py-1"
                       value={voce.encoding ?? ""}
@@ -225,23 +232,23 @@ export function Importatore() {
                         leggi(voce, { encoding: (e.target.value || undefined) as Encoding | undefined, separatore: voce.separatore })
                       }
                     >
-                      <option value="">Automatica</option>
+                      <option value="">{t("automatica")}</option>
                       <option value="utf-8">UTF-8</option>
                       <option value="windows-1252">Windows-1252 / Latin-1</option>
                     </select>
                   </label>
                   <label className="flex items-center gap-2">
-                    Separatore
+                    {t("separatore")}
                     <select
                       className="campo w-auto py-1"
                       value={voce.separatore ?? ""}
                       onChange={(e) => leggi(voce, { encoding: voce.encoding, separatore: e.target.value || undefined })}
                     >
-                      <option value="">Automatico</option>
-                      <option value=";">Punto e virgola ;</option>
-                      <option value=",">Virgola ,</option>
-                      <option value={"\t"}>Tabulazione</option>
-                      <option value="|">Barra verticale |</option>
+                      <option value="">{t("automatico")}</option>
+                      <option value=";">{t("sepPuntoVirgola")}</option>
+                      <option value=",">{t("sepVirgola")}</option>
+                      <option value={"\t"}>{t("sepTab")}</option>
+                      <option value="|">{t("sepBarra")}</option>
                     </select>
                   </label>
                 </div>
@@ -249,7 +256,7 @@ export function Importatore() {
 
               {voce.letto.tipo === "excel" && voce.schede.length > 1 && (
                 <fieldset className="space-y-2">
-                  <legend className="text-sm font-medium">Fogli da importare</legend>
+                  <legend className="text-sm font-medium">{t("fogliDaImportare")}</legend>
                   <div className="flex flex-wrap gap-4">
                     {voce.schede.map((s, i) => (
                       <label key={s.chiave} className="flex items-center gap-2 text-sm">
@@ -265,7 +272,7 @@ export function Importatore() {
                           }
                         />
                         {s.anteprima.foglio}
-                        {s.anteprima.colonne.length === 0 && <span className="text-slate-400">(vuoto)</span>}
+                        {s.anteprima.colonne.length === 0 && <span className="text-slate-400">{t("foglioVuoto")}</span>}
                       </label>
                     ))}
                   </div>
@@ -291,7 +298,7 @@ export function Importatore() {
                 ) : null,
               )}
 
-              <PulsanteImporta voce={voce} esistenti={esistenti} onAvvia={() => avvia(voce)} />
+              <PulsanteImporta voce={voce} esistenti={esistenti} onAvvia={() => avvia(voce)} t={t} f={f} />
             </>
           )}
 
@@ -306,8 +313,7 @@ export function Importatore() {
                 />
               </div>
               <p className="text-sm text-slate-500">
-                {voce.progresso.fase} {voce.progresso.fatte.toLocaleString("it-IT")} di{" "}
-                {voce.progresso.totali.toLocaleString("it-IT")} righe
+                {t("progresso", { fase: voce.progresso.fase, fatte: f.numero(voce.progresso.fatte), totali: f.numero(voce.progresso.totali) })}
               </p>
             </div>
           )}
@@ -316,14 +322,14 @@ export function Importatore() {
             <div className="space-y-3">
               <Messaggio tipo="errore" testo={voce.errore} />
               <button type="button" className="bottone" onClick={() => avvia(voce)}>
-                Riprova da dove si era fermata
+                {t("riprova")}
               </button>
             </div>
           )}
 
           {voce.stato === "completata" && (
             <div className="space-y-2">
-              <Messaggio tipo="ok" testo="Importazione completata." />
+              <Messaggio tipo="ok" testo={t("completata")} />
               <ul className="list-inside list-disc text-sm">
                 {voce.ripresa?.completati.map((d) => (
                   <li key={d.id}>
@@ -341,39 +347,51 @@ export function Importatore() {
   );
 }
 
-function problemi(voce: Voce, esistenti: DatasetEsistente[]): string[] {
+function problemi(voce: Voce, esistenti: DatasetEsistente[], t: Traduttore): string[] {
   const scelte = voce.schede.filter((s) => s.selezionata);
   const elenco: string[] = [];
-  if (scelte.length === 0) elenco.push("Scegli almeno un foglio da importare.");
+  if (scelte.length === 0) elenco.push(t("sceltaFoglio"));
   const nomi = scelte.map((s) => s.anteprima.nomeTabella);
-  if (new Set(nomi).size !== nomi.length) elenco.push("Due fogli hanno lo stesso nome di tabella: cambiane uno.");
+  if (new Set(nomi).size !== nomi.length) elenco.push(t("nomeDoppio"));
   for (const s of scelte) {
     const a = s.anteprima;
-    const etichetta = a.foglio ? `Foglio ${a.foglio}` : "Tabella";
+    const et = a.foglio ? t("etichettaFoglio", { nome: a.foglio }) : t("etichettaTabella");
     if (!/^[a-z_][a-z0-9_]{0,52}$/.test(a.nomeTabella)) {
-      elenco.push(`${etichetta}: il nome può contenere solo lettere minuscole, numeri e _ (massimo 53 caratteri).`);
+      elenco.push(t("nomeNonValido", { et }));
     }
     const incluse = a.colonne.filter((c) => c.includi);
-    if (incluse.length === 0) elenco.push(`${etichetta}: scegli almeno una colonna.`);
+    if (incluse.length === 0) elenco.push(t("nessunaColonna", { et }));
     const nomiColonne = incluse.map((c) => c.nome);
-    if (new Set(nomiColonne).size !== nomiColonne.length) elenco.push(`${etichetta}: ci sono due colonne con lo stesso nome.`);
+    if (new Set(nomiColonne).size !== nomiColonne.length) elenco.push(t("colonneDoppie", { et }));
     if (incluse.some((c) => !/^[a-z_][a-z0-9_]{0,62}$/.test(c.nome) || ["id", "user_id", "created_at"].includes(c.nome))) {
-      elenco.push(`${etichetta}: un nome di colonna non è valido (solo minuscole, numeri e _; non id, user_id, created_at).`);
+      elenco.push(t("colonnaNonValida", { et }));
     }
     const esistente = esistenti.find((e) => e.nome === a.nomeTabella);
     if (esistente && s.modalita === "sostituisci" && !s.confermaSostituzione) {
-      elenco.push(`${etichetta}: conferma la sostituzione di ${esistente.nome}.`);
+      elenco.push(t("confermaSostituzioneProblema", { et, nome: esistente.nome }));
     }
     if (esistente && s.modalita === "accoda") {
-      const motivo = compatibilePerAccodare(a, esistente);
-      if (motivo) elenco.push(`${etichetta}: impossibile accodare. ${motivo}`);
+      const motivo = compatibilePerAccodare(a, esistente, t);
+      if (motivo) elenco.push(t("impossibileAccodare", { et, motivo }));
     }
   }
   return elenco;
 }
 
-function PulsanteImporta({ voce, esistenti, onAvvia }: { voce: Voce; esistenti: DatasetEsistente[]; onAvvia: () => void }) {
-  const elenco = problemi(voce, esistenti);
+function PulsanteImporta({
+  voce,
+  esistenti,
+  onAvvia,
+  t,
+  f,
+}: {
+  voce: Voce;
+  esistenti: DatasetEsistente[];
+  onAvvia: () => void;
+  t: Traduttore;
+  f: Formati;
+}) {
+  const elenco = problemi(voce, esistenti, t);
   const righe = voce.schede.filter((s) => s.selezionata).reduce((n, s) => n + s.anteprima.righe.length, 0);
   return (
     <div className="space-y-3 border-t border-slate-200 pt-4 dark:border-slate-800">
@@ -385,7 +403,7 @@ function PulsanteImporta({ voce, esistenti, onAvvia }: { voce: Voce; esistenti: 
         </ul>
       )}
       <button type="button" className="bottone" disabled={elenco.length > 0} onClick={onAvvia}>
-        Importa {righe.toLocaleString("it-IT")} righe
+        {t("importaN", { n: f.numero(righe) })}
       </button>
     </div>
   );

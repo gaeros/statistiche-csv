@@ -1,10 +1,12 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useCallback, useRef } from "react";
 import type { ECharts } from "echarts/core";
+import type { Traduttore } from "@/i18n/lingue";
 import { csvPreparato, type Preparato } from "@/lib/grafici";
 import { Grafico } from "./Grafico";
-import { colori, formatta, stileAssi, stileTooltip, type Colori } from "./tema";
+import { colori, stileAssi, stileTooltip, type Colori } from "./tema";
 
 function scarica(nome: string, url: string) {
   const a = document.createElement("a");
@@ -13,10 +15,11 @@ function scarica(nome: string, url: string) {
   a.click();
 }
 
-const nomeFile = (titolo: string) =>
-  titolo.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-zA-Z0-9]+/g, "_").replace(/^_|_$/g, "").toLowerCase() || "grafico";
+const nomeFile = (titolo: string, predefinito: string) =>
+  titolo.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-zA-Z0-9]+/g, "_").replace(/^_|_$/g, "").toLowerCase() || predefinito;
 
-function opzioni(p: Preparato, c: Colori) {
+function opzioni(p: Preparato, c: Colori, t: Traduttore) {
+  const formatta = c.formatta;
   const assi = stileAssi(c);
   const asseNumeri = (nome: string) => ({
     type: "value" as const,
@@ -47,7 +50,7 @@ function opzioni(p: Preparato, c: Colori) {
             itemStyle: { borderColor: c.sfondo, borderWidth: 2, borderRadius: 4 },
             label: { color: c.testo, formatter: (x: { name: string; percent: number }) => `${x.name}\n${formatta(x.percent)}%` },
             data: p.fette.slice(0, 8).concat(
-              p.fette.length > 8 ? [{ nome: "Altri", valore: p.fette.slice(8).reduce((s, f) => s + f.valore, 0) }] : [],
+              p.fette.length > 8 ? [{ nome: t("altri"), valore: p.fette.slice(8).reduce((s, f) => s + f.valore, 0) }] : [],
             ).map((f) => ({ name: f.nome, value: f.valore })),
           },
         ],
@@ -66,7 +69,7 @@ function opzioni(p: Preparato, c: Colori) {
         tooltip: { trigger: "axis", axisPointer: { type: "shadow" }, ...stileTooltip(c), valueFormatter: formatta },
         xAxis: asseCategorie(p.categorie),
         yAxis: { ...asseNumeri(p.asseY), minInterval: 1 },
-        series: [{ type: "bar", name: "Righe", data: p.valori, barCategoryGap: "8%", itemStyle: { borderRadius: [4, 4, 0, 0] } }],
+        series: [{ type: "bar", name: t("righe"), data: p.valori, barCategoryGap: "8%", itemStyle: { borderRadius: [4, 4, 0, 0] } }],
       };
     case "box":
       return {
@@ -76,7 +79,7 @@ function opzioni(p: Preparato, c: Colori) {
           ...stileTooltip(c),
           formatter: (x: { name: string; value: number[] }) => {
             const v = x.value.slice(-5);
-            return `${x.name}<br/>Massimo: <b>${formatta(v[4])}</b><br/>3° quartile: <b>${formatta(v[3])}</b><br/>Mediana: <b>${formatta(v[2])}</b><br/>1° quartile: <b>${formatta(v[1])}</b><br/>Minimo: <b>${formatta(v[0])}</b>`;
+            return `${x.name}<br/>${t("massimo")}: <b>${formatta(v[4])}</b><br/>${t("q3")}: <b>${formatta(v[3])}</b><br/>${t("mediana")}: <b>${formatta(v[2])}</b><br/>${t("q1")}: <b>${formatta(v[1])}</b><br/>${t("minimo")}: <b>${formatta(v[0])}</b>`;
           },
         },
         xAxis: asseCategorie(p.categorie),
@@ -118,6 +121,8 @@ function opzioni(p: Preparato, c: Colori) {
 
 // Grafico del costruttore, con esportazione in PNG e dei suoi dati in CSV.
 export function GraficoLibero({ titolo, preparato, altezza = 340 }: { titolo: string; preparato: Preparato; altezza?: number }) {
+  const t = useTranslations("chart");
+  const tg = useTranslations("grafici");
   const grafico = useRef<ECharts | null>(null);
   const riferimento = useCallback((g: ECharts | null) => {
     grafico.current = g;
@@ -151,23 +156,23 @@ export function GraficoLibero({ titolo, preparato, altezza = 340 }: { titolo: st
     ctx.font = "600 16px system-ui, sans-serif";
     ctx.fillText(titolo, 8, 28);
     ctx.drawImage(img, 0, margine);
-    scarica(`${nomeFile(titolo)}.png`, tela.toDataURL("image/png"));
+    scarica(`${nomeFile(titolo, t("grafico"))}.png`, tela.toDataURL("image/png"));
   }
 
   function esportaCsv() {
-    const url = URL.createObjectURL(new Blob([csvPreparato(preparato)], { type: "text/csv;charset=utf-8" }));
-    scarica(`${nomeFile(titolo)}.csv`, url);
+    const url = URL.createObjectURL(new Blob([csvPreparato(preparato, tg)], { type: "text/csv;charset=utf-8" }));
+    scarica(`${nomeFile(titolo, t("grafico"))}.csv`, url);
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
-  if (vuoto) return <p className="py-8 text-center text-sm text-slate-500">Nessun dato da mostrare con queste scelte.</p>;
+  if (vuoto) return <p className="py-8 text-center text-sm text-slate-500">{t("nessunDato")}</p>;
 
   return (
     <div className="space-y-2">
-      <Grafico descrizione={titolo} altezza={altezza} riferimento={riferimento} opzioni={(c) => opzioni(preparato, c)} />
+      <Grafico descrizione={titolo} altezza={altezza} riferimento={riferimento} opzioni={(c) => opzioni(preparato, c, t)} />
       <div className="flex flex-wrap justify-end gap-3 text-sm">
-        <button type="button" onClick={esportaPng} className="link">Scarica immagine (PNG)</button>
-        <button type="button" onClick={esportaCsv} className="link">Scarica dati (CSV)</button>
+        <button type="button" onClick={esportaPng} className="link">{t("scaricaPng")}</button>
+        <button type="button" onClick={esportaCsv} className="link">{t("scaricaCsv")}</button>
       </div>
     </div>
   );

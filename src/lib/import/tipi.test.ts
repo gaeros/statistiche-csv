@@ -61,6 +61,6 @@ describe("rilevamento dei tipi (SPEC §4.9)", () => {
   it("con tipi misti importa come testo e avvisa", () => {
     const r = rilevaTipo(["1", "2", "3", "4", "boh"], "it");
     expect(r.tipo).toBe("testo");
-    expect(r.avviso).toContain("1 valore non numerico");
+    expect(r.avviso).toEqual({ chiave: "avvNonNumericoUno", valori: { n: 1 } });
   });
 });

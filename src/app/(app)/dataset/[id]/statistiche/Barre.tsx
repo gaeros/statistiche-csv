@@ -1,7 +1,7 @@
 // Barre orizzontali semplici in CSS, per elenchi ordinati come le correlazioni.
 export function Barre({
   righe,
-  formattaValore = (n) => n.toLocaleString("it-IT"),
+  formattaValore = (n) => n.toLocaleString(),
 }: {
   righe: { etichetta: string; valore: number | null; nota?: string }[];
   formattaValore?: (n: number) => string;

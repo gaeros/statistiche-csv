@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { NextResponse, type NextRequest } from "next/server";
 import { erroreAuth } from "@/lib/errori-auth";
 import { destinazioneSicura } from "@/lib/redirect";
@@ -14,15 +15,16 @@ export async function GET(request: NextRequest) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(codice);
     if (!error) return NextResponse.redirect(`${origin}${next}`);
-    return redirectErrore(origin, error.message);
+    return await redirectErrore(origin, error.message);
   }
 
-  return redirectErrore(origin, erroreProvider);
+  return await redirectErrore(origin, erroreProvider);
 }
 
-function redirectErrore(origin: string, messaggio: string | null) {
+async function redirectErrore(origin: string, messaggio: string | null) {
+  const te = await getTranslations("erroriAuth");
   return NextResponse.redirect(
-    `${origin}/accedi?errore=${encodeURIComponent(erroreAuth(messaggio))}`,
+    `${origin}/accedi?errore=${encodeURIComponent(erroreAuth(te, messaggio))}`,
   );
 }
 

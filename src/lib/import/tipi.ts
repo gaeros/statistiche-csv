@@ -2,16 +2,12 @@
 
 export type Tipo = "intero" | "decimale" | "testo" | "data" | "data_ora" | "booleano";
 export type FormatoNumero = "it" | "en";
+import type { Messaggio } from "@/i18n/lingue";
+
 export type Valore = string | number | boolean | null;
 
-export const ETICHETTE_TIPO: Record<Tipo, string> = {
-  intero: "Intero",
-  decimale: "Decimale",
-  testo: "Testo",
-  data: "Data",
-  data_ora: "Data e ora",
-  booleano: "Sì/No",
-};
+// Le etichette dei tipi sono nei messaggi: importa.tipo_<tipo>.
+export const TIPI_DATO: Tipo[] = ["intero", "decimale", "testo", "data", "data_ora", "booleano"];
 
 const MANCANTI = new Set(["", "na", "n/a", "n.a.", "null", "-", "nd", "n.d.", "nan"]);
 
@@ -170,18 +166,18 @@ export type Rilevamento = {
   formatoNumero: FormatoNumero;
   valori: number; // non mancanti
   mancanti: number;
-  avviso?: string;
+  avviso?: Messaggio;
 };
 
 // I valori arrivano tutti come testo (anche quelli di Excel, normalizzati prima).
 export function rilevaTipo(valori: string[], formatoPredefinito: FormatoNumero): Rilevamento {
   const presenti = valori.filter((v) => !mancante(v));
   const mancanti = valori.length - presenti.length;
-  const esito = (tipo: Tipo, formatoNumero = formatoPredefinito, avviso?: string): Rilevamento => ({
+  const esito = (tipo: Tipo, formatoNumero = formatoPredefinito, avviso?: Messaggio): Rilevamento => ({
     tipo, formatoNumero, valori: presenti.length, mancanti, avviso,
   });
 
-  if (presenti.length === 0) return esito("testo", formatoPredefinito, "Colonna vuota");
+  if (presenti.length === 0) return esito("testo", formatoPredefinito, { chiave: "avvColonnaVuota" });
 
   // Booleano: solo parole sì/no (una colonna di soli 0/1 resta un numero).
   const minuscoli = presenti.map((v) => v.trim().toLowerCase());
@@ -196,10 +192,10 @@ export function rilevaTipo(valori: string[], formatoPredefinito: FormatoNumero):
   const forme = presenti.map(formaNumero);
   if (forme.every((f) => f !== null)) {
     const conZeri = presenti.some((v) => /^-?0\d/.test(pulisciNumero(v)));
-    if (conZeri) return esito("testo", formatoPredefinito, "Numeri con zeri iniziali (es. CAP, codici): importati come testo");
+    if (conZeri) return esito("testo", formatoPredefinito, { chiave: "avvZeri" });
     const it = forme.includes("it");
     const en = forme.includes("en");
-    if (it && en) return esito("testo", formatoPredefinito, "Numeri scritti in formati diversi: importati come testo");
+    if (it && en) return esito("testo", formatoPredefinito, { chiave: "avvFormatiDiversi" });
     const formato: FormatoNumero = it ? "it" : en ? "en" : formatoPredefinito;
     const numeri = presenti.map((v) => convertiNumero(v, formato));
     if (numeri.every((n) => n !== null)) {
@@ -222,7 +218,10 @@ export function rilevaTipo(valori: string[], formatoPredefinito: FormatoNumero):
     return esito(
       "testo",
       formatoPredefinito,
-      `${altri} valor${altri === 1 ? "e" : "i"} non ${numerici >= date ? "numeric" + (altri === 1 ? "o" : "i") : "di data"}: colonna importata come testo`,
+      {
+        chiave: `avvNon${numerici >= date ? "Numerico" : "Data"}${altri === 1 ? "Uno" : "Molti"}`,
+        valori: { n: altri },
+      },
     );
   }
 

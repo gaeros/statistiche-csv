@@ -30,15 +30,4 @@ export type Statistiche = { totale: number; complessivo: number; colonne: StatCo
 export const NUMERICI = ["intero", "decimale"];
 export const DATE = ["data", "data_ora"];
 
-export const PERIODI = { day: "giorno", week: "settimana", month: "mese", year: "anno" } as const;
-export type Periodo = keyof typeof PERIODI;
-
-export const AGGREGAZIONI = {
-  conteggio: "Conteggio righe",
-  somma: "Somma",
-  media: "Media",
-  mediana: "Mediana",
-  minimo: "Minimo",
-  massimo: "Massimo",
-} as const;
-export type Aggregazione = keyof typeof AGGREGAZIONI;
+export { AGGREGAZIONI, PERIODI, type Aggregazione, type Periodo } from "@/lib/grafici";

@@ -1,4 +1,6 @@
+import { getLocale, getTranslations } from "next-intl/server";
 import { BOM, cella, cellaTesto, riga } from "@/lib/csv";
+import { creaFormati } from "@/lib/formato";
 import { leggiFiltri, type Colonna } from "@/lib/filtri";
 import { createClient } from "@/lib/supabase/server";
 
@@ -8,9 +10,11 @@ const BLOCCO = 500;
 // dell'utente (RLS), così si può scaricare solo ciò che si vede.
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const t = await getTranslations("dettaglio");
+  const f = creaFormati(await getLocale());
   const supabase = await createClient();
   const { data: d } = await supabase.from("dataset").select("nome, colonne").eq("id", id).maybeSingle();
-  if (!d) return new Response("Dataset non trovato.", { status: 404 });
+  if (!d) return new Response(t("nonTrovato"), { status: 404 });
 
   const colonne = d.colonne as Colonna[];
   const sp = Object.fromEntries(
@@ -36,7 +40,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
           return;
         }
         const righe = (data?.righe ?? []) as Record<string, unknown>[];
-        if (righe.length) controller.enqueue(codifica.encode(righe.map((r) => riga(colonne.map((c) => cella(r[c.nome], c.tipo)))).join("")));
+        if (righe.length) controller.enqueue(codifica.encode(righe.map((r) => riga(colonne.map((c) => cella(r[c.nome], c.tipo, f.si, f.no)))).join("")));
         if (righe.length < BLOCCO) break;
       }
       controller.close();

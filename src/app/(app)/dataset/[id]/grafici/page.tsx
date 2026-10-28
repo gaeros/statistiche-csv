@@ -1,8 +1,10 @@
+import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CampiNascosti } from "@/components/CampiNascosti";
 import { FormPulito } from "@/components/FormPulito";
 import { GraficoLibero } from "@/components/grafici/GraficoLibero";
+import { creaFormati } from "@/lib/formato";
 import { conParametri, leggiFiltri, type Colonna } from "@/lib/filtri";
 import {
   AGGREGAZIONI,
@@ -47,6 +49,9 @@ function Opzioni({ elenco, vuota }: { elenco: { valore: string; etichetta: strin
 
 export default async function PaginaGrafici({ params, searchParams }: PageProps<"/dataset/[id]/grafici">) {
   const { id } = await params;
+  const t = await getTranslations("graficiPagina");
+  const tg = await getTranslations("grafici");
+  const f = creaFormati(await getLocale());
   const sp = await searchParams;
 
   const supabase = await createClient();
@@ -72,7 +77,7 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
     (salvati ?? []).map(async (g) => {
       const c = leggiConfigurazione(parametriConfigurazione(g.configurazione as Configurazione), colonne);
       const { data, error } = await supabase.rpc("dati_grafico", { p_dataset: id, p_config: c, p_filtri: filtri });
-      return { id: g.id as string, titolo: g.titolo as string, config: c, preparato: data ? prepara(c, data, colonne) : null, errore: error?.message };
+      return { id: g.id as string, titolo: g.titolo as string, config: c, preparato: data ? prepara(c, data, colonne, f, tg) : null, errore: error?.message };
     }),
   );
 
@@ -81,7 +86,7 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
   const serie = SERIE.includes(config.tipo);
   const unaSola = !serie;
   const xData = colonne.some((c) => c.nome === config.x && (c.tipo === "data" || c.tipo === "data_ora"));
-  const titolo = titoloAutomatico(config, colonne);
+  const titolo = titoloAutomatico(config, colonne, tg);
   const ritorno = conParametri(sp, {});
 
   return (
@@ -103,11 +108,11 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
       {/* Dashboard personale */}
       <section id="dashboard" className="space-y-4">
         <div>
-          <h2 className="text-xl font-semibold">La tua dashboard</h2>
+          <h2 className="text-xl font-semibold">{t("dashboard")}</h2>
           <p className="text-sm text-slate-500">
             {dashboard.length
-              ? "I grafici che hai salvato per questo dataset. Seguono i filtri scelti qui sopra."
-              : "Non hai ancora salvato grafici: costruiscine uno qui sotto e premi “Salva nella dashboard”."}
+              ? t("dashboardPiena")
+              : t("dashboardVuota")}
           </p>
         </div>
         {dashboard.length > 0 && (
@@ -118,11 +123,11 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
                   <h3 className="font-semibold">{g.titolo}</h3>
                   <div className="flex gap-3 text-sm">
                     <Link href={`${conParametri(sp, parametriConfigurazione(g.config))}#costruttore`} className="link">
-                      Modifica
+                      {t("modifica")}
                     </Link>
                     <form action={eliminaGrafico.bind(null, id, g.id)}>
                       <input type="hidden" name="ritorno" value={ritorno} />
-                      <button type="submit" className="text-red-600 hover:underline dark:text-red-400">Elimina</button>
+                      <button type="submit" className="text-red-600 hover:underline dark:text-red-400">{t("elimina")}</button>
                     </form>
                   </div>
                 </header>
@@ -137,51 +142,51 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
       {/* Costruttore */}
       <section id="costruttore" className="scheda space-y-5">
         <div>
-          <h2 className="text-xl font-semibold">Costruisci un grafico</h2>
-          <p className="text-sm text-slate-500">Il grafico si aggiorna a ogni scelta.</p>
+          <h2 className="text-xl font-semibold">{t("costruisci")}</h2>
+          <p className="text-sm text-slate-500">{t("siAggiorna")}</p>
         </div>
 
         <FormPulito action="#costruttore" invioAutomatico className="space-y-4">
           <CampiNascosti sp={sp} tieni={(k) => !k.startsWith("c.")} />
           <div className="grid items-end gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <Campo etichetta="Tipo di grafico">
+            <Campo etichetta={t("tipo")}>
               <select name="c.tipo" defaultValue={config.tipo} className="campo py-1.5">
-                <Opzioni elenco={Object.entries(TIPI).map(([valore, etichetta]) => ({ valore, etichetta }))} />
+                <Opzioni elenco={TIPI.map((valore) => ({ valore, etichetta: tg(`tipo_${valore}`) }))} />
               </select>
             </Campo>
 
             {config.tipo !== "istogramma" && (
-              <Campo etichetta={config.tipo === "dispersione" ? "Asse orizzontale" : config.tipo === "box" ? "Un box per ogni" : "Asse X (raggruppa per)"}>
+              <Campo etichetta={config.tipo === "dispersione" ? t("asseOrizzontale") : config.tipo === "box" ? t("unBoxPerOgni") : t("asseX")}>
                 <select name="c.x" defaultValue={config.x ?? ""} className="campo py-1.5">
-                  <Opzioni elenco={opz(adatte.x)} vuota={config.tipo === "box" ? "– tutti insieme –" : undefined} />
+                  <Opzioni elenco={opz(adatte.x)} vuota={config.tipo === "box" ? t("tuttiInsieme") : undefined} />
                 </select>
               </Campo>
             )}
 
             {xData && config.tipo !== "dispersione" && (
-              <Campo etichetta="Per">
+              <Campo etichetta={t("per")}>
                 <select name="c.per" defaultValue={config.periodo} className="campo py-1.5">
-                  <Opzioni elenco={Object.entries(PERIODI).map(([valore, etichetta]) => ({ valore, etichetta }))} />
+                  <Opzioni elenco={PERIODI.map((valore) => ({ valore, etichetta: tg(`per_${valore}`) }))} />
                 </select>
               </Campo>
             )}
 
             {(serie || config.tipo === "torta") && (
-              <Campo etichetta="Calcola">
+              <Campo etichetta={t("calcola")}>
                 <select name="c.agg" defaultValue={config.aggregazione} className="campo py-1.5">
                   <Opzioni
-                    elenco={Object.entries(AGGREGAZIONI)
-                      .filter(([k]) => (adatte.y.length || k === "conteggio") && (config.tipo !== "barre_impilate" || k === "conteggio" || k === "somma"))
-                      .map(([valore, etichetta]) => ({ valore, etichetta }))}
+                    elenco={AGGREGAZIONI.filter((k) => (adatte.y.length || k === "conteggio") && (config.tipo !== "barre_impilate" || k === "conteggio" || k === "somma")).map(
+                      (valore) => ({ valore, etichetta: tg(`agg_${valore}`) }),
+                    )}
                   />
                 </select>
               </Campo>
             )}
 
             {serie && adatte.suddividi.length > 0 && (
-              <Campo etichetta="Una serie per ogni">
+              <Campo etichetta={t("unaSeriePerOgni")}>
                 <select name="c.sudd" defaultValue={config.suddividi ?? ""} className="campo py-1.5">
-                  <Opzioni elenco={opz(adatte.suddividi.filter((c) => c.nome !== config.x))} vuota={config.tipo === "barre_impilate" ? undefined : "– nessuna –"} />
+                  <Opzioni elenco={opz(adatte.suddividi.filter((c) => c.nome !== config.x))} vuota={config.tipo === "barre_impilate" ? undefined : t("nessuna")} />
                 </select>
               </Campo>
             )}
@@ -190,7 +195,7 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
           {adatte.y.length > 0 && (config.aggregazione !== "conteggio" || unaSola) && config.tipo !== "torta" ? (
             <fieldset className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
               <legend className="mb-1 font-medium">
-                {config.tipo === "dispersione" ? "Asse verticale" : unaSola || config.suddividi ? "Colonna" : "Colonne (anche più di una)"}
+                {config.tipo === "dispersione" ? t("asseVerticale") : unaSola || config.suddividi ? t("colonna") : t("colonnePiu")}
               </legend>
               {adatte.y.map((c) => (
                 <label key={c.nome} className="inline-flex items-center gap-1.5">
@@ -206,7 +211,7 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
             </fieldset>
           ) : (
             config.tipo === "torta" && config.aggregazione !== "conteggio" && (
-              <Campo etichetta="di">
+              <Campo etichetta={t("di")}>
                 <select name="c.y" defaultValue={config.y[0]} className="campo max-w-xs py-1.5">
                   <Opzioni elenco={opz(adatte.y)} />
                 </select>
@@ -214,7 +219,7 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
             )
           )}
           <noscript>
-            <button type="submit" className="bottone">Aggiorna il grafico</button>
+            <button type="submit" className="bottone">{t("aggiorna")}</button>
           </noscript>
         </FormPulito>
 
@@ -224,17 +229,17 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
           anteprima.data && (
             <div className="space-y-4 border-t border-slate-200 pt-4 dark:border-slate-800">
               <h3 className="font-semibold">{titolo}</h3>
-              <GraficoLibero titolo={titolo} preparato={prepara(config, anteprima.data, colonne)} />
+              <GraficoLibero titolo={titolo} preparato={prepara(config, anteprima.data, colonne, f, tg)} />
               <form action={salvaGrafico.bind(null, id)} className="flex flex-wrap items-end gap-3">
                 {Object.entries(parametriConfigurazione(config)).flatMap(([k, v]) =>
                   (Array.isArray(v) ? v : [v]).map((x) => <input key={`${k}-${x}`} type="hidden" name={k} value={x} />),
                 )}
                 <input type="hidden" name="ritorno" value={ritorno} />
                 <label className="block min-w-64 flex-1 space-y-1 text-sm">
-                  <span className="font-medium">Titolo</span>
+                  <span className="font-medium">{t("titolo")}</span>
                   <input name="titolo" placeholder={titolo} maxLength={120} className="campo py-1.5" />
                 </label>
-                <button type="submit" className="bottone">Salva nella dashboard</button>
+                <button type="submit" className="bottone">{t("salva")}</button>
               </form>
             </div>
           )

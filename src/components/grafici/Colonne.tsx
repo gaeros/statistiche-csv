@@ -1,7 +1,7 @@
 "use client";
 
 import { Grafico } from "./Grafico";
-import { formatta, stileAssi, stileTooltip } from "./tema";
+import { stileAssi, stileTooltip } from "./tema";
 
 // Grafico a barre: verticali (istogrammi, periodi) oppure orizzontali (etichette lunghe).
 export function Colonne({
@@ -48,7 +48,7 @@ export function Colonne({
             axisPointer: { type: "shadow" },
             ...stileTooltip(c),
             formatter: (p: { name: string; value: number | null }[]) =>
-              `${p[0].name}<br/>${nomeValore}: <b>${formatta(p[0].value)}</b>`,
+              `${p[0].name}<br/>${nomeValore}: <b>${c.formatta(p[0].value)}</b>`,
           },
           xAxis: orizzontale ? numeri : categorie,
           yAxis: orizzontale ? categorie : numeri,
@@ -64,7 +64,7 @@ export function Colonne({
                 show: valori.length <= 12,
                 position: orizzontale ? "right" : "top",
                 color: c.testo,
-                formatter: (p: { value: number | null }) => formatta(p.value),
+                formatter: (p: { value: number | null }) => c.formatta(p.value),
               },
             },
           ],

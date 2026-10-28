@@ -1,7 +1,8 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Grafico } from "./Grafico";
-import { formatta, stileAssi, stileTooltip } from "./tema";
+import { stileAssi, stileTooltip } from "./tema";
 
 // Andamento nel tempo: una linea per colonna. I periodi senza dati restano vuoti (la linea si interrompe).
 // Con una soglia: linea tratteggiata e punti oltre la soglia evidenziati.
@@ -15,6 +16,7 @@ export function Linee({
   serie: { nome: string; valori: (number | null)[]; soglia?: number }[];
   descrizione: string;
 }) {
+  const t = useTranslations("chart");
   const zoom = etichette.length > 60;
   const soglie = serie.flatMap((s) => (s.soglia === undefined ? [] : [s.soglia]));
   return (
@@ -28,7 +30,7 @@ export function Linee({
         tooltip: {
           trigger: "axis",
           ...stileTooltip(c),
-          valueFormatter: (v: unknown) => formatta(v),
+          valueFormatter: (v: unknown) => c.formatta(v),
         },
         dataZoom: zoom ? [{ type: "inside" }, { type: "slider", height: 24, bottom: 8 }] : [],
         xAxis: { type: "category", data: etichette, boundaryGap: false, ...stileAssi(c), splitLine: { show: false } },
@@ -60,7 +62,7 @@ export function Linee({
                   silent: true,
                   symbol: "none",
                   lineStyle: { type: "dashed", width: 1.5 },
-                  label: { formatter: `Soglia ${formatta(s.soglia)}`, color: c.testo, position: "insideEndTop" },
+                  label: { formatter: t("soglia", { n: c.formatta(s.soglia) }), color: c.testo, position: "insideEndTop" },
                   data: [{ yAxis: s.soglia }],
                 },
           connectNulls: false,
