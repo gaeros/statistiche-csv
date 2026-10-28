@@ -56,3 +56,35 @@ export async function revocaInvito(formData: FormData) {
   await supabase.from("inviti").delete().eq("email", email);
   revalidatePath("/admin/inviti");
 }
+
+// Elimina del tutto una persona invitata: account, dati, file originali e invito.
+// Così lo stesso indirizzo può essere invitato di nuovo come se fosse la prima volta.
+export async function eliminaPersona(formData: FormData) {
+  const { utente, amministratore } = await utenteCorrente();
+  if (!amministratore) return;
+  const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  if (!email || email === utente.email?.toLowerCase()) return;
+
+  const admin = createAdminClient();
+  const { data: invito } = await admin.from("inviti").select("amministratore").eq("email", email).maybeSingle();
+  if (invito?.amministratore) return;
+
+  let id: string | undefined;
+  for (let pagina = 1; !id; pagina++) {
+    const { data, error } = await admin.auth.admin.listUsers({ page: pagina, perPage: 200 });
+    if (error || !data.users.length) break;
+    id = data.users.find((u) => u.email?.toLowerCase() === email)?.id;
+    if (data.users.length < 200) break;
+  }
+
+  if (id) {
+    const { data: importazioni } = await admin.from("importazioni").select("percorso_storage").eq("user_id", id);
+    const percorsi = (importazioni ?? []).map((i) => i.percorso_storage).filter((p): p is string => !!p);
+    if (percorsi.length) await admin.storage.from("originali").remove(percorsi);
+    // Le tabelle, i dataset e i grafici si cancellano a cascata con l'utente.
+    const { error } = await admin.auth.admin.deleteUser(id);
+    if (error) return;
+  }
+  await admin.from("inviti").delete().eq("email", email);
+  revalidatePath("/admin/inviti");
+}

@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import { creaFormati } from "@/lib/formato";
 import { createClient } from "@/lib/supabase/server";
 import { utenteCorrente } from "@/lib/utente";
-import { revocaInvito } from "./actions";
+import { eliminaPersona, revocaInvito } from "./actions";
+import { BottoneElimina } from "./BottoneElimina";
 import { FormInvito } from "./FormInvito";
 
 export default async function PaginaInviti() {
@@ -45,12 +46,18 @@ export default async function PaginaInviti() {
                 <td className="px-4 py-2 text-slate-500">{f.dataOra(i.created_at)}</td>
                 <td className="px-4 py-2 text-right">
                   {!i.amministratore && (
-                    <form action={revocaInvito}>
-                      <input type="hidden" name="email" value={i.email} />
-                      <button type="submit" className="text-red-600 hover:underline dark:text-red-400">
-                        {t("revoca")}
-                      </button>
-                    </form>
+                    <div className="flex justify-end gap-4">
+                      <form action={revocaInvito}>
+                        <input type="hidden" name="email" value={i.email} />
+                        <button type="submit" className="text-red-600 hover:underline dark:text-red-400">
+                          {t("revoca")}
+                        </button>
+                      </form>
+                      <form action={eliminaPersona}>
+                        <input type="hidden" name="email" value={i.email} />
+                        <BottoneElimina email={i.email} />
+                      </form>
+                    </div>
                   )}
                 </td>
               </tr>

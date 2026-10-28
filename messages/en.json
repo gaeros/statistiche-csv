@@ -462,17 +462,19 @@
     "invitatoIl": "Invited on",
     "amministratore": "administrator",
     "revoca": "Revoke",
-    "nota": "Revoking an invitation prevents a new sign-up, but does not delete an account that was already created.",
+    "elimina": "Delete",
+    "confermaElimina": "Delete {email} completely? The account, datasets, charts and uploaded files will be erased. This cannot be undone.",
+    "nota": "Revoke removes the invitation (they can no longer sign up). Delete removes the person completely: account, data and files; you can then invite the same address again.",
     "invitaPersona": "Invite someone",
     "segnaposto": "name@example.com",
     "inCorso": "Sending…",
     "invita": "Invite",
-    "inviaEmail": "Send the invitation email (to choose a password). Without an email, the person can only sign up with Google.",
+    "inviaEmail": "Send the invitation email (to choose a password). Without an email the address is only authorised.",
     "soloAdmin": "Only the administrator can invite people.",
     "giaInvitato": "This address has already been invited.",
     "emailNonPartita": "Address authorised, but the email was not sent: {dettaglio}",
     "invitoInviato": "Invitation sent to {email}.",
-    "autorizzato": "{email} is authorised: they can sign up by signing in with Google."
+    "autorizzato": "{email} is authorised."
   },
   "benvenuto": {
     "metaTitolo": "Welcome – Datahue",
