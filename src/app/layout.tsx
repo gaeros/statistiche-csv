@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
+import "@fontsource-variable/inter-tight";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {

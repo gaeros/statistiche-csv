@@ -49,7 +49,7 @@ export default async function PaginaBenvenuto() {
     <div className="flex flex-1 flex-col bg-white">
       <div className="sticky top-0 z-10 border-b border-slate-100 bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
-          <Link href="/benvenuto" className="text-2xl font-bold tracking-tight text-black sm:text-3xl">datahue</Link>
+          <Link href="/benvenuto" className="text-2xl font-bold tracking-normal text-black sm:text-3xl">datahue</Link>
           <div className="flex items-center gap-3">
             <SelettoreLingua nero />
             <Link href={collegato ? "/dataset" : "/accedi"} className="bottone-nero">
@@ -80,7 +80,7 @@ export default async function PaginaBenvenuto() {
       </header>
 
       <section aria-labelledby="come" className="space-y-4">
-        <h2 id="come" className="text-3xl font-semibold tracking-tight sm:text-4xl">{t("comeFunziona")}</h2>
+        <h2 id="come" className="text-3xl font-semibold tracking-normal sm:text-4xl">{t("comeFunziona")}</h2>
         <ol className="grid gap-4 sm:grid-cols-3">
           {PASSI.map((p, i) => (
             <li key={p} className="scheda space-y-1">
@@ -94,7 +94,7 @@ export default async function PaginaBenvenuto() {
 
       <section aria-labelledby="esempi" className="space-y-4">
         <div className="space-y-1">
-          <h2 id="esempi" className="text-3xl font-semibold tracking-tight sm:text-4xl">{t("esempi")}</h2>
+          <h2 id="esempi" className="text-3xl font-semibold tracking-normal sm:text-4xl">{t("esempi")}</h2>
           <p className="text-sm text-slate-500">{t("esempiNota")}</p>
         </div>
         <div className="grid gap-4 lg:grid-cols-2">
@@ -137,7 +137,7 @@ export default async function PaginaBenvenuto() {
       </section>
 
       <section aria-labelledby="cosa" className="space-y-4">
-        <h2 id="cosa" className="text-3xl font-semibold tracking-tight sm:text-4xl">{t("cosaPuoiFare")}</h2>
+        <h2 id="cosa" className="text-3xl font-semibold tracking-normal sm:text-4xl">{t("cosaPuoiFare")}</h2>
         <ul className="grid gap-3 text-sm sm:grid-cols-2">
           {["cosa1", "cosa2", "cosa3", "cosa4"].map((k) => (
             <li key={k} className="scheda">
@@ -148,7 +148,7 @@ export default async function PaginaBenvenuto() {
       </section>
 
       <section aria-labelledby="privacy" className="scheda space-y-2">
-        <h2 id="privacy" className="text-3xl font-semibold tracking-tight sm:text-4xl">{t("privacyT")}</h2>
+        <h2 id="privacy" className="text-3xl font-semibold tracking-normal sm:text-4xl">{t("privacyT")}</h2>
         <p className="text-sm text-slate-600 dark:text-slate-400">
           {t("privacy")}{" "}
           <Link href="/privacy" className="link">{t("leggiInformativa")}</Link>.

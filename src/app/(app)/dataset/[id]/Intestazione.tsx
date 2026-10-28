@@ -36,7 +36,7 @@ export async function Intestazione({ id, nome, nomeOriginale, foglio, createdAt,
     <div className="space-y-4">
       <div className="space-y-1">
         <Link href="/dataset" className="link text-sm">{t("tornaElenco")}</Link>
-        <h1 className="font-mono text-3xl font-semibold tracking-tight break-all">{nome}</h1>
+        <h1 className="font-mono text-3xl font-semibold tracking-normal break-all">{nome}</h1>
         <p className="text-sm text-slate-500 break-all">
           {nomeOriginale}
           {foglio ? ` · ${t("foglio", { nome: foglio })} · ` : " · "}
