@@ -51,7 +51,7 @@ const liscia = (t: number) => {
 
 function Barre({ attivo }: { attivo: boolean }) {
   return (
-    <div className="flex h-28 items-end gap-2 sm:h-52 sm:gap-3">
+    <div className="flex h-24 items-end gap-2 sm:h-44 sm:gap-3">
       {BARRE.map((h, i) => (
         <div
           key={i}
@@ -79,7 +79,7 @@ function Torta({ attivo }: { attivo: boolean }) {
   return (
     <svg
       viewBox="0 0 120 120"
-      className="h-32 w-32 sm:h-52 sm:w-52"
+      className="h-24 w-24 sm:h-44 sm:w-44"
       style={{
         opacity: attivo ? 1 : 0,
         transform: `scale(${attivo ? 1 : 0.6}) rotate(${attivo ? 0 : -120}deg)`,
@@ -171,7 +171,7 @@ export function HeroScorrimento({ a, b, descrizione, scorri }: { a: string; b: s
   }
 
   // Appena si comincia a scorrere: la seconda scritta sale dal basso e copre la prima,
-  // i numeri si dissolvono e poi, sotto le scritte, salgono i grafici.
+  // i numeri si dissolvono e poi, dietro le scritte, salgono i grafici.
   const entrata = liscia(p / 0.2);
   const opA = 1 - liscia((p - 0.06) / 0.14);
   const opNumeri = 1 - liscia((p - 0.02) / 0.2);
@@ -181,49 +181,51 @@ export function HeroScorrimento({ a, b, descrizione, scorri }: { a: string; b: s
   return (
     <div ref={contenitore} className="relative" style={{ height: "220svh" }}>
       <div ref={fisso} className="sticky overflow-hidden" style={{ top: SCARTO_INTESTAZIONE, height: `calc(100svh - ${SCARTO_INTESTAZIONE}px)` }}>
-        <div aria-hidden className="absolute inset-0 z-0" style={{ opacity: opNumeri }}>
-          {numeri.map((n) => (
-            <span
-              key={n.id}
-              className="anim-deriva absolute whitespace-nowrap font-mono font-semibold"
-              style={{
-                left: `${n.x}%`,
-                top: `${n.y}%`,
-                fontSize: n.dim,
-                color: n.scuro ? "#09090b" : "#94a3b8",
-                animationDuration: `${n.dur}s`,
-                animationDelay: `${n.ritardo}s`,
-                ["--dx" as string]: `${n.dx}px`,
-                ["--dy" as string]: `${n.dy}px`,
-              }}
-            >
-              {n.testo}
-            </span>
-          ))}
-        </div>
-
         <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col items-center justify-center px-4 text-center">
-          <h1 className={`grid ${titolo}`}>
-            <span className="sr-only">{descrizione}</span>
-            <span aria-hidden className="col-start-1 row-start-1 text-slate-400" style={{ opacity: opA }}>{a}</span>
-            <span
-              aria-hidden
-              className="col-start-1 row-start-1 text-foreground"
-              style={{ opacity: Math.min(1, entrata * 5), transform: `translateY(calc(${1 - entrata} * 70svh))` }}
-            >
-              {b}
-            </span>
-          </h1>
-
-          <div
-            aria-hidden
-            className="flex h-32 items-start justify-center pt-8 sm:h-60"
-            style={{ opacity: grafici, transform: `translateY(calc(${1 - grafici} * 30svh))` }}
-          >
-            <div className="flex flex-wrap items-end justify-center gap-8 sm:gap-14">
-              <Barre attivo={p > 0.2} />
-              <Torta attivo={p > 0.2} />
+          <div className="relative w-full px-2 py-10 sm:py-14">
+            <div aria-hidden className="absolute inset-0 z-0 overflow-hidden">
+              <div className="absolute inset-0" style={{ opacity: opNumeri }}>
+                {numeri.map((n) => (
+                  <span
+                    key={n.id}
+                    className="anim-deriva absolute whitespace-nowrap font-mono font-semibold"
+                    style={{
+                      left: `${n.x}%`,
+                      top: `${n.y}%`,
+                      fontSize: n.dim,
+                      color: n.scuro ? "#09090b" : "#94a3b8",
+                      animationDuration: `${n.dur}s`,
+                      animationDelay: `${n.ritardo}s`,
+                      ["--dx" as string]: `${n.dx}px`,
+                      ["--dy" as string]: `${n.dy}px`,
+                    }}
+                  >
+                    {n.testo}
+                  </span>
+                ))}
+              </div>
+              <div
+                className="absolute inset-0 flex items-center justify-center"
+                style={{ opacity: grafici, transform: `translateY(${(1 - grafici) * 100}%)` }}
+              >
+                <div className="flex items-end justify-center gap-6 sm:gap-14">
+                  <Barre attivo={p > 0.2} />
+                  <Torta attivo={p > 0.2} />
+                </div>
+              </div>
             </div>
+
+            <h1 className={`relative z-10 grid ${titolo}`}>
+              <span className="sr-only">{descrizione}</span>
+              <span aria-hidden className="col-start-1 row-start-1 text-slate-400" style={{ opacity: opA }}>{a}</span>
+              <span
+                aria-hidden
+                className="col-start-1 row-start-1 text-foreground"
+                style={{ opacity: Math.min(1, entrata * 5), transform: `translateY(calc(${1 - entrata} * 70svh))` }}
+              >
+                {b}
+              </span>
+            </h1>
           </div>
         </div>
 
