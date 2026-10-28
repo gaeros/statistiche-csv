@@ -522,5 +522,24 @@
     "privacyT": "I tuoi dati restano tuoi",
     "privacy": "Vedi solo i tuoi file: nessun altro utente può leggerli. I dati sono conservati in Europa e puoi scaricarli o cancellare tutto quando vuoi dalla pagina del tuo account. L'app mostra i numeri e non dà consigli medici.",
     "leggiInformativa": "Leggi l'informativa"
+  },
+  "guidaPagina": {
+    "metaTitolo": "Guida – Datahue",
+    "titolo": "Guida",
+    "intro": "Datahue trasforma un file di numeri in statistiche e grafici. Si usa in sei passi.",
+    "p1Titolo": "Importa un file",
+    "p1Testo": "Dal menu «Importa» trascina un file CSV o Excel (fino a 50 MB). Se il file ha più fogli scegli quali importare. L'app riconosce da sola codifica e separatore; se vedi caratteri strani, cambiali a mano. Ogni file (o foglio) diventa un dataset con il suo nome.",
+    "p2Titolo": "Guarda i dati",
+    "p2Testo": "In «I miei dataset» trovi i file importati, con una ricerca per nome. Aprine uno: la scheda «Dati» mostra la tabella a pagine. Da lì puoi anche rinominarlo, scaricarlo in CSV o eliminarlo.",
+    "p3Titolo": "Filtra",
+    "p3Testo": "Sopra ai dati scegli un periodo (anche con le scorciatoie «ultimi 7 giorni», «ultimi 30 giorni»…), le categorie o i valori che ti interessano, o cerca un testo. Statistiche e grafici seguono sempre i filtri scelti; «Azzera filtri» li toglie tutti.",
+    "p4Titolo": "Leggi le statistiche",
+    "p4Testo": "La scheda «Statistiche» riassume il file: numero di righe, periodo, medie, andamento nel tempo, un riepilogo di ogni colonna, il confronto fra gruppi (per esempio la media per momento della giornata) e le colonne che vanno insieme.",
+    "p5Titolo": "Costruisci i grafici",
+    "p5Testo": "Nella scheda «Grafici» scegli il tipo (barre, linee, torta, dispersione, istogramma, box plot…), le colonne e il calcolo. Il grafico si aggiorna a ogni scelta. Con «Salva nella dashboard» lo tieni per la prossima volta; puoi scaricarlo come immagine (PNG) o come dati (CSV).",
+    "p6Titolo": "Scarica o elimina i tuoi dati",
+    "p6Testo": "In «Il mio account» puoi scaricare tutti i tuoi dati o eliminare l'account con tutto ciò che hai caricato. I tuoi file sono visibili solo a te.",
+    "nota": "L'app mostra i tuoi dati e non fornisce consigli medici.",
+    "inizia": "Importa il primo file"
   }
 }

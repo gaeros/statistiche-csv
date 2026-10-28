@@ -522,5 +522,24 @@
     "privacyT": "Your data stays yours",
     "privacy": "You only see your own files: no other user can read them. The data is stored in Europe and you can download it or delete everything whenever you want from your account page. The app shows numbers and gives no medical advice.",
     "leggiInformativa": "Read the privacy notice"
+  },
+  "guidaPagina": {
+    "metaTitolo": "Guide – Datahue",
+    "titolo": "Guide",
+    "intro": "Datahue turns a file of numbers into statistics and charts. You use it in six steps.",
+    "p1Titolo": "Import a file",
+    "p1Testo": "From the “Import” menu, drag in a CSV or Excel file (up to 50 MB). If the file has several sheets, choose which to import. The app detects the encoding and separator by itself; if you see odd characters, change them by hand. Each file (or sheet) becomes a dataset with its own name.",
+    "p2Titolo": "Look at the data",
+    "p2Testo": "“My datasets” lists the files you imported, with a search by name. Open one: the “Data” tab shows the table, page by page. From there you can also rename it, download it as CSV or delete it.",
+    "p3Titolo": "Filter",
+    "p3Testo": "Above the data, choose a period (also with shortcuts such as “last 7 days” or “last 30 days”), the categories or values you care about, or search for some text. Statistics and charts always follow the chosen filters; “Clear filters” removes them all.",
+    "p4Titolo": "Read the statistics",
+    "p4Testo": "The “Statistics” tab summarises the file: number of rows, period, averages, trend over time, a summary of each column, a comparison between groups (for example the average by time of day) and the columns that move together.",
+    "p5Titolo": "Build charts",
+    "p5Testo": "In the “Charts” tab, choose the type (bars, lines, pie, scatter, histogram, box plot…), the columns and the calculation. The chart updates with every choice. “Save to dashboard” keeps it for next time; you can download it as an image (PNG) or as data (CSV).",
+    "p6Titolo": "Download or delete your data",
+    "p6Testo": "In “My account” you can download all your data or delete the account along with everything you uploaded. Your files are visible only to you.",
+    "nota": "The app shows your data and does not give medical advice.",
+    "inizia": "Import your first file"
   }
 }
