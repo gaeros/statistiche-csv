@@ -462,17 +462,19 @@
     "invitatoIl": "Invitato il",
     "amministratore": "amministratore",
     "revoca": "Revoca",
-    "nota": "Revocare un invito impedisce una nuova registrazione, ma non elimina un account già creato.",
+    "elimina": "Elimina",
+    "confermaElimina": "Eliminare del tutto {email}? Si cancellano l'account, i dataset, i grafici e i file caricati. Non si può annullare.",
+    "nota": "Revoca toglie l'invito (non si può più registrare). Elimina cancella del tutto la persona: account, dati e file; poi puoi invitare di nuovo lo stesso indirizzo.",
     "invitaPersona": "Invita una persona",
     "segnaposto": "nome@esempio.it",
     "inCorso": "Invio…",
     "invita": "Invita",
-    "inviaEmail": "Invia l'email di invito (per scegliere una password). Senza email, la persona può registrarsi solo con Google.",
+    "inviaEmail": "Invia l'email di invito (per scegliere una password). Senza email l'indirizzo è solo autorizzato.",
     "soloAdmin": "Solo l'amministratore può invitare.",
     "giaInvitato": "Questo indirizzo è già stato invitato.",
     "emailNonPartita": "Indirizzo autorizzato, ma l'email non è partita: {dettaglio}",
     "invitoInviato": "Invito inviato a {email}.",
-    "autorizzato": "{email} è autorizzato: può registrarsi entrando con Google."
+    "autorizzato": "{email} è autorizzato."
   },
   "benvenuto": {
     "metaTitolo": "Benvenuto – Datahue",
