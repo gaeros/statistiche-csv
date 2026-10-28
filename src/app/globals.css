@@ -1,6 +1,10 @@
 @import "tailwindcss";
 
+/* Solo tema chiaro: le classi dark: non si attivano mai (niente [data-theme=dark] nell'app) */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
 :root {
+  color-scheme: light;
   --background: #f8fafc;
   --foreground: #0f172a;
 }
@@ -10,12 +14,6 @@
   --color-foreground: var(--foreground);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0b1120;
-    --foreground: #e2e8f0;
-  }
-}
 
 body {
   background: var(--background);
