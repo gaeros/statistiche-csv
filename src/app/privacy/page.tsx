@@ -48,7 +48,7 @@ export default async function PaginaPrivacy() {
       <h2>{t("quantoH")}</h2>
       <p>{t("quantoP")}</p>
 
-      <h2>{t("cookieH")}</h2>
+      <h2 id="cookie">{t("cookieH")}</h2>
       <p>{t("cookieP")}</p>
       <ul>
         <li>{t("cookie1")}</li>
