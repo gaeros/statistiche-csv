@@ -1,5 +1,6 @@
 // Costruttore di grafici (SPEC §6.1): configurazione di un grafico e preparazione dei dati da disegnare.
 import type { Colonna, Parametri } from "./filtri";
+import { BOM, cellaNumero, cellaTesto, riga } from "./csv";
 import { etichettaPeriodo, formattaValore } from "./formato";
 
 export const TIPI = {
@@ -215,25 +216,25 @@ export function prepara(c: Configurazione, r: Risultato, colonne: Colonna[]): Pr
 
 // Dati del grafico in CSV (separatore ";" e virgola decimale, come vuole Excel in italiano)
 export function csvPreparato(p: Preparato): string {
-  const n = (v: number | null) => (v === null ? "" : String(v).replace(".", ","));
-  const q = (s: string) => (/[";\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s);
+  const n = cellaNumero;
+  const q = cellaTesto;
   let righe: string[][];
   switch (p.forma) {
     case "serie":
-      righe = [[p.asseX, ...p.serie.map((s) => s.nome)], ...p.categorie.map((c, i) => [c, ...p.serie.map((s) => n(s.valori[i]))])];
+      righe = [[q(p.asseX), ...p.serie.map((s) => q(s.nome))], ...p.categorie.map((c, i) => [q(c), ...p.serie.map((s) => n(s.valori[i]))])];
       break;
     case "torta":
-      righe = [["Valore", p.asseY], ...p.fette.map((f) => [f.nome, n(f.valore)])];
+      righe = [["Valore", q(p.asseY)], ...p.fette.map((f) => [q(f.nome), n(f.valore)])];
       break;
     case "dispersione":
-      righe = [[p.asseX, p.asseY], ...p.punti.map(([a, b]) => [n(a), n(b)])];
+      righe = [[q(p.asseX), q(p.asseY)], ...p.punti.map(([a, b]) => [n(a), n(b)])];
       break;
     case "istogramma":
-      righe = [["Fascia", "Righe"], ...p.categorie.map((c, i) => [c, n(p.valori[i])])];
+      righe = [["Fascia", "Righe"], ...p.categorie.map((c, i) => [q(c), n(p.valori[i])])];
       break;
     case "box":
-      righe = [["Gruppo", "Minimo", "1° quartile", "Mediana", "3° quartile", "Massimo"], ...p.categorie.map((c, i) => [c, ...p.scatole[i].map(n)])];
+      righe = [["Gruppo", "Minimo", "1° quartile", "Mediana", "3° quartile", "Massimo"], ...p.categorie.map((c, i) => [q(c), ...p.scatole[i].map(n)])];
       break;
   }
-  return "﻿" + righe.map((r) => r.map(q).join(";")).join("\r\n") + "\r\n";
+  return BOM + righe.map(riga).join("");
 }

@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { supabaseAnonKey, supabaseUrl } from "@/lib/env";
 
 // Pagine raggiungibili senza essere collegati.
-const PUBBLICHE = ["/accedi", "/password-dimenticata", "/auth"];
+const PUBBLICHE = ["/accedi", "/password-dimenticata", "/auth", "/privacy"];
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
