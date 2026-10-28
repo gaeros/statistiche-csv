@@ -179,7 +179,7 @@ export function HeroScorrimento({ a, b, descrizione, scorri }: { a: string; b: s
   const opSuggerimento = 1 - liscia(p / 0.04);
 
   return (
-    <div ref={contenitore} className="relative" style={{ height: "220svh" }}>
+    <div ref={contenitore} className="relative" style={{ height: "340svh" }}>
       <div ref={fisso} className="sticky overflow-hidden" style={{ top: SCARTO_INTESTAZIONE, height: `calc(100svh - ${SCARTO_INTESTAZIONE}px)` }}>
         <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col items-center justify-center px-4 text-center">
           <div className="relative w-full px-2 py-10 sm:py-14">
