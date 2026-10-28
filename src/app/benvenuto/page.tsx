@@ -4,7 +4,7 @@ import { Colonne } from "@/components/grafici/Colonne";
 import { Linee } from "@/components/grafici/Linee";
 import { Torta } from "@/components/grafici/Torta";
 import { SelettoreLingua } from "@/components/SelettoreLingua";
-import { TitoloAnimato } from "@/components/TitoloAnimato";
+import { HeroScorrimento } from "@/components/HeroScorrimento";
 import { creaFormati } from "@/lib/formato";
 import { createClient } from "@/lib/supabase/server";
 
@@ -49,7 +49,7 @@ export default async function PaginaBenvenuto() {
     <div className="flex flex-1 flex-col bg-white">
       <div className="sticky top-0 z-10 border-b border-slate-100 bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
-          <span className="text-2xl font-bold tracking-tight text-black sm:text-3xl">datahue</span>
+          <Link href="/benvenuto" className="text-2xl font-bold tracking-tight text-black sm:text-3xl">datahue</Link>
           <div className="flex items-center gap-3">
             <SelettoreLingua nero />
             <Link href={collegato ? "/dataset" : "/accedi"} className="bottone-nero">
@@ -58,9 +58,9 @@ export default async function PaginaBenvenuto() {
           </div>
         </div>
       </div>
-    <main className="mx-auto w-full max-w-5xl flex-1 space-y-16 px-4 pb-16 pt-12 [&_.scheda]:rounded-3xl [&_.scheda]:border-slate-200 [&_.scheda]:shadow-none">
+      <HeroScorrimento a={t("titoloA")} b={t("titoloB")} descrizione={t("titoloAnimazione")} scorri={t("scorri")} />
+    <main className="mx-auto w-full max-w-5xl flex-1 space-y-16 px-4 pb-16 pt-4 [&_.scheda]:rounded-3xl [&_.scheda]:border-slate-200 [&_.scheda]:shadow-none">
       <header className="space-y-8 text-center">
-        <TitoloAnimato a={t("titoloA")} b={t("titoloB")} descrizione={t("titoloAnimazione")} />
         <p className="mx-auto max-w-2xl text-lg text-slate-600 sm:text-2xl">
           {t("intro")}
         </p>

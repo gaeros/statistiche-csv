@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { SelettoreLingua } from "./SelettoreLingua";
 
 export function PaginaAuth({ titolo, children }: { titolo: string; children: React.ReactNode }) {
@@ -6,7 +7,7 @@ export function PaginaAuth({ titolo, children }: { titolo: string; children: Rea
       <SelettoreLingua className="absolute right-4 top-4" />
       <div className="scheda w-full max-w-sm space-y-6">
         <div className="space-y-1 text-center">
-          <p className="text-3xl font-bold tracking-tight text-black">datahue</p>
+          <Link href="/benvenuto" className="inline-block text-3xl font-bold tracking-tight text-black">datahue</Link>
           <h1 className="text-3xl font-semibold tracking-tight">{titolo}</h1>
         </div>
         {children}

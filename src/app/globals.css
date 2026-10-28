@@ -39,32 +39,33 @@ body {
   }
 }
 
-/* Titolo animato della pagina di benvenuto: numeri -> barre, ciclo di 6 secondi */
-@keyframes numero {
-  0%, 30% { opacity: 1; transform: translateY(0); }
-  42%, 88% { opacity: 0; transform: translateY(-12px); }
-  100% { opacity: 1; transform: translateY(0); }
+/* Apertura della pagina di benvenuto (HeroScorrimento) */
+@keyframes deriva {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(var(--dx), var(--dy)); }
 }
-@keyframes barra {
-  0%, 30% { transform: scaleY(0.04); opacity: 0.3; }
-  50%, 88% { transform: scaleY(1); opacity: 1; }
-  100% { transform: scaleY(0.04); opacity: 0.3; }
+@keyframes respira {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.78); }
 }
-@keyframes freccia {
-  0%, 100% { transform: translateY(0); opacity: 0.5; }
-  35% { transform: translateY(6px); opacity: 1; }
+@keyframes ruota {
+  to { transform: rotate(360deg); }
 }
-@keyframes evidenzia {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+@keyframes fetta {
+  0%, 100% { stroke-width: 22; }
+  50% { stroke-width: 27; }
 }
-.anim-numero { animation: numero 6s ease-in-out infinite; animation-delay: calc(var(--i) * 0.08s); }
-.anim-barra { height: var(--h); transform-origin: bottom; animation: barra 6s ease-in-out infinite; animation-delay: calc(var(--i) * 0.08s); }
-.anim-freccia { animation: freccia 6s ease-in-out infinite; }
-.anim-evidenzia { background-size: 200% 100%; animation: evidenzia 6s ease-in-out infinite; }
+@keyframes suggerimento {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+.anim-deriva { animation: deriva 10s ease-in-out infinite; }
+.anim-respira { animation: respira 3.2s ease-in-out infinite; }
+.anim-ruota { animation: ruota 40s linear infinite; }
+.anim-fetta { animation: fetta 3s ease-in-out infinite; }
+.anim-suggerimento { animation: suggerimento 1.6s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) {
-  .anim-numero { animation: none; opacity: 0; }
-  .anim-barra, .anim-freccia, .anim-evidenzia { animation: none; }
+  .anim-deriva, .anim-respira, .anim-ruota, .anim-fetta, .anim-suggerimento { animation: none; }
 }
 
 /* Pulsanti a pillola, bianco e nero (pagina di benvenuto) */
