@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { Logo } from "@/components/Logo";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { esci } from "@/app/accedi/actions";
@@ -15,8 +16,8 @@ export default async function LayoutApp({ children }: LayoutProps<"/">) {
     <>
       <header className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3">
-          <Link href="/dataset" className="text-2xl font-bold tracking-normal">
-            datahue
+          <Link href="/dataset">
+            <Logo className="h-11 w-auto" />
           </Link>
           <nav className="flex gap-4 text-sm">
             <Link href="/dataset" className="link">{t("iMieiDataset")}</Link>
