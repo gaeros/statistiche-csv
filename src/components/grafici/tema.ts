@@ -26,11 +26,13 @@ export function colori(scuro: boolean, locale = "it-IT"): Colori {
     : { formatta, serie: SERIE_CHIARO, sfondo: "#ffffff", testo: "#0f172a", testoTenue: "#64748b", griglia: "#e2e8f0", tooltip: "#ffffff" };
 }
 
+export const FONT_GRAFICI = '"Inter Tight Variable", "Helvetica Neue", Helvetica, Arial, sans-serif';
+
 export function stileTooltip(c: Colori) {
   return {
     backgroundColor: c.tooltip,
     borderColor: c.griglia,
-    textStyle: { color: c.testo, fontSize: 13 },
+    textStyle: { color: c.testo, fontSize: 13, fontFamily: FONT_GRAFICI },
     extraCssText: "box-shadow: 0 4px 12px rgb(0 0 0 / 0.12); border-radius: 8px;",
   };
 }

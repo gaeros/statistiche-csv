@@ -7,7 +7,7 @@ export function PaginaAuth({ titolo, children }: { titolo: string; children: Rea
       <SelettoreLingua className="absolute right-4 top-4" />
       <div className="scheda w-full max-w-sm space-y-6">
         <div className="space-y-1 text-center">
-          <Link href="/benvenuto" className="inline-block text-3xl font-bold tracking-normal text-black">datahue</Link>
+          <Link href="/benvenuto" className="inline-block text-3xl font-bold tracking-normal text-foreground">datahue</Link>
           <h1 className="text-3xl font-semibold tracking-normal">{titolo}</h1>
         </div>
         {children}

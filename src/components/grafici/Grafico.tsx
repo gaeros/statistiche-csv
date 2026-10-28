@@ -7,7 +7,7 @@ import * as echarts from "echarts/core";
 import { BarChart, BoxplotChart, LineChart, PieChart, ScatterChart } from "echarts/charts";
 import { DataZoomComponent, GridComponent, LegendComponent, MarkLineComponent, TooltipComponent } from "echarts/components";
 import { SVGRenderer } from "echarts/renderers";
-import { colori, type Colori } from "./tema";
+import { colori, FONT_GRAFICI, type Colori } from "./tema";
 
 echarts.use([
   BarChart,
@@ -59,7 +59,7 @@ export function Grafico({
   }, [riferimento]);
 
   useEffect(() => {
-    grafico.current?.setOption(opzioni(colori(scuro, locale)), true);
+    grafico.current?.setOption({ textStyle: { fontFamily: FONT_GRAFICI }, ...opzioni(colori(scuro, locale)) }, true);
   }, [opzioni, scuro, locale]);
 
   return <div ref={riquadro} role="img" aria-label={descrizione} style={{ height: altezza }} className="w-full" />;

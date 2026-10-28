@@ -73,7 +73,7 @@ export async function BarraFiltri({
           <span className="font-medium">
             {t("titolo")}{" "}
             {attivi && (
-              <span className="ml-1 rounded-full bg-black px-2 py-0.5 text-xs font-semibold text-white">{etichette.length}</span>
+              <span className="ml-1 rounded-full bg-foreground px-2 py-0.5 text-xs font-semibold text-white">{etichette.length}</span>
             )}
           </span>
           <span className="text-sm text-slate-500">

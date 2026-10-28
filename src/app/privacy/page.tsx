@@ -48,6 +48,14 @@ export default async function PaginaPrivacy() {
       <h2>{t("quantoH")}</h2>
       <p>{t("quantoP")}</p>
 
+      <h2>{t("cookieH")}</h2>
+      <p>{t("cookieP")}</p>
+      <ul>
+        <li>{t("cookie1")}</li>
+        <li>{t("cookie2")}</li>
+        <li>{t("cookie3")}</li>
+      </ul>
+
       <h2>{t("dirittiH")}</h2>
       <p>
         {t.rich("dirittiP", {

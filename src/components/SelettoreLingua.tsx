@@ -20,7 +20,7 @@ export function SelettoreLingua({ className = "", nero = true }: { className?: s
           aria-pressed={l === attuale}
           title={t(l)}
           onClick={() => avvia(() => impostaLingua(l))}
-          className={`px-3 py-1.5 font-medium uppercase ${l === attuale ? (nero ? "bg-black text-white" : "bg-blue-600 text-white") : "bg-white text-slate-700 hover:bg-slate-100"}`}
+          className={`px-3 py-1.5 font-medium uppercase ${l === attuale ? (nero ? "bg-foreground text-white" : "bg-blue-600 text-white") : "bg-white text-slate-700 hover:bg-slate-100"}`}
         >
           {l}
         </button>
