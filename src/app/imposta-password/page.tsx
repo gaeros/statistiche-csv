@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { Messaggio } from "@/components/Messaggio";
 import { PaginaAuth } from "@/components/PaginaAuth";
+import { GOOGLE_ATTIVO } from "@/lib/funzioni";
 import { impostaPassword } from "./actions";
 
 // Si arriva qui dal link dell'invito o del recupero password, già collegati.
@@ -26,9 +27,7 @@ export default function PaginaImpostaPassword() {
         <button type="submit" disabled={inCorso} className="bottone w-full">
           {inCorso ? t("inCorso") : t("salva")}
         </button>
-        <p className="text-center text-xs text-slate-500">
-          {t("google")}
-        </p>
+        {GOOGLE_ATTIVO && <p className="text-center text-xs text-slate-500">{t("google")}</p>}
       </form>
     </PaginaAuth>
   );
