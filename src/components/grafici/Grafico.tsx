@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useSyncExternalStore } from "react";
+import { useEffect, useRef } from "react";
 import * as echarts from "echarts/core";
 import { BarChart, BoxplotChart, LineChart, PieChart, ScatterChart } from "echarts/charts";
 import { DataZoomComponent, GridComponent, LegendComponent, MarkLineComponent, TooltipComponent } from "echarts/components";
@@ -21,15 +21,7 @@ echarts.use([
   SVGRenderer,
 ]);
 
-const scuroQuery = "(prefers-color-scheme: dark)";
-
-function iscriviTema(avvisa: () => void) {
-  const mq = window.matchMedia(scuroQuery);
-  mq.addEventListener("change", avvisa);
-  return () => mq.removeEventListener("change", avvisa);
-}
-
-// Contenitore comune: crea il grafico ECharts, lo ridimensiona con il riquadro e segue il tema chiaro/scuro.
+// Contenitore comune: crea il grafico ECharts, lo ridimensiona con il riquadro e usa il tema chiaro.
 export function Grafico({
   opzioni,
   altezza = 280,
@@ -44,11 +36,7 @@ export function Grafico({
 }) {
   const riquadro = useRef<HTMLDivElement>(null);
   const grafico = useRef<echarts.ECharts | null>(null);
-  const scuro = useSyncExternalStore(
-    iscriviTema,
-    () => window.matchMedia(scuroQuery).matches,
-    () => false,
-  );
+  const scuro = false; // l'app usa solo il tema chiaro
 
   useEffect(() => {
     const el = riquadro.current;

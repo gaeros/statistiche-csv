@@ -143,8 +143,7 @@ export function GraficoLibero({ titolo, preparato, altezza = 340 }: { titolo: st
     tela.width = img.width * scala;
     tela.height = (img.height + margine) * scala;
     const ctx = tela.getContext("2d")!;
-    const scuro = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const tema = colori(scuro);
+    const tema = colori(false);
     ctx.scale(scala, scala);
     ctx.fillStyle = tema.sfondo;
     ctx.fillRect(0, 0, img.width, img.height + margine);
