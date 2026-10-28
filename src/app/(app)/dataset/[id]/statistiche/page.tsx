@@ -372,7 +372,7 @@ export default async function PaginaStatistiche({ params, searchParams }: PagePr
                                 key={p}
                                 href={linkPeriodo(p)}
                                 scroll={false}
-                                className={p === periodo ? "font-semibold text-black dark:text-blue-300" : "link"}
+                                className={p === periodo ? "font-semibold text-foreground dark:text-blue-300" : "link"}
                               >
                                 {tg(`per_${p}`)}
                               </Link>

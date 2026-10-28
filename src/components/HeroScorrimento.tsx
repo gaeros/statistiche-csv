@@ -58,7 +58,7 @@ function Barre({ attivo }: { attivo: boolean }) {
           className="h-full w-6 origin-bottom sm:w-9"
           style={{
             transform: `scaleY(${attivo ? 1 : 0})`,
-            transition: `transform 800ms cubic-bezier(.2,.8,.2,1) ${i * 90}ms`,
+            transition: `transform 450ms cubic-bezier(.2,.8,.2,1) ${i * 45}ms`,
           }}
         >
           <div className="flex h-full items-end">
@@ -83,7 +83,7 @@ function Torta({ attivo }: { attivo: boolean }) {
       style={{
         opacity: attivo ? 1 : 0,
         transform: `scale(${attivo ? 1 : 0.6}) rotate(${attivo ? 0 : -120}deg)`,
-        transition: "opacity 700ms ease, transform 1000ms cubic-bezier(.2,.8,.2,1)",
+        transition: "opacity 400ms ease, transform 600ms cubic-bezier(.2,.8,.2,1)",
       }}
     >
       <g className="anim-ruota" style={{ transformOrigin: "60px 60px" }}>
@@ -160,7 +160,7 @@ export function HeroScorrimento({ a, b, descrizione, scorri }: { a: string; b: s
         <h1 className={titolo}>
           <span className="sr-only">{descrizione}</span>
           <span aria-hidden className="block text-slate-400">{a}</span>
-          <span aria-hidden className="block text-black">{b}</span>
+          <span aria-hidden className="block text-foreground">{b}</span>
         </h1>
         <div aria-hidden className="flex flex-wrap items-end justify-center gap-10 pt-6">
           <Barre attivo />
@@ -170,14 +170,14 @@ export function HeroScorrimento({ a, b, descrizione, scorri }: { a: string; b: s
     );
   }
 
-  const opA = 1 - liscia((p - 0.3) / 0.22);
-  const opB = liscia((p - 0.38) / 0.22);
-  const opNumeri = 1 - liscia((p - 0.12) / 0.3);
-  const opGrafici = liscia((p - 0.55) / 0.2);
-  const opSuggerimento = 1 - liscia(p / 0.08);
+  const opA = 1 - liscia((p - 0.25) / 0.1);
+  const opB = liscia((p - 0.29) / 0.1);
+  const opNumeri = 1 - liscia((p - 0.1) / 0.2);
+  const opGrafici = liscia((p - 0.36) / 0.1);
+  const opSuggerimento = 1 - liscia(p / 0.06);
 
   return (
-    <div ref={contenitore} className="relative" style={{ height: "300svh" }}>
+    <div ref={contenitore} className="relative" style={{ height: "220svh" }}>
       <div ref={fisso} className="sticky overflow-hidden" style={{ top: SCARTO_INTESTAZIONE, height: `calc(100svh - ${SCARTO_INTESTAZIONE}px)` }}>
         <div className="mx-auto flex h-full max-w-6xl flex-col px-4 text-center">
           <div aria-hidden className="relative min-h-0 flex-1" style={{ opacity: opNumeri }}>
@@ -189,7 +189,7 @@ export function HeroScorrimento({ a, b, descrizione, scorri }: { a: string; b: s
                   left: `${n.x}%`,
                   top: `${n.y}%`,
                   fontSize: n.dim,
-                  color: n.scuro ? "#0f172a" : "#94a3b8",
+                  color: n.scuro ? "#09090b" : "#94a3b8",
                   animationDuration: `${n.dur}s`,
                   animationDelay: `${n.ritardo}s`,
                   ["--dx" as string]: `${n.dx}px`,
@@ -204,13 +204,13 @@ export function HeroScorrimento({ a, b, descrizione, scorri }: { a: string; b: s
           <h1 className={`grid ${titolo}`}>
             <span className="sr-only">{descrizione}</span>
             <span aria-hidden className="col-start-1 row-start-1 text-slate-400" style={{ opacity: opA, transform: `translateY(${(1 - opA) * -14}px)` }}>{a}</span>
-            <span aria-hidden className="col-start-1 row-start-1 text-black" style={{ opacity: opB, transform: `translateY(${(1 - opB) * 14}px)` }}>{b}</span>
+            <span aria-hidden className="col-start-1 row-start-1 text-foreground" style={{ opacity: opB, transform: `translateY(${(1 - opB) * 14}px)` }}>{b}</span>
           </h1>
 
           <div aria-hidden className="relative flex flex-1 items-start justify-center pt-6" style={{ opacity: opGrafici }}>
             <div className="flex flex-wrap items-end justify-center gap-8 sm:gap-14">
-              <Barre attivo={p > 0.6} />
-              <Torta attivo={p > 0.6} />
+              <Barre attivo={p > 0.4} />
+              <Torta attivo={p > 0.4} />
             </div>
           </div>
           <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-4 text-sm font-medium text-slate-400" style={{ opacity: opSuggerimento }}>

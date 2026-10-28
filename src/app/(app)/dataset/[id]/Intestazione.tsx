@@ -24,7 +24,7 @@ export async function Intestazione({ id, nome, nomeOriginale, foglio, createdAt,
       aria-current={attiva === valore ? "page" : undefined}
       className={`border-b-2 px-1 pb-2 text-sm font-medium ${
         attiva === valore
-          ? "border-black text-black dark:text-blue-300"
+          ? "border-foreground text-foreground dark:text-blue-300"
           : "border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200"
       }`}
     >

@@ -23,19 +23,19 @@ body {
 
 @layer components {
   .campo {
-    @apply w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-slate-900 outline-none focus:border-black focus:ring-2 focus:ring-black/15;
+    @apply w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-slate-900 outline-none focus:border-foreground focus:ring-2 focus:ring-foreground/15;
   }
   .bottone {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-black px-5 py-2 font-semibold text-white hover:bg-slate-800 disabled:opacity-60;
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-foreground px-5 py-2 font-semibold text-white hover:bg-slate-800 disabled:opacity-60;
   }
   .bottone-secondario {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-5 py-2 font-semibold text-black hover:bg-slate-100 disabled:opacity-60;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-5 py-2 font-semibold text-foreground hover:bg-slate-100 disabled:opacity-60;
   }
   .scheda {
     @apply rounded-3xl border border-slate-200 bg-white p-6;
   }
   .link {
-    @apply text-black underline decoration-slate-300 underline-offset-4 hover:decoration-black;
+    @apply text-foreground underline decoration-slate-300 underline-offset-4 hover:decoration-foreground;
   }
 }
 
@@ -71,10 +71,10 @@ body {
 /* Pulsanti a pillola, bianco e nero (pagina di benvenuto) */
 @layer components {
   .bottone-nero {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-black px-5 py-2 font-semibold text-white hover:bg-slate-800;
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-foreground px-5 py-2 font-semibold text-white hover:bg-slate-800;
   }
   .bottone-bordo {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-5 py-2 font-semibold text-black hover:bg-slate-100;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-5 py-2 font-semibold text-foreground hover:bg-slate-100;
   }
   .bottone-nero-grande { @apply px-8 py-4 text-lg; }
 }
