@@ -80,7 +80,7 @@
     "chiVede2": "I dati sono conservati presso fornitori tecnici che agiscono come responsabili del trattamento: Supabase (database e file, server a Stoccolma, UE) e Vercel (esecuzione dell'app, funzioni a Stoccolma, UE).",
     "chiVede3": "Non ci sono pubblicità, strumenti di analisi del traffico o cessioni a terzi.",
     "quantoH": "Per quanto tempo",
-    "quantoP": "Finché tieni il tuo account. Eliminando un dataset si cancellano la sua tabella e il file originale caricato; eliminando l'account si cancellano tutti i tuoi dati.",
+    "quantoP": "Le tabelle e i grafici, finché tieni il tuo account. Il file originale che carichi viene cancellato da solo dopo 30 giorni (le tabelle create restano). Eliminando un dataset si cancellano la sua tabella e il file originale; eliminando l'account si cancellano tutti i tuoi dati.",
     "cookieH": "Cookie",
     "cookieP": "L'app usa solo cookie tecnici, necessari al funzionamento o scelti da te: per questo non serve il tuo consenso e ti mostriamo solo un avviso informativo. Non ci sono cookie di profilazione, pubblicità o analisi del traffico.",
     "cookie1": "Cookie di accesso (il nome inizia con «sb-»): mantengono la sessione dopo il login e vengono rimossi quando esci.",
