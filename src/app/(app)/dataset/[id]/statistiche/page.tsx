@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { CampiNascosti } from "@/components/CampiNascosti";
 import { FormPulito } from "@/components/FormPulito";
 import { conParametri, leggiFiltri, type Parametri } from "@/lib/filtri";
-import { formattaStatistica, formattaValore } from "@/lib/formato";
+import { etichettaPeriodo, formattaStatistica, formattaValore } from "@/lib/formato";
 import { createClient } from "@/lib/supabase/server";
 import { BarraFiltri } from "../BarraFiltri";
 import { filtriDataset } from "../filtri-dataset";
@@ -31,14 +31,6 @@ function scelta<T extends string>(valore: unknown, ammessi: readonly T[], predef
 const PERIODI_CHIAVI = Object.keys(PERIODI) as Periodo[];
 const AGGREGAZIONI_CHIAVI = Object.keys(AGGREGAZIONI) as Aggregazione[];
 
-// Etichetta di un periodo: "2026-09-28" → "28/09/2026", "set 2026", "2026" ...
-function etichettaPeriodo(iso: string, periodo: Periodo): string {
-  const d = new Date(`${iso}T00:00:00Z`);
-  if (periodo === "year") return String(d.getUTCFullYear());
-  if (periodo === "month") return d.toLocaleDateString("it-IT", { month: "short", year: "numeric", timeZone: "UTC" });
-  if (periodo === "week") return `sett. del ${d.toLocaleDateString("it-IT", { day: "2-digit", month: "2-digit", year: "numeric", timeZone: "UTC" })}`;
-  return d.toLocaleDateString("it-IT", { day: "2-digit", month: "2-digit", year: "numeric", timeZone: "UTC" });
-}
 
 // Periodo predefinito in base a quanti giorni coprono i dati: abbastanza punti, ma non troppi.
 function periodoAdatto(giorni: number | undefined): Periodo {

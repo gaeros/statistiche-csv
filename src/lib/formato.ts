@@ -48,3 +48,12 @@ export function formattaPercentuale(parte: number, totale: number): string {
   if (!totale) return "–";
   return `${statistica.format((parte / totale) * 100)}%`;
 }
+
+// Etichetta di un periodo: "2026-09-28" → "28/09/2026", "set 2026", "2026" ...
+export function etichettaPeriodo(iso: string, periodo: "day" | "week" | "month" | "year"): string {
+  const d = new Date(`${iso}T00:00:00Z`);
+  if (periodo === "year") return String(d.getUTCFullYear());
+  if (periodo === "month") return d.toLocaleDateString("it-IT", { month: "short", year: "numeric", timeZone: "UTC" });
+  if (periodo === "week") return `sett. del ${d.toLocaleDateString("it-IT", { day: "2-digit", month: "2-digit", year: "numeric", timeZone: "UTC" })}`;
+  return d.toLocaleDateString("it-IT", { day: "2-digit", month: "2-digit", year: "numeric", timeZone: "UTC" });
+}

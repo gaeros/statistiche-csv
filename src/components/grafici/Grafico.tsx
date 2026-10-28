@@ -2,15 +2,17 @@
 
 import { useEffect, useRef, useSyncExternalStore } from "react";
 import * as echarts from "echarts/core";
-import { BarChart, LineChart, PieChart } from "echarts/charts";
+import { BarChart, BoxplotChart, LineChart, PieChart, ScatterChart } from "echarts/charts";
 import { DataZoomComponent, GridComponent, LegendComponent, MarkLineComponent, TooltipComponent } from "echarts/components";
 import { SVGRenderer } from "echarts/renderers";
 import { colori, type Colori } from "./tema";
 
 echarts.use([
   BarChart,
+  BoxplotChart,
   LineChart,
   PieChart,
+  ScatterChart,
   GridComponent,
   TooltipComponent,
   LegendComponent,
@@ -32,10 +34,13 @@ export function Grafico({
   opzioni,
   altezza = 280,
   descrizione,
+  riferimento,
 }: {
   opzioni: (c: Colori) => echarts.EChartsCoreOption;
   altezza?: number;
   descrizione: string;
+  // Riceve il grafico ECharts appena creato (null quando viene tolto), es. per esportarlo
+  riferimento?: (g: echarts.ECharts | null) => void;
 }) {
   const riquadro = useRef<HTMLDivElement>(null);
   const grafico = useRef<echarts.ECharts | null>(null);
@@ -50,14 +55,16 @@ export function Grafico({
     if (!el) return;
     const g = echarts.init(el, null, { renderer: "svg" });
     grafico.current = g;
+    riferimento?.(g);
     const osservatore = new ResizeObserver(() => g.resize());
     osservatore.observe(el);
     return () => {
       osservatore.disconnect();
+      riferimento?.(null);
       g.dispose();
       grafico.current = null;
     };
-  }, []);
+  }, [riferimento]);
 
   useEffect(() => {
     grafico.current?.setOption(opzioni(colori(scuro)), true);

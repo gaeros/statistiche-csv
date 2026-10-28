@@ -9,7 +9,7 @@ type Props = {
   createdAt: string;
   righe: number;
   colonne: number;
-  attiva: "dati" | "statistiche";
+  attiva: "dati" | "statistiche" | "grafici";
   // Filtri attivi ("?f.data.p=30..."), mantenuti passando da una scheda all'altra
   query?: string;
 };
@@ -43,6 +43,7 @@ export function Intestazione({ id, nome, nomeOriginale, foglio, createdAt, righe
       <nav className="flex gap-6 border-b border-slate-200 dark:border-slate-800">
         {scheda("dati", `/dataset/${id}${query}`, "Dati")}
         {scheda("statistiche", `/dataset/${id}/statistiche${query}`, "Statistiche")}
+        {scheda("grafici", `/dataset/${id}/grafici${query}`, "Grafici")}
       </nav>
     </div>
   );
