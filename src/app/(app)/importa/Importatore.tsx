@@ -8,6 +8,7 @@ import type { Traduttore } from "@/i18n/lingue";
 import { Messaggio } from "@/components/Messaggio";
 import { creaAnteprima, type Anteprima } from "@/lib/import/anteprima";
 import {
+  accodaRighe,
   compatibilePerAccodare,
   importa,
   LIMITE_FILE_BYTE,
@@ -336,6 +337,7 @@ export function Importatore() {
                     <Link href={`/dataset/${d.id}`} className="link">
                       {d.nome}
                     </Link>
+                    {d.saltate !== undefined && <span className="text-slate-500"> · {t("saltateInfo", { n: d.saltate })}</span>}
                   </li>
                 ))}
               </ul>
@@ -370,7 +372,7 @@ function problemi(voce: Voce, esistenti: DatasetEsistente[], t: Traduttore): str
     if (esistente && s.modalita === "sostituisci" && !s.confermaSostituzione) {
       elenco.push(t("confermaSostituzioneProblema", { et, nome: esistente.nome }));
     }
-    if (esistente && s.modalita === "accoda") {
+    if (esistente && accodaRighe(s.modalita)) {
       const motivo = compatibilePerAccodare(a, esistente, t);
       if (motivo) elenco.push(t("impossibileAccodare", { et, motivo }));
     }

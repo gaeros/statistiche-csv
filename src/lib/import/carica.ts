@@ -9,7 +9,10 @@ import { tradotto, type Traduttore } from "@/i18n/lingue";
 export const RIGHE_PER_BLOCCO = 2000;
 export const LIMITE_FILE_BYTE = 50 * 1024 * 1024;
 
-export type Modalita = "nuova" | "sostituisci" | "accoda";
+export type Modalita = "nuova" | "sostituisci" | "accoda" | "accodaNuove";
+
+// Le due modalità che aggiungono righe a un dataset già esistente.
+export const accodaRighe = (m: Modalita) => m === "accoda" || m === "accodaNuove";
 
 export type DatasetEsistente = {
   id: string;
@@ -31,7 +34,8 @@ export type Ripresa = {
   destinazione: number;
   datasetId?: string;
   blocco: number;
-  completati: { id: string; nome: string }[];
+  saltate?: number; // righe già presenti saltate finora nella destinazione corrente
+  completati: { id: string; nome: string; saltate?: number }[];
 };
 
 export type Progresso = { fatte: number; totali: number; fase: string };
@@ -157,12 +161,12 @@ export async function importa(
     }
 
     // 3. Una tabella per ogni destinazione, righe a blocchi
-    for (; r.destinazione < destinazioni.length; r = { ...r, destinazione: r.destinazione + 1, datasetId: undefined, blocco: 0 }) {
+    for (; r.destinazione < destinazioni.length; r = { ...r, destinazione: r.destinazione + 1, datasetId: undefined, blocco: 0, saltate: 0 }) {
       const d = destinazioni[r.destinazione];
       const { righe, nonConvertiti } = preparate[r.destinazione];
 
       if (!r.datasetId) {
-        if (d.modalita === "accoda" && d.esistente) {
+        if (accodaRighe(d.modalita) && d.esistente) {
           r = { ...r, datasetId: d.esistente.id };
         } else {
           if (d.modalita === "sostituisci" && d.esistente) {
@@ -188,13 +192,20 @@ export async function importa(
         }
       }
 
-      const nomeTabella = d.modalita === "accoda" && d.esistente ? d.esistente.nome : d.anteprima.nomeTabella;
+      const nomeTabella = accodaRighe(d.modalita) && d.esistente ? d.esistente.nome : d.anteprima.nomeTabella;
       for (; r.blocco * RIGHE_PER_BLOCCO < righe.length; r = { ...r, blocco: r.blocco + 1 }) {
         segnala(t("faseInvio", { nome: nomeTabella }));
         const blocco: RigaDati[] = righe.slice(r.blocco * RIGHE_PER_BLOCCO, (r.blocco + 1) * RIGHE_PER_BLOCCO);
-        await conRiprova(() => supabase.rpc("inserisci_righe", { p_dataset: r.datasetId, p_righe: blocco }));
+        if (d.modalita === "accodaNuove") {
+          const esito = await conRiprova<{ inserite: number; saltate: number }>(() =>
+            supabase.rpc("inserisci_righe_nuove", { p_dataset: r.datasetId, p_righe: blocco }),
+          );
+          r = { ...r, saltate: (r.saltate ?? 0) + esito.saltate };
+        } else {
+          await conRiprova(() => supabase.rpc("inserisci_righe", { p_dataset: r.datasetId, p_righe: blocco }));
+        }
       }
-      r = { ...r, completati: [...r.completati, { id: r.datasetId!, nome: nomeTabella }] };
+      r = { ...r, completati: [...r.completati, { id: r.datasetId!, nome: nomeTabella, saltate: d.modalita === "accodaNuove" ? (r.saltate ?? 0) : undefined }] };
     }
 
     await supabase

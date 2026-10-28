@@ -102,6 +102,7 @@ export function SchedaAnteprima({
               ["nuova", t("modNuova", { nome: a.nomeTabella })],
               ["sostituisci", t("modSostituisci")],
               ["accoda", t("modAccoda")],
+              ["accodaNuove", t("modAccodaNuove")],
             ] as [Modalita, string][]
           ).map(([valore, etichetta]) => (
             <label key={valore} className="flex items-center gap-2">
@@ -114,6 +115,7 @@ export function SchedaAnteprima({
               {etichetta}
             </label>
           ))}
+          {scheda.modalita === "accodaNuove" && <p className="ml-6 text-slate-600">{t("accodaNuoveNota")}</p>}
           {scheda.modalita === "sostituisci" && (
             <label className="ml-6 flex items-center gap-2 text-red-700 dark:text-red-300">
               <input

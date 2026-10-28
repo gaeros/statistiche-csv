@@ -454,7 +454,10 @@
     "faseCreazione": "Creazione della tabella {nome}…",
     "faseInvio": "Invio delle righe di {nome}…",
     "faseCompletata": "Completata",
-    "faseInterrotta": "Interrotta"
+    "faseInterrotta": "Interrotta",
+    "modAccodaNuove": "Accoda solo le righe nuove (salta quelle già presenti)",
+    "saltateInfo": "{n, plural, one {# riga già presente saltata} other {# righe già presenti saltate}}",
+    "accodaNuoveNota": "Una riga è «già presente» se ha esattamente gli stessi valori in tutte le colonne."
   },
   "inviti": {
     "titolo": "Inviti",
