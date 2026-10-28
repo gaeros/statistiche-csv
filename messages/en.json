@@ -454,7 +454,10 @@
     "faseCreazione": "Creating the table {nome}…",
     "faseInvio": "Sending the rows of {nome}…",
     "faseCompletata": "Completed",
-    "faseInterrotta": "Interrupted"
+    "faseInterrotta": "Interrupted",
+    "modAccodaNuove": "Append only new rows (skip the ones already there)",
+    "saltateInfo": "{n, plural, one {# row already there skipped} other {# rows already there skipped}}",
+    "accodaNuoveNota": "A row is “already there” if it has exactly the same values in every column."
   },
   "inviti": {
     "titolo": "Invitations",
