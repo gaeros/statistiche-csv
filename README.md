@@ -6,6 +6,7 @@ con filtri. Ogni utente vede solo i propri dati. Registrazione solo su invito.
 Stack: Next.js (App Router, TypeScript), Supabase (PostgreSQL, Auth, Storage), Tailwind CSS.
 
 - **Avvio sul PC:** [docs/AVVIO-LOCALE.md](docs/AVVIO-LOCALE.md)
+- **Messa in rete (Vercel):** [docs/RILASCIO.md](docs/RILASCIO.md)
 - **Specifica funzionale:** `SPEC.md` del progetto (v0.6)
 
 ## Comandi

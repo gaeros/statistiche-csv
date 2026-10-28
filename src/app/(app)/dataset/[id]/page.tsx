@@ -124,11 +124,14 @@ export default async function PaginaDettaglio({ params, searchParams }: PageProp
         </table>
       </div>
 
-      <nav className="flex items-center justify-between text-sm">
+      <nav className="flex flex-wrap items-center justify-between gap-3 text-sm">
         <span className="text-slate-500">
           {etichette.length > 0 && `${totale.toLocaleString("it-IT")} righe con i filtri · `}Pagina {pagina} di {pagine}
         </span>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+          <a href={`/dataset/${id}/esporta${queryFiltri}`} className="bottone-secondario px-3 py-1" download>
+            Scarica CSV{etichette.length ? " (con i filtri)" : ""}
+          </a>
           {pagina > 1 && <Link href={link({ pagina: pagina - 1 })} className="bottone-secondario px-3 py-1">← Precedente</Link>}
           {pagina < pagine && <Link href={link({ pagina: pagina + 1 })} className="bottone-secondario px-3 py-1">Successiva →</Link>}
         </div>

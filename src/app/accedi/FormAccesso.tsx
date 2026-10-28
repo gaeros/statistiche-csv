@@ -52,6 +52,9 @@ export function FormAccesso({ errore, ok }: { errore?: string; ok?: string }) {
         <p className="text-slate-500">
           Non hai un account? La registrazione è solo su invito.
         </p>
+        <Link href="/privacy" className="block text-xs text-slate-500 hover:underline">
+          Informativa privacy
+        </Link>
       </div>
     </div>
   );
