@@ -18,6 +18,7 @@ export default async function LayoutApp({ children }: LayoutProps<"/">) {
           <nav className="flex gap-4 text-sm">
             <Link href="/dataset" className="link">I miei dataset</Link>
             <Link href="/importa" className="link">Importa</Link>
+            <Link href="/benvenuto" className="link">Guida</Link>
             {amministratore && (
               <Link href="/admin/inviti" className="link">Inviti</Link>
             )}
