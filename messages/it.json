@@ -465,7 +465,9 @@
   },
   "benvenuto": {
     "metaTitolo": "Benvenuto – Datahue",
-    "titolo": "Dai tuoi file di numeri a grafici che si capiscono",
+    "titoloA": "Dai tuoi file di numeri",
+    "titoloB": "a grafici che si capiscono",
+    "titoloAnimazione": "Dai file di numeri ai grafici",
     "intro": "Hai un foglio con gli ordini di Amazon, le misure della pressione o le spese del mese? Caricalo e l'app lo trasforma in statistiche e grafici, senza formule e senza saper programmare.",
     "accedi": "Accedi",
     "vaiDati": "Vai ai tuoi dati",

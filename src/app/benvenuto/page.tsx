@@ -4,6 +4,7 @@ import { Colonne } from "@/components/grafici/Colonne";
 import { Linee } from "@/components/grafici/Linee";
 import { Torta } from "@/components/grafici/Torta";
 import { SelettoreLingua } from "@/components/SelettoreLingua";
+import { TitoloAnimato } from "@/components/TitoloAnimato";
 import { creaFormati } from "@/lib/formato";
 import { createClient } from "@/lib/supabase/server";
 
@@ -46,13 +47,14 @@ export default async function PaginaBenvenuto() {
 
   return (
     <main className="mx-auto w-full max-w-5xl flex-1 space-y-12 px-4 py-10">
-      <div className="flex justify-end">
-        <SelettoreLingua />
+      <div className="grid grid-cols-[1fr_auto_1fr] items-center">
+        <span />
+        <p className="text-3xl font-bold tracking-tight text-blue-600 sm:text-4xl">Datahue</p>
+        <SelettoreLingua className="justify-self-end" />
       </div>
-      <header className="space-y-4 text-center">
-        <p className="text-sm font-medium text-blue-600 dark:text-blue-400">Datahue</p>
-        <h1 className="text-3xl font-semibold sm:text-4xl">{t("titolo")}</h1>
-        <p className="mx-auto max-w-2xl text-slate-600 dark:text-slate-400">
+      <header className="space-y-6 text-center">
+        <TitoloAnimato a={t("titoloA")} b={t("titoloB")} descrizione={t("titoloAnimazione")} />
+        <p className="mx-auto max-w-2xl text-lg text-slate-600 sm:text-xl dark:text-slate-400">
           {t("intro")}
         </p>
         <div className="flex flex-wrap justify-center gap-3">
