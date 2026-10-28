@@ -60,6 +60,12 @@ Da qui in poi ogni modifica unita in `main` va in rete da sola; ogni pull reques
 Segui il punto 8 di [AVVIO-LOCALE.md](AVVIO-LOCALE.md), aggiungendo in Google:
 *Authorized JavaScript origins* → anche l'indirizzo di Vercel.
 
+## 6. Pulizia automatica dei file originali (30 giorni)
+
+Vercel chiama ogni giorno `/api/cron/pulizia-originali` (vedi `vercel.json`). Serve una variabile in Vercel:
+*Settings → Environment Variables* → nome `CRON_SECRET`, valore una stringa casuale lunga (almeno 32 caratteri), tutti gli ambienti → *Save* → *Redeploy*.
+Vercel la manda da sola nella chiamata; senza la variabile la pulizia risponde 401 e non fa nulla.
+
 ## Prima di aprire l'app ad altre persone
 
 - Fai verificare l'informativa (`/privacy`) da un esperto privacy: è una bozza tecnica.
