@@ -1,4 +1,5 @@
 import { getLocale, getTranslations } from "next-intl/server";
+import { Logo } from "@/components/Logo";
 import Link from "next/link";
 import { Colonne } from "@/components/grafici/Colonne";
 import { Linee } from "@/components/grafici/Linee";
@@ -49,7 +50,7 @@ export default async function PaginaBenvenuto() {
     <div className="flex flex-1 flex-col bg-white">
       <div className="sticky top-0 z-10 border-b border-slate-100 bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
-          <Link href="/benvenuto" className="text-2xl font-bold tracking-normal text-foreground sm:text-3xl">datahue</Link>
+          <Link href="/benvenuto" className="text-foreground"><Logo className="h-11 w-auto sm:h-14" /></Link>
           <div className="flex items-center gap-3">
             <SelettoreLingua nero />
             <Link href={collegato ? "/dataset" : "/accedi"} className="bottone-nero">
