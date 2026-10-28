@@ -94,7 +94,7 @@
   "consenso": {
     "titolo": "Prima di iniziare",
     "intro": "I file che carichi possono contenere dati sulla salute, come pressione e battiti. Restano visibili solo a te e sono conservati in Europa.",
-    "informativa": "Ho letto l'<link>informativa sul trattamento dei dati</link>.",
+    "informativa": "Ho letto l’<link>informativa sul trattamento dei dati</link>.",
     "salute": "Acconsento al trattamento dei dati relativi alla mia salute che caricherò nell'app.",
     "conferma": "Accetto e continuo",
     "inCorso": "Salvataggio…",
