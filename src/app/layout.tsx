@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Statistiche da CSV",
+  title: "Datahue",
   description: "Carica file CSV ed Excel e guarda i tuoi dati in grafici.",
 };
 
