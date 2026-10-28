@@ -45,7 +45,7 @@ function Riquadro({ etichetta, valore, nota }: { etichetta: string; valore: stri
   return (
     <div className="scheda min-w-0 p-4">
       <div className="truncate text-xs text-slate-500" title={etichetta}>{etichetta}</div>
-      <div className="text-3xl font-semibold tracking-tight tabular-nums">{valore}</div>
+      <div className="text-3xl font-semibold tracking-normal tabular-nums">{valore}</div>
       {nota && <div className="truncate text-xs text-slate-500">{nota}</div>}
     </div>
   );

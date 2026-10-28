@@ -20,7 +20,7 @@ export default async function PaginaInviti() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-semibold tracking-tight">{t("titolo")}</h1>
+      <h1 className="text-3xl font-semibold tracking-normal">{t("titolo")}</h1>
       <FormInvito />
       <div className="scheda overflow-x-auto p-0">
         <table className="w-full text-left text-sm">

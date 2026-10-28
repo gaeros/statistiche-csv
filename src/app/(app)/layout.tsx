@@ -15,7 +15,7 @@ export default async function LayoutApp({ children }: LayoutProps<"/">) {
     <>
       <header className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3">
-          <Link href="/dataset" className="text-2xl font-bold tracking-tight">
+          <Link href="/dataset" className="text-2xl font-bold tracking-normal">
             datahue
           </Link>
           <nav className="flex gap-4 text-sm">

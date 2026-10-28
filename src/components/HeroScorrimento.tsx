@@ -152,7 +152,7 @@ export function HeroScorrimento({ a, b, descrizione, scorri }: { a: string; b: s
     };
   }, [ridotto]);
 
-  const titolo = "text-5xl font-semibold leading-[1.05] tracking-tighter sm:text-7xl md:text-8xl";
+  const titolo = "text-5xl font-semibold leading-[1.05] tracking-tight sm:text-7xl md:text-8xl";
 
   if (ridotto) {
     return (
