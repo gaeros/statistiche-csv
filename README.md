@@ -16,7 +16,7 @@ Stack: Next.js (App Router, TypeScript), Supabase (PostgreSQL, Auth, Storage), T
 | `npm run build` | compila la versione di produzione |
 | `npm run lint` | controlla il codice |
 | `npm test` | test di lettura dei file, nomi e tipi |
-| `npm run test:db` | applica le migrazioni a un PostgreSQL di prova e verifica l'isolamento tra utenti (serve PostgreSQL locale, vedi `scripts/test-db.sh`) |
+| `npm run test:db` | applica le migrazioni a un PostgreSQL di prova e verifica isolamento tra utenti, statistiche, filtri e grafici (serve PostgreSQL locale, vedi `scripts/test-db.sh`) |
 
 ## Struttura
 
@@ -24,6 +24,8 @@ Stack: Next.js (App Router, TypeScript), Supabase (PostgreSQL, Auth, Storage), T
 |----------|-----------|
 | `src/app/accedi`, `password-dimenticata`, `imposta-password`, `auth/*` | login, recupero password, ritorno da email e Google |
 | `src/app/(app)` | pagine riservate agli utenti collegati (dataset, importazione, inviti) |
+| `src/app/(app)/dataset/[id]` | schede Dati, Statistiche e Grafici di un dataset, con la barra dei filtri |
+| `src/lib/filtri.ts`, `src/lib/grafici.ts` | filtri nell'indirizzo della pagina, configurazione e dati dei grafici |
 | `src/lib/import` | lettura CSV/Excel, nomi, tipi e caricamento a blocchi (tutto nel browser) |
 | `src/lib/supabase` | client Supabase (browser, server, proxy, admin solo lato server) |
 | `src/proxy.ts` | rinnova la sessione e manda al login chi non è collegato |
@@ -34,6 +36,6 @@ Stack: Next.js (App Router, TypeScript), Supabase (PostgreSQL, Auth, Storage), T
 
 - [x] Fase 0: base locale, login solo su invito, email/password e Google
 - [x] Fase 1: import CSV/Excel
-- [x] Fase 2: statistiche
-- [ ] Fase 3: grafici e filtri
+- [x] Fase 2: statistiche e grafici (ECharts)
+- [x] Fase 3: filtri, dashboard e costruttore di grafici
 - [ ] Fase 4: rilascio su Vercel

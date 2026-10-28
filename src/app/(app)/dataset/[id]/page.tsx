@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { conParametri } from "@/lib/filtri";
 import { formattaValore } from "@/lib/formato";
 import { createClient } from "@/lib/supabase/server";
 import { Azioni } from "./Azioni";
+import { BarraFiltri } from "./BarraFiltri";
+import { filtriDataset } from "./filtri-dataset";
 import { Intestazione } from "./Intestazione";
 
 const PER_PAGINA = 50;
@@ -25,7 +28,9 @@ export default async function PaginaDettaglio({ params, searchParams }: PageProp
   if (!d) notFound();
 
   const colonne = d.colonne as Colonna[];
+  const { filtri, etichette, valori, queryFiltri } = await filtriDataset(supabase, id, colonne, sp);
   const { data: risultato, error } = await supabase.rpc("leggi_righe", {
+    p_filtri: filtri,
     p_dataset: id,
     p_limite: PER_PAGINA,
     p_offset: (pagina - 1) * PER_PAGINA,
@@ -37,11 +42,8 @@ export default async function PaginaDettaglio({ params, searchParams }: PageProp
   const pagine = Math.max(1, Math.ceil(totale / PER_PAGINA));
   const avvisi = (d.avvisi as string[]) ?? [];
 
-  const link = (modifiche: Record<string, string | number>) => {
-    const p = new URLSearchParams({ pagina: String(pagina), ordina, dir: discendente ? "desc" : "asc" });
-    for (const [k, v] of Object.entries(modifiche)) p.set(k, String(v));
-    return `/dataset/${id}?${p}`;
-  };
+  const link = (modifiche: Record<string, string | number>) =>
+    `/dataset/${id}${conParametri(sp, Object.fromEntries(Object.entries(modifiche).map(([k, v]) => [k, String(v)])))}`;
 
   return (
     <div className="space-y-6">
@@ -54,6 +56,16 @@ export default async function PaginaDettaglio({ params, searchParams }: PageProp
         righe={d.righe}
         colonne={colonne.length}
         attiva="dati"
+        query={queryFiltri}
+      />
+
+      <BarraFiltri
+        colonne={colonne}
+        sp={sp}
+        etichette={etichette}
+        valori={valori}
+        totale={totale}
+        complessivo={d.righe}
       />
 
       {avvisi.length > 0 && (
@@ -114,7 +126,7 @@ export default async function PaginaDettaglio({ params, searchParams }: PageProp
 
       <nav className="flex items-center justify-between text-sm">
         <span className="text-slate-500">
-          Pagina {pagina} di {pagine}
+          {etichette.length > 0 && `${totale.toLocaleString("it-IT")} righe con i filtri · `}Pagina {pagina} di {pagine}
         </span>
         <div className="flex gap-2">
           {pagina > 1 && <Link href={link({ pagina: pagina - 1 })} className="bottone-secondario px-3 py-1">← Precedente</Link>}
