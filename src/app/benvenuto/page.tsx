@@ -5,7 +5,7 @@ import { Linee } from "@/components/grafici/Linee";
 import { Torta } from "@/components/grafici/Torta";
 import { createClient } from "@/lib/supabase/server";
 
-export const metadata: Metadata = { title: "Benvenuto – Statistiche da CSV" };
+export const metadata: Metadata = { title: "Benvenuto – Datahue" };
 
 // Dati inventati, solo per mostrare che aspetto hanno i grafici.
 const GIORNI = Array.from({ length: 14 }, (_, i) => `${String(i + 1).padStart(2, "0")}/10`);
@@ -45,7 +45,7 @@ export default async function PaginaBenvenuto() {
   return (
     <main className="mx-auto w-full max-w-5xl flex-1 space-y-12 px-4 py-10">
       <header className="space-y-4 text-center">
-        <p className="text-sm font-medium text-blue-600 dark:text-blue-400">Statistiche da CSV</p>
+        <p className="text-sm font-medium text-blue-600 dark:text-blue-400">Datahue</p>
         <h1 className="text-3xl font-semibold sm:text-4xl">Dai tuoi file di numeri a grafici che si capiscono</h1>
         <p className="mx-auto max-w-2xl text-slate-600 dark:text-slate-400">
           Hai un foglio con gli ordini di Amazon, le misure della pressione o le spese del mese? Caricalo e l&apos;app lo

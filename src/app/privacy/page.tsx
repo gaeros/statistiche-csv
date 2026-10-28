@@ -1,21 +1,21 @@
 import Link from "next/link";
 import { VERSIONE_INFORMATIVA } from "@/lib/privacy";
 
-export const metadata = { title: "Informativa privacy · Statistiche da CSV" };
+export const metadata = { title: "Informativa privacy · Datahue" };
 
 // Bozza di informativa (SPEC §8.2): va fatta verificare da un esperto privacy prima di aprire l'app ad altri.
 export default function PaginaPrivacy() {
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 space-y-6 px-4 py-10 text-slate-700 dark:text-slate-300 [&_h2]:mt-6 [&_h2]:text-lg [&_h2]:font-semibold [&_h2]:text-slate-900 dark:[&_h2]:text-slate-100 [&_li]:ml-5 [&_li]:list-disc">
       <div className="space-y-1">
-        <Link href="/" className="link text-sm">← Statistiche da CSV</Link>
+        <Link href="/" className="link text-sm">← Datahue</Link>
         <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">Informativa sul trattamento dei dati</h1>
         <p className="text-sm text-slate-500">Versione del {VERSIONE_INFORMATIVA.split("-").reverse().join("/")}</p>
       </div>
 
       <h2>Chi tratta i dati</h2>
       <p>
-        L&apos;app &quot;Statistiche da CSV&quot; è gestita dal suo amministratore, la persona che ti ha invitato, che è il titolare
+        L&apos;app &quot;Datahue&quot; è gestita dal suo amministratore, la persona che ti ha invitato, che è il titolare
         del trattamento. L&apos;accesso è solo su invito. Per qualsiasi richiesta sui tuoi dati puoi scrivergli
         all&apos;indirizzo da cui hai ricevuto l&apos;invito.
       </p>

@@ -246,11 +246,11 @@ otp_expiry = 3600
 
 # Uncomment to customize email template
 [auth.email.template.invite]
-subject = "Sei stato invitato su Statistiche da CSV"
+subject = "Sei stato invitato su Datahue"
 content_path = "./supabase/templates/invito.html"
 
 [auth.email.template.recovery]
-subject = "Reimposta la password di Statistiche da CSV"
+subject = "Reimposta la password di Datahue"
 content_path = "./supabase/templates/recupero.html"
 
 # Uncomment to customize notification email template

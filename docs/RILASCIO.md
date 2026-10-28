@@ -12,7 +12,7 @@ secondo progetto attivo, quindi app in rete e app sul PC condividono database, u
 2. In **Import Git Repository**, se GitHub non è collegato premi **Continue with GitHub** (o
    **Install**) e dai accesso al repository `gaeros/statistiche-csv`.
 3. Accanto a `statistiche-csv` premi **Import**.
-4. *Framework Preset* deve essere **Next.js** (lo riconosce da solo). Non cambiare i comandi.
+4. In **Project Name** scrivi `datahue` (così l'indirizzo sarà `datahue.vercel.app`; se è già occupato Vercel te lo dice, scegli `datahue-app`). *Framework Preset* deve essere **Next.js** (lo riconosce da solo). Non cambiare i comandi.
 5. Apri **Environment Variables** e aggiungi tre righe (*Key* a sinistra, *Value* a destra), copiando
    i valori dal tuo `.env.local`:
 
@@ -24,7 +24,7 @@ secondo progetto attivo, quindi app in rete e app sul PC condividono database, u
 
    `NEXT_PUBLIC_SITE_URL` **non** serve: in rete l'app usa da sola l'indirizzo di Vercel.
 6. Premi **Deploy** e aspetta 1–2 minuti. Alla fine Vercel mostra l'indirizzo, del tipo
-   `https://statistiche-csv.vercel.app` (in *Domains* della pagina del progetto).
+   `https://datahue.vercel.app` (in *Domains* della pagina del progetto).
 
 Da qui in poi ogni modifica unita in `main` va in rete da sola; ogni pull request ha un'anteprima.
 
@@ -32,9 +32,9 @@ Da qui in poi ogni modifica unita in `main` va in rete da sola; ogni pull reques
 
 *Authentication → URL Configuration*:
 
-- **Site URL**: l'indirizzo di Vercel, es. `https://statistiche-csv.vercel.app`
+- **Site URL**: l'indirizzo di Vercel, es. `https://datahue.vercel.app`
 - **Redirect URLs** → *Add URL*: lo stesso indirizzo seguito da `/**`, es.
-  `https://statistiche-csv.vercel.app/**`. Lascia anche `http://localhost:3000/**`, così l'app sul PC
+  `https://datahue.vercel.app/**`. Lascia anche `http://localhost:3000/**`, così l'app sul PC
   continua a funzionare.
 
 ## 3. Prova
