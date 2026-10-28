@@ -73,7 +73,7 @@ export async function BarraFiltri({
           <span className="font-medium">
             {t("titolo")}{" "}
             {attivi && (
-              <span className="ml-1 rounded-full bg-blue-600 px-2 py-0.5 text-xs font-semibold text-white">{etichette.length}</span>
+              <span className="ml-1 rounded-full bg-black px-2 py-0.5 text-xs font-semibold text-white">{etichette.length}</span>
             )}
           </span>
           <span className="text-sm text-slate-500">
@@ -195,7 +195,7 @@ export async function BarraFiltri({
             <Link
               key={e.testo}
               href={conParametri(sp, Object.fromEntries([...e.chiavi, "pagina"].map((x) => [x, null])))}
-              className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 text-blue-800 hover:bg-blue-100 dark:bg-blue-950 dark:text-blue-200 dark:hover:bg-blue-900"
+              className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-slate-900 hover:bg-slate-200 dark:bg-blue-950 dark:text-blue-200 dark:hover:bg-blue-900"
               title={t("togli")}
             >
               {e.testo}

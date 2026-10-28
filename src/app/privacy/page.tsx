@@ -21,7 +21,7 @@ export default async function PaginaPrivacy() {
           <Link href="/" className="link text-sm">← Datahue</Link>
           <SelettoreLingua />
         </div>
-        <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">{t("titolo")}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">{t("titolo")}</h1>
         <p className="text-sm text-slate-500">{t("versione", { data })}</p>
       </div>
 

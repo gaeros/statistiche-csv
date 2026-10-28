@@ -45,7 +45,7 @@ function Riquadro({ etichetta, valore, nota }: { etichetta: string; valore: stri
   return (
     <div className="scheda min-w-0 p-4">
       <div className="truncate text-xs text-slate-500" title={etichetta}>{etichetta}</div>
-      <div className="text-2xl font-semibold tabular-nums">{valore}</div>
+      <div className="text-3xl font-semibold tracking-tight tabular-nums">{valore}</div>
       {nota && <div className="truncate text-xs text-slate-500">{nota}</div>}
     </div>
   );
@@ -372,7 +372,7 @@ export default async function PaginaStatistiche({ params, searchParams }: PagePr
                                 key={p}
                                 href={linkPeriodo(p)}
                                 scroll={false}
-                                className={p === periodo ? "font-semibold text-blue-700 dark:text-blue-300" : "link"}
+                                className={p === periodo ? "font-semibold text-black dark:text-blue-300" : "link"}
                               >
                                 {tg(`per_${p}`)}
                               </Link>

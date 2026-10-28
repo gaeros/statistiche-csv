@@ -23,7 +23,7 @@ export default async function PaginaDataset({ searchParams }: PageProps<"/datase
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold">{t("titolo")}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">{t("titolo")}</h1>
         <Link href="/importa" className="bottone">
           {t("importaFile")}
         </Link>
@@ -53,7 +53,7 @@ export default async function PaginaDataset({ searchParams }: PageProps<"/datase
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {elenco.map((d) => (
             <li key={d.id}>
-              <Link href={`/dataset/${d.id}`} className="scheda block h-full space-y-2 hover:border-blue-400">
+              <Link href={`/dataset/${d.id}`} className="scheda block h-full space-y-2 hover:border-black">
                 <p className="font-mono font-medium break-all">{d.nome}</p>
                 <p className="text-sm text-slate-500 break-all">
                   {d.nome_originale}

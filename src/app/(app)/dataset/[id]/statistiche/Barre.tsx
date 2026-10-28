@@ -17,7 +17,7 @@ export function Barre({
           <span className="h-3 rounded-sm bg-slate-100 dark:bg-slate-800">
             {r.valore !== null && massimo > 0 && (
               <span
-                className="block h-full rounded-sm bg-blue-500"
+                className="block h-full rounded-sm bg-slate-800"
                 style={{ width: `${(Math.abs(r.valore) / massimo) * 100}%` }}
               />
             )}

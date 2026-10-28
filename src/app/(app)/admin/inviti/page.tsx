@@ -20,7 +20,7 @@ export default async function PaginaInviti() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">{t("titolo")}</h1>
+      <h1 className="text-3xl font-semibold tracking-tight">{t("titolo")}</h1>
       <FormInvito />
       <div className="scheda overflow-x-auto p-0">
         <table className="w-full text-left text-sm">
@@ -37,7 +37,7 @@ export default async function PaginaInviti() {
                 <td className="px-4 py-2">
                   {i.email}
                   {i.amministratore && (
-                    <span className="ml-2 rounded bg-blue-100 px-1.5 py-0.5 text-xs text-blue-800 dark:bg-blue-950 dark:text-blue-200">
+                    <span className="ml-2 rounded bg-slate-900 px-1.5 py-0.5 text-xs text-white dark:bg-blue-950 dark:text-blue-200">
                       {t("amministratore")}
                     </span>
                   )}

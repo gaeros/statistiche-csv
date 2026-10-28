@@ -6,7 +6,7 @@ import { impostaLingua } from "@/i18n/azioni";
 import { LINGUE } from "@/i18n/lingue";
 
 // Due pulsanti IT | EN: scelgono la lingua per tutto il sito.
-export function SelettoreLingua({ className = "", nero = false }: { className?: string; nero?: boolean }) {
+export function SelettoreLingua({ className = "", nero = true }: { className?: string; nero?: boolean }) {
   const attuale = useLocale();
   const t = useTranslations("lingua");
   const [, avvia] = useTransition();

@@ -95,7 +95,7 @@ export function SchedaAnteprima({
       )}
 
       {esistente && (
-        <fieldset className="space-y-2 rounded-md border border-blue-200 bg-blue-50 p-3 text-sm dark:border-blue-900 dark:bg-blue-950/40">
+        <fieldset className="space-y-2 rounded-md border border-slate-300 bg-slate-100 p-3 text-sm dark:border-blue-900 dark:bg-blue-950/40">
           <legend className="px-1 font-medium">{t("esistente", { nome: esistente.nome })}</legend>
           {(
             [

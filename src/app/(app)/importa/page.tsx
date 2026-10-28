@@ -6,7 +6,7 @@ export default async function PaginaImporta() {
   return (
     <div className="space-y-6">
       <div className="space-y-1">
-        <h1 className="text-2xl font-semibold">{t("titolo")}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">{t("titolo")}</h1>
         <p className="text-slate-600 dark:text-slate-400">
           {t("sottotitolo")}
         </p>
