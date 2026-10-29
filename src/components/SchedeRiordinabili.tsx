@@ -3,7 +3,6 @@
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent as PointerEventReact, type ReactNode } from "react";
 import { applicaOrdine, sposta, stessoOrdine } from "@/lib/ordine";
-import { salvaOrdineSchede } from "./actions";
 
 type Voce = { chiave: string; nome: string; contenuto: ReactNode };
 
@@ -12,21 +11,27 @@ const INTERATTIVI = "a, button, input, select, textarea, label, summary";
 // Quanti pixel deve muoversi il mouse prima che il trascinamento parta (sotto è un clic).
 const SOGLIA = 6;
 
-// Schede «Colonna per colonna» che l'utente può riordinare: col mouse trascinando la scheda,
-// col dito dalla maniglia in alto, da tastiera con le frecce sulla maniglia.
-// L'ordine si salva sul dataset (per utente, grazie alla RLS) e si ritrova al rientro.
-export function OrdinaSchede({
-  datasetId,
+// Schede che l'utente può riordinare (es. «Colonna per colonna», dashboard): col mouse trascinando
+// la scheda, col dito dalla maniglia in alto, da tastiera con le frecce sulla maniglia; la lente
+// apre la scheda ingrandita. L'ordine si salva con l'azione `salva` (per utente, grazie alla RLS).
+// Con `ripristinabile` l'ordine originale (quello di `voci`) si salva come elenco vuoto e un
+// pulsante permette di tornarci.
+export function SchedeRiordinabili({
   voci,
   salvato,
   intestazione,
+  salva: salvaSulServer,
+  ripristinabile = true,
+  griglia = "md:grid-cols-2 xl:grid-cols-3",
 }: {
-  datasetId: string;
   voci: Voce[];
   salvato: string[];
   intestazione: ReactNode;
+  salva: (chiavi: string[]) => Promise<boolean>;
+  ripristinabile?: boolean;
+  griglia?: string;
 }) {
-  const t = useTranslations("statistiche");
+  const t = useTranslations("schede");
   const originale = voci.map((v) => v.chiave);
   const [ordine, setOrdine] = useState(() => applicaOrdine(originale, salvato));
   const [trascinata, setTrascinata] = useState<string | null>(null);
@@ -44,12 +49,12 @@ export function OrdinaSchede({
   const perChiave = new Map(voci.map((v) => [v.chiave, v]));
   // Colonne aggiunte o tolte dopo il salvataggio: si riallinea senza perdere l'ordine scelto.
   const visibili = applicaOrdine(originale, ordine);
-  const modificato = !stessoOrdine(visibili, originale);
+  const modificato = ripristinabile && !stessoOrdine(visibili, originale);
 
   async function salva(nuovo: string[], subito = true) {
     clearTimeout(attesa.current);
     const esegui = async () => {
-      const ok = await salvaOrdineSchede(datasetId, stessoOrdine(nuovo, originale) ? [] : nuovo);
+      const ok = await salvaSulServer(ripristinabile && stessoOrdine(nuovo, originale) ? [] : nuovo);
       setErrore(!ok);
       if (!ok) setAnnuncio(t("ordineNonSalvato"));
     };
@@ -153,6 +158,11 @@ export function OrdinaSchede({
     if (aperta && d && !d.open) d.showModal();
   }, [aperta]);
 
+  // Scheda ingrandita tolta nel frattempo (es. «Togli dalla dashboard» dalla finestra): si chiude.
+  useEffect(() => {
+    if (aperta && !voci.some((v) => v.chiave === aperta)) finestra.current?.close();
+  }, [aperta, voci]);
+
   function chiudi() {
     finestra.current?.close();
   }
@@ -175,7 +185,7 @@ export function OrdinaSchede({
       </div>
       <p id="istruzioni-schede" className="sr-only">{t("istruzioniSposta")}</p>
       <p aria-live="polite" className={errore ? "text-sm text-red-600" : "sr-only"}>{annuncio}</p>
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className={`grid gap-4 ${griglia}`}>
         {visibili.map((chiave) => {
           const v = perChiave.get(chiave)!;
           const presa = trascinata === chiave || premuta === chiave;

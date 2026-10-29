@@ -13,7 +13,8 @@ import { Colonne } from "@/components/grafici/Colonne";
 import { Linee } from "@/components/grafici/Linee";
 import { Torta } from "@/components/grafici/Torta";
 import { Barre } from "./Barre";
-import { OrdinaSchede } from "./OrdinaSchede";
+import { SchedeRiordinabili } from "@/components/SchedeRiordinabili";
+import { salvaOrdineSchede } from "./actions";
 import { SchedaColonna } from "./SchedaColonna";
 import {
   AGGREGAZIONI,
@@ -351,8 +352,8 @@ export default async function PaginaStatistiche({ params, searchParams }: PagePr
       {/* Riepilogo per colonna */}
       {statistiche && (
         <section id="colonne" className="space-y-4">
-          <OrdinaSchede
-            datasetId={d.id}
+          <SchedeRiordinabili
+            salva={salvaOrdineSchede.bind(null, d.id)}
             salvato={ordineSchede}
             intestazione={
               <div>

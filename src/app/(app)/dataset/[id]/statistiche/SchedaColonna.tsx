@@ -63,7 +63,7 @@ export async function SchedaColonna({
 
   return (
     <section className="scheda min-w-0 space-y-4">
-      {/* pr-10: a destra c'è il pulsante per ingrandire la scheda (OrdinaSchede) */}
+      {/* pr-10: a destra c'è il pulsante per ingrandire la scheda (SchedeRiordinabili) */}
       <header className="pr-10">
         <h3 className="font-semibold break-all">{c.originale}</h3>
       </header>

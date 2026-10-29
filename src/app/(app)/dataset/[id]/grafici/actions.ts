@@ -5,6 +5,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { Colonna, Parametri } from "@/lib/filtri";
 import { confermaScritta } from "@/lib/conferma";
+import { fissa, MAX_FISSATI, togli } from "@/lib/dashboard";
+import { cambiaDashboard } from "@/lib/dashboard-db";
 import { leggiConfigurazione, titoloAutomatico } from "@/lib/grafici";
 import { createClient } from "@/lib/supabase/server";
 
@@ -43,5 +45,17 @@ export async function eliminaGrafico(id: string, grafico: string, formData: Form
   const { error } = await supabase.from("grafici").delete().eq("id", grafico).eq("dataset_id", id);
   if (error) throw new Error(t("eliminazioneFallita", { dettaglio: error.message }));
   revalidatePath(`/dataset/${id}/grafici`);
+  redirect(ritorno(id, formData));
+}
+
+// Fissa un grafico salvato nella dashboard personale, o lo toglie (senza eliminarlo).
+export async function fissaInDashboard(id: string, grafico: string, fissato: boolean, formData: FormData) {
+  const esito = await cambiaDashboard((salvati) => (fissato ? fissa(salvati, grafico) : togli(salvati, grafico)));
+  if (!esito.ok) {
+    const t = await getTranslations("dashboard");
+    throw new Error(esito.troppi ? t("troppi", { n: MAX_FISSATI }) : t("nonRiuscito", { dettaglio: esito.dettaglio ?? "" }));
+  }
+  revalidatePath(`/dataset/${id}/grafici`);
+  revalidatePath("/dashboard");
   redirect(ritorno(id, formData));
 }
