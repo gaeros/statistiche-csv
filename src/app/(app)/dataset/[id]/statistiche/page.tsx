@@ -65,7 +65,7 @@ function Seleziona({
 }) {
   return (
     <label className="block space-y-1 text-sm">
-      <span className="font-medium">{etichetta}</span>
+      <span className="block font-medium">{etichetta}</span>
       <select name={nome} defaultValue={valore} className="campo py-1.5">
         {opzioni.map((o) => (
           <option key={o.valore} value={o.valore}>
