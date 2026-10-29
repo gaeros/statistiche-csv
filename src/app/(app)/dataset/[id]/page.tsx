@@ -103,6 +103,9 @@ export default async function PaginaDettaglio({ params, searchParams }: PageProp
           <a href={`/dataset/${id}/esporta${queryFiltri}`} className="bottone-secondario px-3 py-1" download>
             {etichette.length ? t("scaricaCsvFiltri") : t("scaricaCsv")}
           </a>
+          <a href={`/dataset/${id}/excel${queryFiltri}`} className="bottone-secondario px-3 py-1" download>
+            {etichette.length ? t("scaricaExcelFiltri") : t("scaricaExcel")}
+          </a>
           {pagina > 1 && <Link href={link({ pagina: pagina - 1 })} className="bottone-secondario px-3 py-1">{t("precedente")}</Link>}
           {pagina < pagine && <Link href={link({ pagina: pagina + 1 })} className="bottone-secondario px-3 py-1">{t("successiva")}</Link>}
         </div>
