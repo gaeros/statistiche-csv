@@ -14,6 +14,7 @@ export default async function PaginaGuida() {
       <div className="space-y-1">
         <h1 className="text-3xl font-semibold tracking-normal">{t("titolo")}</h1>
         <p className="text-slate-600 dark:text-slate-400">{t("intro")}</p>
+        <p className="text-slate-600 dark:text-slate-400">{t("accesso")}</p>
       </div>
       <ol className="space-y-4">
         {PASSI.map((n) => (
