@@ -29,7 +29,7 @@ const SERIE = ["barre", "barre_impilate", "linee", "area"];
 function Campo({ etichetta, children }: { etichetta: string; children: React.ReactNode }) {
   return (
     <label className="block space-y-1 text-sm">
-      <span className="font-medium">{etichetta}</span>
+      <span className="block font-medium">{etichetta}</span>
       {children}
     </label>
   );
@@ -189,6 +189,14 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
               </Campo>
             )}
 
+            {config.tipo === "torta" && config.aggregazione !== "conteggio" && adatte.y.length > 0 && (
+              <Campo etichetta={t("di")}>
+                <select name="c.y" defaultValue={config.y[0]} className="campo py-1.5">
+                  <Opzioni elenco={opz(adatte.y)} />
+                </select>
+              </Campo>
+            )}
+
             {serie && adatte.suddividi.length > 0 && (
               <Campo etichetta={t("unaSeriePerOgni")}>
                 <select name="c.sudd" defaultValue={config.suddividi ?? ""} className="campo py-1.5">
@@ -198,7 +206,7 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
             )}
           </div>
 
-          {adatte.y.length > 0 && (config.aggregazione !== "conteggio" || unaSola) && config.tipo !== "torta" ? (
+          {adatte.y.length > 0 && (config.aggregazione !== "conteggio" || unaSola) && config.tipo !== "torta" && (
             <fieldset className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
               <legend className="mb-1 font-medium">
                 {config.tipo === "dispersione" ? t("asseVerticale") : unaSola || config.suddividi ? t("colonna") : t("colonnePiu")}
@@ -215,14 +223,6 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
                 </label>
               ))}
             </fieldset>
-          ) : (
-            config.tipo === "torta" && config.aggregazione !== "conteggio" && (
-              <Campo etichetta={t("di")}>
-                <select name="c.y" defaultValue={config.y[0]} className="campo max-w-xs py-1.5">
-                  <Opzioni elenco={opz(adatte.y)} />
-                </select>
-              </Campo>
-            )
           )}
           <noscript>
             <button type="submit" className="bottone">{t("aggiorna")}</button>
