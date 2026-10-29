@@ -27,8 +27,11 @@ export async function rinomina(id: string, _prev: StatoForm, formData: FormData)
 }
 
 // Elimina tabella e voce di catalogo; se l'importazione resta vuota, anche il file originale.
-export async function elimina(id: string) {
+// Si procede solo se nella finestra è stata scritta la parola di conferma (ELIMINA o DELETE).
+export async function elimina(id: string, formData: FormData) {
   const t = await getTranslations("dettaglio");
+  const scritto = String(formData.get("conferma") ?? "").trim();
+  if (scritto !== "ELIMINA" && scritto !== "DELETE") throw new Error(t("confermaErrore", { parola: t("parola") }));
   const supabase = await createClient();
   const { data: dataset } = await supabase.from("dataset").select("importazione_id").eq("id", id).single();
   if (!dataset) redirect("/dataset");
