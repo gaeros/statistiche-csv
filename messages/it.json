@@ -276,6 +276,8 @@
     "istruzioniSposta": "Usa le frecce per spostare la scheda; Home e Fine la portano all'inizio o alla fine. L'ordine viene salvato.",
     "schedaSpostata": "«{nome}» spostata in posizione {pos} di {tot}.",
     "ripristinaOrdine": "Ripristina ordine",
+    "ingrandisciScheda": "Ingrandisci la scheda «{nome}»",
+    "chiudi": "Chiudi",
     "ordineRipristinato": "Ordine originale ripristinato.",
     "ordineNonSalvato": "Non è stato possibile salvare l'ordine delle schede. Riprova più tardi.",
     "righePer": "Righe per {periodo}",
@@ -291,12 +293,6 @@
     "nRighe": "{n} righe"
   },
   "colonna": {
-    "tipo_intero": "Numero intero",
-    "tipo_decimale": "Numero",
-    "tipo_testo": "Testo",
-    "tipo_data": "Data",
-    "tipo_data_ora": "Data e ora",
-    "tipo_booleano": "Sì/No",
     "vuota": "La colonna è vuota.",
     "media": "Media",
     "minimo": "Minimo",

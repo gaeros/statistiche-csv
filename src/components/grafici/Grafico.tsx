@@ -24,6 +24,7 @@ echarts.use([
 ]);
 
 // Contenitore comune: crea il grafico ECharts, lo ridimensiona con il riquadro e usa il tema chiaro.
+// L'altezza si può ingrandire da fuori con la variabile CSS --scala-grafici (es. scheda in primo piano).
 export function Grafico({
   opzioni,
   altezza = 280,
@@ -62,5 +63,5 @@ export function Grafico({
     grafico.current?.setOption({ textStyle: { fontFamily: FONT_GRAFICI }, ...opzioni(colori(scuro, locale)) }, true);
   }, [opzioni, scuro, locale]);
 
-  return <div ref={riquadro} role="img" aria-label={descrizione} style={{ height: altezza }} className="w-full" />;
+  return <div ref={riquadro} role="img" aria-label={descrizione} style={{ height: `calc(${altezza}px * var(--scala-grafici, 1))` }} className="w-full" />;
 }

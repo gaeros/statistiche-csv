@@ -47,11 +47,9 @@ export async function SchedaColonna({
 
   return (
     <section className="scheda min-w-0 space-y-4">
-      <header className="flex items-baseline justify-between gap-2">
+      {/* pr-10: a destra c'è il pulsante per ingrandire la scheda (OrdinaSchede) */}
+      <header className="pr-10">
         <h3 className="font-semibold break-all">{c.originale}</h3>
-        <span className="shrink-0 rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300">
-          {["intero", "decimale", "testo", "data", "data_ora", "booleano"].includes(c.tipo) ? t(`tipo_${c.tipo}`) : c.tipo}
-        </span>
       </header>
 
       {c.valori === 0 && <p className="text-sm text-slate-500">{t("vuota")}</p>}
