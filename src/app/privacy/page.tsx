@@ -43,6 +43,7 @@ export default async function PaginaPrivacy() {
         <li>{t("chiVede1")}</li>
         <li>{t("chiVede2")}</li>
         <li>{t("chiVede3")}</li>
+        <li>{t("chiVede4")}</li>
       </ul>
 
       <h2>{t("quantoH")}</h2>

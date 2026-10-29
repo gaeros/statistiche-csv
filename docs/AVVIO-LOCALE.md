@@ -110,10 +110,12 @@ con **Accedi con Google**.
 
 1. Vai su https://console.cloud.google.com, crea un progetto (es. "statistiche-csv").
 2. *APIs & Services → OAuth consent screen* (o *Google Auth Platform*): tipo **External**, nome app,
-   la tua email come contatto. In *Audience* lascialo in modalità **Testing** e aggiungi come *Test
-   users* le email di chi vuoi far entrare.
+   la tua email come contatto. In *Branding* metti home page e link alla privacy
+   (`https://datahue.vercel.app/privacy`), **senza logo** (un logo richiede la verifica di Google).
+   In *Audience* premi **Publish app**: con i soli permessi di base (email, nome) non serve verifica e
+   non c'è limite di utenti; chi entra lo decide l'elenco inviti di Datahue.
 3. *Clients → Create client* → tipo **Web application**:
-   - *Authorized JavaScript origins*: `http://localhost:3000`
+   - *Authorized JavaScript origins*: `http://localhost:3000` (e l'indirizzo Vercel, vedi RILASCIO.md)
    - *Authorized redirect URIs*: l'indirizzo di callback che Supabase ti mostra al punto 4
      (è `https://<il-tuo-progetto>.supabase.co/auth/v1/callback`)
 4. In Supabase: *Authentication → Sign In / Providers → Google* → attiva, incolla **Client ID** e

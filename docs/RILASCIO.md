@@ -55,7 +55,7 @@ Da qui in poi ogni modifica unita in `main` va in rete da sola; ogni pull reques
    host `smtp.resend.com`, porta `465`, utente `resend`, password = la API key, mittente a scelta.
 4. Con lo SMTP attivo puoi anche usare i modelli email in italiano di `supabase/templates/`.
 
-## 5. Facoltativo: accesso con Google
+## 5. Accesso con Google (attivo dal 2026-10-29)
 
 Segui il punto 8 di [AVVIO-LOCALE.md](AVVIO-LOCALE.md), aggiungendo in Google:
 *Authorized JavaScript origins* → anche l'indirizzo di Vercel.
