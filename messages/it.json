@@ -113,13 +113,11 @@
     "nessunDato": "Non hai ancora dati caricati.",
     "eliminaH": "Elimina l'account",
     "eliminaP": "Cancella per sempre il tuo account, tutte le tabelle, i file caricati e i grafici salvati. Non si può annullare: se vuoi conservare qualcosa, scaricalo prima.",
-    "confermaScrivi": "Per confermare scrivi <b>{parola}</b>",
-    "parola": "ELIMINA",
     "elimina": "Elimina definitivamente account e dati",
-    "inCorso": "Eliminazione…",
-    "confermaErrore": "Per confermare scrivi {parola} nella casella.",
     "erroreFile": "Non è stato possibile eliminare i file originali: {dettaglio}",
-    "erroreElimina": "Eliminazione non riuscita: {dettaglio}"
+    "erroreElimina": "Eliminazione non riuscita: {dettaglio}",
+    "eliminaApri": "Elimina l'account…",
+    "eliminaTitolo": "Eliminare il tuo account?"
   },
   "grafici": {
     "tipo_barre": "Barre",
@@ -222,10 +220,6 @@
     "eliminaAvviso": "Verranno eliminati la tabella con tutte le righe e, se non serve ad altri dataset, il file originale. L'operazione non si può annullare.",
     "eliminaConferma": "Elimina definitivamente",
     "eliminaTitolo": "Eliminare «{nome}»?",
-    "eliminaScrivi": "Per confermare scrivi <b>{parola}</b> in maiuscolo",
-    "parola": "ELIMINA",
-    "eliminaInCorso": "Eliminazione…",
-    "confermaErrore": "Per confermare scrivi {parola} nella casella.",
     "annulla": "Annulla",
     "nomeVuoto": "Il nome non può essere vuoto.",
     "nomeLungo": "Il nome può avere al massimo 100 caratteri.",
@@ -365,7 +359,10 @@
     "titolo": "Titolo",
     "salva": "Salva nella dashboard",
     "salvataggioFallito": "Salvataggio non riuscito: {dettaglio}",
-    "eliminazioneFallita": "Eliminazione non riuscita: {dettaglio}"
+    "eliminazioneFallita": "Eliminazione non riuscita: {dettaglio}",
+    "eliminaTitolo": "Eliminare il grafico «{titolo}»?",
+    "eliminaAvviso": "Il grafico salvato verrà tolto dalla dashboard. I dati del dataset restano. L'operazione non si può annullare.",
+    "eliminaConferma": "Elimina il grafico"
   },
   "importa": {
     "titolo": "Importa file",
@@ -477,7 +474,6 @@
     "amministratore": "amministratore",
     "revoca": "Revoca",
     "elimina": "Elimina",
-    "confermaElimina": "Eliminare del tutto {email}? Si cancellano l'account, i dataset, i grafici e i file caricati. Non si può annullare.",
     "nota": "Revoca toglie l'invito (non si può più registrare). Elimina cancella del tutto la persona: account, dati e file; poi puoi invitare di nuovo lo stesso indirizzo.",
     "invitaPersona": "Invita una persona",
     "segnaposto": "nome@esempio.it",
@@ -488,7 +484,10 @@
     "giaInvitato": "Questo indirizzo è già stato invitato.",
     "emailNonPartita": "Indirizzo autorizzato, ma l'email non è partita: {dettaglio}",
     "invitoInviato": "Invito inviato a {email}.",
-    "autorizzato": "{email} è autorizzato."
+    "autorizzato": "{email} è autorizzato.",
+    "eliminaTitolo": "Eliminare del tutto {email}?",
+    "eliminaAvviso": "Si cancellano l'account, i dataset, i grafici e i file caricati. Non si può annullare.",
+    "eliminaConferma": "Elimina definitivamente"
   },
   "benvenuto": {
     "metaTitolo": "Benvenuto – Datahue",
@@ -555,5 +554,12 @@
     "p6Testo": "In «Il mio account» puoi scaricare tutti i tuoi dati o eliminare l'account con tutto ciò che hai caricato. I tuoi file sono visibili solo a te.",
     "nota": "L'app mostra i tuoi dati e non fornisce consigli medici.",
     "inizia": "Importa il primo file"
+  },
+  "confermaElimina": {
+    "parola": "ELIMINA",
+    "scrivi": "Per confermare scrivi <b>{parola}</b> in maiuscolo",
+    "annulla": "Annulla",
+    "inCorso": "Eliminazione…",
+    "errore": "Per confermare scrivi ELIMINA nella casella."
   }
 }

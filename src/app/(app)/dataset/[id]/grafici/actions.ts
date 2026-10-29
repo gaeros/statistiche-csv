@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { Colonna, Parametri } from "@/lib/filtri";
+import { confermaScritta } from "@/lib/conferma";
 import { leggiConfigurazione, titoloAutomatico } from "@/lib/grafici";
 import { createClient } from "@/lib/supabase/server";
 
@@ -37,6 +38,7 @@ export async function salvaGrafico(id: string, formData: FormData) {
 
 export async function eliminaGrafico(id: string, grafico: string, formData: FormData) {
   const t = await getTranslations("graficiPagina");
+  if (!confermaScritta(formData)) throw new Error((await getTranslations("confermaElimina"))("errore"));
   const supabase = await createClient();
   const { error } = await supabase.from("grafici").delete().eq("id", grafico).eq("dataset_id", id);
   if (error) throw new Error(t("eliminazioneFallita", { dettaglio: error.message }));
