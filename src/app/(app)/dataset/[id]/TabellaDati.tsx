@@ -13,7 +13,7 @@ const stickyPrima = "sticky left-0 bg-inherit shadow-[1px_0_0_var(--color-slate-
 const vuota = (c: Colonna, valori: Record<string, unknown[] | null>) =>
   Array.isArray(valori[c.nome]) && valori[c.nome]!.length === 0;
 
-// Tabella delle righe del dataset: le colonne vuote sono nascoste solo qui, i dati restano (e nel CSV).
+// Tabella delle righe del dataset: le colonne vuote sono nascoste solo qui, i dati restano (e nei file CSV ed Excel).
 export async function TabellaDati({
   nome,
   colonne,
