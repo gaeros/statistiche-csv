@@ -3,6 +3,7 @@
 import { getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { confermaScritta } from "@/lib/conferma";
 import { siteUrl } from "@/lib/env";
 import { erroreAuth } from "@/lib/errori-auth";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -50,7 +51,7 @@ export async function invita(_prev: StatoForm, formData: FormData): Promise<Stat
 
 export async function revocaInvito(formData: FormData) {
   const { amministratore } = await utenteCorrente();
-  if (!amministratore) return;
+  if (!amministratore || !confermaScritta(formData)) return;
   const email = String(formData.get("email") ?? "");
   const supabase = await createClient();
   await supabase.from("inviti").delete().eq("email", email);
@@ -61,7 +62,7 @@ export async function revocaInvito(formData: FormData) {
 // Così lo stesso indirizzo può essere invitato di nuovo come se fosse la prima volta.
 export async function eliminaPersona(formData: FormData) {
   const { utente, amministratore } = await utenteCorrente();
-  if (!amministratore) return;
+  if (!amministratore || !confermaScritta(formData)) return;
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
   if (!email || email === utente.email?.toLowerCase()) return;
 

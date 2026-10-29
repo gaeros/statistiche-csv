@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import type { StatoForm } from "@/app/accedi/actions";
+import { confermaScritta } from "@/lib/conferma";
 import { pulisciImportazione } from "@/lib/import/carica";
 import { createClient } from "@/lib/supabase/server";
 
@@ -30,8 +31,7 @@ export async function rinomina(id: string, _prev: StatoForm, formData: FormData)
 // Si procede solo se nella finestra è stata scritta la parola di conferma (ELIMINA o DELETE).
 export async function elimina(id: string, formData: FormData) {
   const t = await getTranslations("dettaglio");
-  const scritto = String(formData.get("conferma") ?? "").trim();
-  if (scritto !== "ELIMINA" && scritto !== "DELETE") throw new Error(t("confermaErrore", { parola: t("parola") }));
+  if (!confermaScritta(formData)) throw new Error((await getTranslations("confermaElimina"))("errore"));
   const supabase = await createClient();
   const { data: dataset } = await supabase.from("dataset").select("importazione_id").eq("id", id).single();
   if (!dataset) redirect("/dataset");

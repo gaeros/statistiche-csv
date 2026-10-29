@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { creaFormati } from "@/lib/formato";
 import { createClient } from "@/lib/supabase/server";
 import { utenteCorrente } from "@/lib/utente";
-import { eliminaPersona, revocaInvito } from "./actions";
+import { revocaInvito } from "./actions";
 import { BottoneElimina } from "./BottoneElimina";
 import { FormInvito } from "./FormInvito";
 
@@ -53,10 +53,7 @@ export default async function PaginaInviti() {
                           {t("revoca")}
                         </button>
                       </form>
-                      <form action={eliminaPersona}>
-                        <input type="hidden" name="email" value={i.email} />
-                        <BottoneElimina email={i.email} />
-                      </form>
+                      <BottoneElimina email={i.email} />
                     </div>
                   )}
                 </td>

@@ -3,6 +3,7 @@
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import type { StatoForm } from "@/app/accedi/actions";
+import { confermaScritta } from "@/lib/conferma";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
@@ -10,11 +11,7 @@ import { createClient } from "@/lib/supabase/server";
 // si cancellano a cascata con l'utente; i file originali vanno tolti dallo Storage prima.
 export async function eliminaAccount(_prev: StatoForm, formData: FormData): Promise<StatoForm> {
   const t = await getTranslations("account");
-  const scritto = String(formData.get("conferma") ?? "").trim().toUpperCase();
-  // Vale la parola della lingua in uso, ma anche l'altra (l'utente può cambiare lingua durante la conferma).
-  if (scritto !== t("parola") && scritto !== "ELIMINA" && scritto !== "DELETE") {
-    return { errore: t("confermaErrore", { parola: t("parola") }) };
-  }
+  if (!confermaScritta(formData)) return { errore: (await getTranslations("confermaElimina"))("errore") };
 
   const supabase = await createClient();
   const { data: sessione } = await supabase.auth.getUser();

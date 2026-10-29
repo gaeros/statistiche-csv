@@ -21,6 +21,7 @@ import { createClient } from "@/lib/supabase/server";
 import { BarraFiltri } from "../BarraFiltri";
 import { filtriDataset } from "../filtri-dataset";
 import { Intestazione } from "../Intestazione";
+import { ConfermaElimina } from "@/components/ConfermaElimina";
 import { eliminaGrafico, salvaGrafico } from "./actions";
 
 const SERIE = ["barre", "barre_impilate", "linee", "area"];
@@ -125,10 +126,15 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
                     <Link href={`${conParametri(sp, parametriConfigurazione(g.config))}#costruttore`} className="link">
                       {t("modifica")}
                     </Link>
-                    <form action={eliminaGrafico.bind(null, id, g.id)}>
+                    <ConfermaElimina
+                      etichetta={t("elimina")}
+                      titolo={t("eliminaTitolo", { titolo: g.titolo })}
+                      avviso={t("eliminaAvviso")}
+                      conferma={t("eliminaConferma")}
+                      azione={eliminaGrafico.bind(null, id, g.id)}
+                    >
                       <input type="hidden" name="ritorno" value={ritorno} />
-                      <button type="submit" className="text-red-600 hover:underline dark:text-red-400">{t("elimina")}</button>
-                    </form>
+                    </ConfermaElimina>
                   </div>
                 </header>
                 {g.errore && <p className="text-sm text-red-600">{g.errore}</p>}

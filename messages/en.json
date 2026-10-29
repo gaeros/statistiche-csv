@@ -113,13 +113,11 @@
     "nessunDato": "You have not uploaded any data yet.",
     "eliminaH": "Delete account",
     "eliminaP": "Permanently deletes your account, all tables, uploaded files and saved charts. This cannot be undone: if you want to keep anything, download it first.",
-    "confermaScrivi": "To confirm, type <b>{parola}</b>",
-    "parola": "DELETE",
     "elimina": "Permanently delete account and data",
-    "inCorso": "Deleting…",
-    "confermaErrore": "To confirm, type {parola} in the box.",
     "erroreFile": "The original files could not be deleted: {dettaglio}",
-    "erroreElimina": "Deletion failed: {dettaglio}"
+    "erroreElimina": "Deletion failed: {dettaglio}",
+    "eliminaApri": "Delete the account…",
+    "eliminaTitolo": "Delete your account?"
   },
   "grafici": {
     "tipo_barre": "Bars",
@@ -222,10 +220,6 @@
     "eliminaAvviso": "The table with all its rows and, if no other dataset needs it, the original file will be deleted. This cannot be undone.",
     "eliminaConferma": "Delete permanently",
     "eliminaTitolo": "Delete “{nome}”?",
-    "eliminaScrivi": "To confirm, type <b>{parola}</b> in capital letters",
-    "parola": "DELETE",
-    "eliminaInCorso": "Deleting…",
-    "confermaErrore": "To confirm, type {parola} in the box.",
     "annulla": "Cancel",
     "nomeVuoto": "The name cannot be empty.",
     "nomeLungo": "The name can be at most 100 characters long.",
@@ -365,7 +359,10 @@
     "titolo": "Title",
     "salva": "Save to dashboard",
     "salvataggioFallito": "Saving failed: {dettaglio}",
-    "eliminazioneFallita": "Deletion failed: {dettaglio}"
+    "eliminazioneFallita": "Deletion failed: {dettaglio}",
+    "eliminaTitolo": "Delete the chart “{titolo}”?",
+    "eliminaAvviso": "The saved chart will be removed from the dashboard. The dataset's data stays. This cannot be undone.",
+    "eliminaConferma": "Delete the chart"
   },
   "importa": {
     "titolo": "Import file",
@@ -477,7 +474,6 @@
     "amministratore": "administrator",
     "revoca": "Revoke",
     "elimina": "Delete",
-    "confermaElimina": "Delete {email} completely? The account, datasets, charts and uploaded files will be erased. This cannot be undone.",
     "nota": "Revoke removes the invitation (they can no longer sign up). Delete removes the person completely: account, data and files; you can then invite the same address again.",
     "invitaPersona": "Invite someone",
     "segnaposto": "name@example.com",
@@ -488,7 +484,10 @@
     "giaInvitato": "This address has already been invited.",
     "emailNonPartita": "Address authorised, but the email was not sent: {dettaglio}",
     "invitoInviato": "Invitation sent to {email}.",
-    "autorizzato": "{email} is authorised."
+    "autorizzato": "{email} is authorised.",
+    "eliminaTitolo": "Delete {email} completely?",
+    "eliminaAvviso": "The account, datasets, charts and uploaded files will be erased. This cannot be undone.",
+    "eliminaConferma": "Delete permanently"
   },
   "benvenuto": {
     "metaTitolo": "Welcome – Datahue",
@@ -555,5 +554,12 @@
     "p6Testo": "In “My account” you can download all your data or delete the account along with everything you uploaded. Your files are visible only to you.",
     "nota": "The app shows your data and does not give medical advice.",
     "inizia": "Import your first file"
+  },
+  "confermaElimina": {
+    "parola": "DELETE",
+    "scrivi": "To confirm, type <b>{parola}</b> in capital letters",
+    "annulla": "Cancel",
+    "inCorso": "Deleting…",
+    "errore": "To confirm, type DELETE in the box."
   }
 }
