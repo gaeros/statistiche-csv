@@ -13,9 +13,22 @@ export async function GET(request: NextRequest) {
 
   if (codice) {
     const supabase = await createClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(codice);
-    if (!error) return NextResponse.redirect(`${origin}${next}`);
-    return await redirectErrore(origin, error.message);
+    const { data, error } = await supabase.auth.exchangeCodeForSession(codice);
+    if (error) return await redirectErrore(origin, error.message);
+
+    // Seconda difesa oltre all'hook "Before User Created": chi non è in public.inviti
+    // (es. un account Google qualsiasi, se l'hook non fosse attivo) viene disconnesso.
+    const email = data.user.email?.toLowerCase() ?? "";
+    const { data: invito, error: errInvito } = await supabase
+      .from("inviti")
+      .select("email")
+      .eq("email", email)
+      .maybeSingle();
+    if (errInvito || !invito) {
+      await supabase.auth.signOut();
+      return await redirectErrore(origin, errInvito ? null : "invito");
+    }
+    return NextResponse.redirect(`${origin}${next}`);
   }
 
   return await redirectErrore(origin, erroreProvider);
