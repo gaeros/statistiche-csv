@@ -172,6 +172,7 @@
     "contiene": "{colonna} contiene “{testo}”"
   },
   "app": {
+    "dashboard": "Dashboard",
     "iMieiDataset": "I miei dataset",
     "importa": "Importa",
     "guida": "Guida",
@@ -270,15 +271,6 @@
     "colonnaPerColonna": "Colonna per colonna",
     "colonnaPerColonnaSub": "Un riepilogo di ogni colonna del file, su {n} righe.",
     "trascinaSchede": "Trascina le schede per metterle nell'ordine che preferisci.",
-    "trascinaPerSpostare": "Trascina per spostare la scheda",
-    "spostaScheda": "Sposta la scheda «{nome}»",
-    "istruzioniSposta": "Usa le frecce per spostare la scheda; Home e Fine la portano all'inizio o alla fine. L'ordine viene salvato.",
-    "schedaSpostata": "«{nome}» spostata in posizione {pos} di {tot}.",
-    "ripristinaOrdine": "Ripristina ordine",
-    "ingrandisciScheda": "Ingrandisci la scheda «{nome}»",
-    "chiudi": "Chiudi",
-    "ordineRipristinato": "Ordine originale ripristinato.",
-    "ordineNonSalvato": "Non è stato possibile salvare l'ordine delle schede. Riprova più tardi.",
     "righePer": "Righe per {periodo}",
     "descRighePer": "Numero di righe per {periodo} secondo {colonna}",
     "confronta": "Confronta i gruppi",
@@ -335,9 +327,9 @@
     "grafico": "grafico"
   },
   "graficiPagina": {
-    "dashboard": "La tua dashboard",
-    "dashboardPiena": "I grafici che hai salvato per questo dataset. Seguono i filtri scelti qui sopra.",
-    "dashboardVuota": "Non hai ancora salvato grafici: costruiscine uno qui sotto e premi “Salva nella dashboard”.",
+    "dashboard": "Grafici salvati",
+    "dashboardPiena": "I grafici che hai salvato per questo dataset. Seguono i filtri scelti qui sopra. Con «Fissa in dashboard» li vedi anche nella tua dashboard, insieme a quelli degli altri dataset.",
+    "dashboardVuota": "Non hai ancora salvato grafici: costruiscine uno qui sotto e premi «Salva il grafico».",
     "modifica": "Modifica",
     "elimina": "Elimina",
     "costruisci": "Costruisci un grafico",
@@ -357,12 +349,15 @@
     "di": "di",
     "aggiorna": "Aggiorna il grafico",
     "titolo": "Titolo",
-    "salva": "Salva nella dashboard",
+    "salva": "Salva il grafico",
     "salvataggioFallito": "Salvataggio non riuscito: {dettaglio}",
     "eliminazioneFallita": "Eliminazione non riuscita: {dettaglio}",
     "eliminaTitolo": "Eliminare il grafico «{titolo}»?",
-    "eliminaAvviso": "Il grafico salvato verrà tolto dalla dashboard. I dati del dataset restano. L'operazione non si può annullare.",
-    "eliminaConferma": "Elimina il grafico"
+    "eliminaAvviso": "Il grafico salvato verrà eliminato, anche dalla tua dashboard. I dati del dataset restano. L'operazione non si può annullare.",
+    "eliminaConferma": "Elimina il grafico",
+    "fissa": "Fissa in dashboard",
+    "togli": "Togli dalla dashboard",
+    "inDashboard": "Nella dashboard"
   },
   "importa": {
     "titolo": "Importa file",
@@ -530,7 +525,7 @@
     "cosaPuoiFare": "Cosa puoi fare",
     "cosa1": "Caricare file CSV ed Excel: l'app riconosce da sola numeri, date e testo.",
     "cosa2": "Filtrare per periodo, per valori o per momento della giornata.",
-    "cosa3": "Costruire i tuoi grafici (barre, linee, torta e altri) e salvarli nella dashboard.",
+    "cosa3": "Costruire i tuoi grafici (barre, linee, torta e altri), salvarli e fissare i preferiti nella tua dashboard.",
     "cosa4": "Scaricare grafici come immagine e dati filtrati come CSV.",
     "privacyT": "I tuoi dati restano tuoi",
     "privacy": "Vedi solo i tuoi file: nessun altro utente può leggerli. I dati sono conservati in Europa e puoi scaricarli o cancellare tutto quando vuoi dalla pagina del tuo account. L'app mostra i numeri e non dà consigli medici.",
@@ -539,7 +534,7 @@
   "guidaPagina": {
     "metaTitolo": "Guida – Datahue",
     "titolo": "Guida",
-    "intro": "Datahue trasforma un file di numeri in statistiche e grafici. Si usa in sei passi.",
+    "intro": "Datahue trasforma un file di numeri in statistiche e grafici. Si usa in sette passi.",
     "p1Titolo": "Importa un file",
     "p1Testo": "Dal menu «Importa» trascina un file CSV o Excel (fino a 50 MB). Se il file ha più fogli scegli quali importare. L'app riconosce da sola codifica e separatore; se vedi caratteri strani, cambiali a mano. Ogni file (o foglio) diventa un dataset con il suo nome.",
     "p2Titolo": "Guarda i dati",
@@ -549,9 +544,11 @@
     "p4Titolo": "Leggi le statistiche",
     "p4Testo": "La scheda «Statistiche» riassume il file: numero di righe, periodo, medie, andamento nel tempo, un riepilogo di ogni colonna, il confronto fra gruppi (per esempio la media per momento della giornata) e le colonne che vanno insieme. Nel riepilogo «Colonna per colonna» puoi trascinare le schede per metterle nell'ordine che preferisci (l'app lo ricorda; «Ripristina ordine» torna a quello del file) e aprirne una più grande con la lente.",
     "p5Titolo": "Costruisci i grafici",
-    "p5Testo": "Nella scheda «Grafici» scegli il tipo (barre, linee, torta, dispersione, istogramma, box plot…), le colonne e il calcolo. Il grafico si aggiorna a ogni scelta. Con «Salva nella dashboard» lo tieni per la prossima volta; puoi scaricarlo come immagine (PNG) o come dati (CSV).",
-    "p6Titolo": "Scarica o elimina i tuoi dati",
-    "p6Testo": "In «Il mio account» puoi scaricare tutti i tuoi dati o eliminare l'account con tutto ciò che hai caricato. I tuoi file sono visibili solo a te.",
+    "p5Testo": "Nella scheda «Grafici» scegli il tipo (barre, linee, torta, dispersione, istogramma, box plot…), le colonne e il calcolo. Il grafico si aggiorna a ogni scelta. Con «Salva il grafico» lo tieni per la prossima volta, tra i «Grafici salvati» del dataset; puoi scaricarlo come immagine (PNG) o come dati (CSV).",
+    "p6Titolo": "Componi la tua dashboard",
+    "p6Testo": "Sotto un grafico salvato premi «Fissa in dashboard»: lo trovi nel menu «Dashboard», insieme ai grafici fissati dagli altri dataset. Lì puoi trascinarli nell'ordine che preferisci (anche da tastiera, con le frecce sulla maniglia), aprirne uno più grande con la lente o toglierlo con «Togli dalla dashboard»: il grafico resta salvato nel suo dataset. Nella dashboard i grafici usano tutte le righe, senza filtri.",
+    "p7Titolo": "Scarica o elimina i tuoi dati",
+    "p7Testo": "In «Il mio account» puoi scaricare tutti i tuoi dati o eliminare l'account con tutto ciò che hai caricato. I tuoi file sono visibili solo a te.",
     "nota": "L'app mostra i tuoi dati e non fornisce consigli medici.",
     "inizia": "Importa il primo file"
   },
@@ -561,5 +558,31 @@
     "annulla": "Annulla",
     "inCorso": "Eliminazione…",
     "errore": "Per confermare scrivi ELIMINA nella casella."
+  },
+  "schede": {
+    "trascinaPerSpostare": "Trascina per spostare la scheda",
+    "spostaScheda": "Sposta la scheda «{nome}»",
+    "istruzioniSposta": "Usa le frecce per spostare la scheda; Home e Fine la portano all'inizio o alla fine. L'ordine viene salvato.",
+    "schedaSpostata": "«{nome}» spostata in posizione {pos} di {tot}.",
+    "ripristinaOrdine": "Ripristina ordine",
+    "ingrandisciScheda": "Ingrandisci la scheda «{nome}»",
+    "chiudi": "Chiudi",
+    "ordineRipristinato": "Ordine originale ripristinato.",
+    "ordineNonSalvato": "Non è stato possibile salvare l'ordine delle schede. Riprova più tardi."
+  },
+  "dashboard": {
+    "titolo": "La tua dashboard",
+    "sottotitolo": "I grafici che hai fissato, presi da tutti i tuoi dataset. Trascinali per metterli nell'ordine che preferisci.",
+    "vuotaTitolo": "La tua dashboard è vuota",
+    "vuota": "Apri un dataset, vai nella scheda «Grafici», salva un grafico e premi «Fissa in dashboard»: lo ritroverai qui, accanto a quelli degli altri dataset.",
+    "vaiAiDataset": "Vai ai tuoi dataset",
+    "daDataset": "dal dataset {nome}",
+    "apriDataset": "Apri nei grafici",
+    "togli": "Togli dalla dashboard",
+    "togliAiuto": "Il grafico resta salvato nel suo dataset.",
+    "senzaFiltri": "I grafici mostrano tutte le righe del dataset, senza filtri.",
+    "errore": "Impossibile caricare la dashboard: {dettaglio}",
+    "troppi": "Puoi fissare al massimo {n} grafici nella dashboard. Togline qualcuno e riprova.",
+    "nonRiuscito": "Operazione non riuscita: {dettaglio}"
   }
 }

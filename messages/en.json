@@ -172,6 +172,7 @@
     "contiene": "{colonna} contains “{testo}”"
   },
   "app": {
+    "dashboard": "Dashboard",
     "iMieiDataset": "My datasets",
     "importa": "Import",
     "guida": "Guide",
@@ -270,15 +271,6 @@
     "colonnaPerColonna": "Column by column",
     "colonnaPerColonnaSub": "A summary of each column in the file, over {n} rows.",
     "trascinaSchede": "Drag the cards to arrange them the way you like.",
-    "trascinaPerSpostare": "Drag to move the card",
-    "spostaScheda": "Move the “{nome}” card",
-    "istruzioniSposta": "Use the arrow keys to move the card; Home and End move it to the start or the end. The order is saved.",
-    "schedaSpostata": "“{nome}” moved to position {pos} of {tot}.",
-    "ripristinaOrdine": "Reset order",
-    "ingrandisciScheda": "Enlarge the “{nome}” card",
-    "chiudi": "Close",
-    "ordineRipristinato": "Original order restored.",
-    "ordineNonSalvato": "The card order could not be saved. Please try again later.",
     "righePer": "Rows by {periodo}",
     "descRighePer": "Number of rows by {periodo} according to {colonna}",
     "confronta": "Compare groups",
@@ -335,9 +327,9 @@
     "grafico": "chart"
   },
   "graficiPagina": {
-    "dashboard": "Your dashboard",
-    "dashboardPiena": "The charts you saved for this dataset. They follow the filters chosen above.",
-    "dashboardVuota": "You haven't saved any charts yet: build one below and press “Save to dashboard”.",
+    "dashboard": "Saved charts",
+    "dashboardPiena": "The charts you saved for this dataset. They follow the filters chosen above. With “Pin to dashboard” you also see them on your dashboard, together with those from other datasets.",
+    "dashboardVuota": "You haven't saved any charts yet: build one below and press “Save chart”.",
     "modifica": "Edit",
     "elimina": "Delete",
     "costruisci": "Build a chart",
@@ -357,12 +349,15 @@
     "di": "of",
     "aggiorna": "Update the chart",
     "titolo": "Title",
-    "salva": "Save to dashboard",
+    "salva": "Save chart",
     "salvataggioFallito": "Saving failed: {dettaglio}",
     "eliminazioneFallita": "Deletion failed: {dettaglio}",
     "eliminaTitolo": "Delete the chart “{titolo}”?",
-    "eliminaAvviso": "The saved chart will be removed from the dashboard. The dataset's data stays. This cannot be undone.",
-    "eliminaConferma": "Delete the chart"
+    "eliminaAvviso": "The saved chart will be deleted, from your dashboard too. The dataset's data stays. This cannot be undone.",
+    "eliminaConferma": "Delete the chart",
+    "fissa": "Pin to dashboard",
+    "togli": "Remove from dashboard",
+    "inDashboard": "On the dashboard"
   },
   "importa": {
     "titolo": "Import file",
@@ -530,7 +525,7 @@
     "cosaPuoiFare": "What you can do",
     "cosa1": "Upload CSV and Excel files: the app recognises numbers, dates and text by itself.",
     "cosa2": "Filter by period, by values or by time of day.",
-    "cosa3": "Build your own charts (bars, lines, pie and more) and save them to the dashboard.",
+    "cosa3": "Build your own charts (bars, lines, pie and more), save them and pin your favourites to your dashboard.",
     "cosa4": "Download charts as images and filtered data as CSV.",
     "privacyT": "Your data stays yours",
     "privacy": "You only see your own files: no other user can read them. The data is stored in Europe and you can download it or delete everything whenever you want from your account page. The app shows numbers and gives no medical advice.",
@@ -539,7 +534,7 @@
   "guidaPagina": {
     "metaTitolo": "Guide – Datahue",
     "titolo": "Guide",
-    "intro": "Datahue turns a file of numbers into statistics and charts. You use it in six steps.",
+    "intro": "Datahue turns a file of numbers into statistics and charts. You use it in seven steps.",
     "p1Titolo": "Import a file",
     "p1Testo": "From the “Import” menu, drag in a CSV or Excel file (up to 50 MB). If the file has several sheets, choose which to import. The app detects the encoding and separator by itself; if you see odd characters, change them by hand. Each file (or sheet) becomes a dataset with its own name.",
     "p2Titolo": "Look at the data",
@@ -549,9 +544,11 @@
     "p4Titolo": "Read the statistics",
     "p4Testo": "The “Statistics” tab summarises the file: number of rows, period, averages, trend over time, a summary of each column, a comparison between groups (for example the average by time of day) and the columns that move together. In “Column by column” you can drag the cards into the order you like (the app remembers it; “Reset order” goes back to the file's order) and open one larger with the magnifying glass.",
     "p5Titolo": "Build charts",
-    "p5Testo": "In the “Charts” tab, choose the type (bars, lines, pie, scatter, histogram, box plot…), the columns and the calculation. The chart updates with every choice. “Save to dashboard” keeps it for next time; you can download it as an image (PNG) or as data (CSV).",
-    "p6Titolo": "Download or delete your data",
-    "p6Testo": "In “My account” you can download all your data or delete the account along with everything you uploaded. Your files are visible only to you.",
+    "p5Testo": "In the “Charts” tab, choose the type (bars, lines, pie, scatter, histogram, box plot…), the columns and the calculation. The chart updates with every choice. “Save chart” keeps it for next time, among the dataset's “Saved charts”; you can download it as an image (PNG) or as data (CSV).",
+    "p6Titolo": "Build your dashboard",
+    "p6Testo": "Under a saved chart, press “Pin to dashboard”: you'll find it in the “Dashboard” menu, together with the charts pinned from your other datasets. There you can drag them into the order you prefer (also from the keyboard, with the arrows on the handle), open one larger with the magnifier, or take it off with “Remove from dashboard”: the chart stays saved in its dataset. On the dashboard, charts use all the rows, with no filters.",
+    "p7Titolo": "Download or delete your data",
+    "p7Testo": "In “My account” you can download all your data or delete the account along with everything you uploaded. Your files are visible only to you.",
     "nota": "The app shows your data and does not give medical advice.",
     "inizia": "Import your first file"
   },
@@ -561,5 +558,31 @@
     "annulla": "Cancel",
     "inCorso": "Deleting…",
     "errore": "To confirm, type DELETE in the box."
+  },
+  "schede": {
+    "trascinaPerSpostare": "Drag to move the card",
+    "spostaScheda": "Move the “{nome}” card",
+    "istruzioniSposta": "Use the arrow keys to move the card; Home and End move it to the start or the end. The order is saved.",
+    "schedaSpostata": "“{nome}” moved to position {pos} of {tot}.",
+    "ripristinaOrdine": "Reset order",
+    "ingrandisciScheda": "Enlarge the “{nome}” card",
+    "chiudi": "Close",
+    "ordineRipristinato": "Original order restored.",
+    "ordineNonSalvato": "The card order could not be saved. Please try again later."
+  },
+  "dashboard": {
+    "titolo": "Your dashboard",
+    "sottotitolo": "The charts you pinned, from all your datasets. Drag them into the order you prefer.",
+    "vuotaTitolo": "Your dashboard is empty",
+    "vuota": "Open a dataset, go to the “Charts” tab, save a chart and press “Pin to dashboard”: you'll find it here, next to the ones from your other datasets.",
+    "vaiAiDataset": "Go to your datasets",
+    "daDataset": "from the dataset {nome}",
+    "apriDataset": "Open in charts",
+    "togli": "Remove from dashboard",
+    "togliAiuto": "The chart stays saved in its dataset.",
+    "senzaFiltri": "Charts show all the rows of the dataset, with no filters.",
+    "errore": "Could not load the dashboard: {dettaglio}",
+    "troppi": "You can pin at most {n} charts to the dashboard. Remove some and try again.",
+    "nonRiuscito": "Operation failed: {dettaglio}"
   }
 }

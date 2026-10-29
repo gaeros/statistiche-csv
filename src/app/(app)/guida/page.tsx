@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 
-const PASSI = [1, 2, 3, 4, 5, 6] as const;
+const PASSI = [1, 2, 3, 4, 5, 6, 7] as const;
 
 export async function generateMetadata() {
   return { title: (await getTranslations("guidaPagina"))("metaTitolo") };

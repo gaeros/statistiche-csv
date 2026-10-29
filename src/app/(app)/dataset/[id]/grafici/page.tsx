@@ -22,7 +22,7 @@ import { BarraFiltri } from "../BarraFiltri";
 import { filtriDataset } from "../filtri-dataset";
 import { Intestazione } from "../Intestazione";
 import { ConfermaElimina } from "@/components/ConfermaElimina";
-import { eliminaGrafico, salvaGrafico } from "./actions";
+import { eliminaGrafico, fissaInDashboard, salvaGrafico } from "./actions";
 
 const SERIE = ["barre", "barre_impilate", "linee", "area"];
 
@@ -67,11 +67,13 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
   const { filtri } = leggiFiltri(sp, colonne);
   const config = leggiConfigurazione(sp, colonne);
 
-  const [{ etichette, valori, queryFiltri }, { data: salvati }, anteprima] = await Promise.all([
+  const [{ etichette, valori, queryFiltri }, { data: salvati }, anteprima, { data: pannello }] = await Promise.all([
     filtriDataset(supabase, id, colonne, sp),
     supabase.from("grafici").select("id, titolo, configurazione").eq("dataset_id", id).order("created_at"),
     supabase.rpc("dati_grafico", { p_dataset: id, p_config: config, p_filtri: filtri }),
+    supabase.from("dashboard").select("grafici").maybeSingle(),
   ]);
+  const fissati = new Set((pannello?.grafici as string[] | undefined) ?? []);
 
   // I grafici salvati si ricalcolano con i filtri attivi; la configurazione si ricontrolla sulle colonne attuali.
   const dashboard = await Promise.all(
@@ -106,7 +108,7 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
 
       <BarraFiltri colonne={colonne} sp={sp} etichette={etichette} valori={valori} />
 
-      {/* Dashboard personale */}
+      {/* Grafici salvati per questo dataset (si possono fissare nella dashboard personale) */}
       <section id="dashboard" className="space-y-4">
         <div>
           <h2 className="text-xl font-semibold">{t("dashboard")}</h2>
@@ -121,8 +123,19 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
             {dashboard.map((g) => (
               <article key={g.id} className="scheda min-w-0 space-y-2">
                 <header className="flex flex-wrap items-baseline justify-between gap-2">
-                  <h3 className="font-semibold">{g.titolo}</h3>
-                  <div className="flex gap-3 text-sm">
+                  <h3 className="font-semibold">
+                    {g.titolo}
+                    {fissati.has(g.id) && (
+                      <span className="ml-2 rounded-full bg-slate-100 px-2 py-0.5 align-middle text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                        {t("inDashboard")}
+                      </span>
+                    )}
+                  </h3>
+                  <div className="flex flex-wrap gap-x-3 gap-y-1 text-sm">
+                    <form action={fissaInDashboard.bind(null, id, g.id, !fissati.has(g.id))}>
+                      <input type="hidden" name="ritorno" value={ritorno} />
+                      <button type="submit" className="link">{fissati.has(g.id) ? t("togli") : t("fissa")}</button>
+                    </form>
                     <Link href={`${conParametri(sp, parametriConfigurazione(g.config))}#costruttore`} className="link">
                       {t("modifica")}
                     </Link>
