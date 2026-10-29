@@ -276,6 +276,8 @@
     "istruzioniSposta": "Use the arrow keys to move the card; Home and End move it to the start or the end. The order is saved.",
     "schedaSpostata": "“{nome}” moved to position {pos} of {tot}.",
     "ripristinaOrdine": "Reset order",
+    "ingrandisciScheda": "Enlarge the “{nome}” card",
+    "chiudi": "Close",
     "ordineRipristinato": "Original order restored.",
     "ordineNonSalvato": "The card order could not be saved. Please try again later.",
     "righePer": "Rows by {periodo}",
@@ -291,12 +293,6 @@
     "nRighe": "{n} rows"
   },
   "colonna": {
-    "tipo_intero": "Whole number",
-    "tipo_decimale": "Number",
-    "tipo_testo": "Text",
-    "tipo_data": "Date",
-    "tipo_data_ora": "Date and time",
-    "tipo_booleano": "Yes/No",
     "vuota": "The column is empty.",
     "media": "Average",
     "minimo": "Minimum",

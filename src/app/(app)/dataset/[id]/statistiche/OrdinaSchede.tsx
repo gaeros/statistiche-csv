@@ -30,6 +30,11 @@ export function OrdinaSchede({
   const originale = voci.map((v) => v.chiave);
   const [ordine, setOrdine] = useState(() => applicaOrdine(originale, salvato));
   const [trascinata, setTrascinata] = useState<string | null>(null);
+  // Scheda premuta col mouse: si ingrandisce un poco per far capire che è stata presa.
+  const [premuta, setPremuta] = useState<string | null>(null);
+  // Scheda mostrata in primo piano, ingrandita (pulsante con la lente).
+  const [aperta, setAperta] = useState<string | null>(null);
+  const finestra = useRef<HTMLDialogElement>(null);
   const [annuncio, setAnnuncio] = useState("");
   const [errore, setErrore] = useState(false);
   const maniglie = useRef(new Map<string, HTMLButtonElement>());
@@ -71,6 +76,7 @@ export function OrdinaSchede({
     if (!daManiglia && (e.pointerType !== "mouse" || bersaglio.closest(INTERATTIVI))) return;
 
     const inizio = { x: e.clientX, y: e.clientY };
+    setPremuta(chiave);
     let attivo = false;
     let corrente = visibili;
     let ultimo: string | null = null;
@@ -101,6 +107,7 @@ export function OrdinaSchede({
       window.removeEventListener("pointermove", muovi);
       window.removeEventListener("pointerup", fine);
       window.removeEventListener("pointercancel", fine);
+      setPremuta(null);
       if (!attivo) return;
       document.body.style.userSelect = "";
       setTrascinata(null);
@@ -141,6 +148,15 @@ export function OrdinaSchede({
     void salva(nuovo, false);
   }
 
+  useEffect(() => {
+    const d = finestra.current;
+    if (aperta && d && !d.open) d.showModal();
+  }, [aperta]);
+
+  function chiudi() {
+    finestra.current?.close();
+  }
+
   function ripristina() {
     setOrdine(originale);
     setAnnuncio(t("ordineRipristinato"));
@@ -162,14 +178,14 @@ export function OrdinaSchede({
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {visibili.map((chiave) => {
           const v = perChiave.get(chiave)!;
-          const presa = trascinata === chiave;
+          const presa = trascinata === chiave || premuta === chiave;
           return (
             <div
               key={chiave}
               data-scheda={chiave}
               onPointerDown={(e) => iniziaTrascinamento(e, chiave)}
-              className={`relative min-w-0 rounded-3xl transition-shadow ${
-                presa ? "z-10 cursor-grabbing opacity-90 shadow-xl ring-2 ring-foreground" : "cursor-grab"
+              className={`relative min-w-0 rounded-3xl transition-[transform,box-shadow] duration-150 ${
+                presa ? "z-10 scale-[1.03] cursor-grabbing shadow-2xl ring-2 ring-foreground" : "cursor-grab"
               }`}
             >
               <button
@@ -189,11 +205,48 @@ export function OrdinaSchede({
                   {[2, 8, 14].flatMap((x) => [2, 8].map((y) => <circle key={`${x}-${y}`} cx={x} cy={y} r="1.6" />))}
                 </svg>
               </button>
+              <button
+                type="button"
+                onClick={() => setAperta(chiave)}
+                aria-label={t("ingrandisciScheda", { nome: v.nome })}
+                title={t("ingrandisciScheda", { nome: v.nome })}
+                className="absolute top-4 right-4 flex size-9 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100 hover:text-foreground focus-visible:ring-2 focus-visible:ring-foreground focus-visible:outline-none"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <circle cx="10.5" cy="10.5" r="6.5" />
+                  <path d="m15.5 15.5 5 5M10.5 7.5v6M7.5 10.5h6" />
+                </svg>
+              </button>
               {v.contenuto}
             </div>
           );
         })}
       </div>
+      {/* Fuori dalla griglia: i clic nella finestra non devono avviare il trascinamento. */}
+      <dialog
+        ref={finestra}
+        onClose={() => setAperta(null)}
+        onClick={(e) => e.target === e.currentTarget && chiudi()}
+        aria-label={aperta ? perChiave.get(aperta)?.nome : undefined}
+        className="m-auto w-[min(64rem,calc(100vw-2rem))] max-w-none overflow-visible bg-transparent p-0 backdrop:bg-slate-950/50"
+      >
+        {aperta && perChiave.has(aperta) && (
+          <div className="relative max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-3xl text-lg [--scala-grafici:1.6]">
+            <button
+              type="button"
+              onClick={chiudi}
+              aria-label={t("chiudi")}
+              title={t("chiudi")}
+              className="absolute top-4 right-4 z-10 flex size-9 items-center justify-center rounded-full bg-white text-slate-600 hover:bg-slate-100 hover:text-foreground focus-visible:ring-2 focus-visible:ring-foreground focus-visible:outline-none"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <path d="M6 6l12 12M18 6 6 18" />
+              </svg>
+            </button>
+            {perChiave.get(aperta)!.contenuto}
+          </div>
+        )}
+      </dialog>
     </>
   );
 }
