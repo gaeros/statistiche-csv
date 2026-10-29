@@ -3,7 +3,7 @@
 // Così nessun file grande passa dal server dell'app (limite di ~4,5 MB delle funzioni Vercel).
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { preparaRighe, type Anteprima, type RigaDati } from "./anteprima";
+import { avvisiColonna, preparaRighe, type Anteprima, type RigaDati } from "./anteprima";
 import { tradotto, type Traduttore } from "@/i18n/lingue";
 
 export const RIGHE_PER_BLOCCO = 2000;
@@ -65,16 +65,21 @@ export function compatibilePerAccodare(a: Anteprima, esistente: DatasetEsistente
   return null;
 }
 
-function avvisiImportazione(a: Anteprima, nonConvertiti: Record<string, number>, t: Traduttore): string[] {
+type Preparate = ReturnType<typeof preparaRighe>;
+
+function avvisiImportazione(a: Anteprima, { nonConvertiti, corretti, escluse }: Preparate, t: Traduttore): string[] {
   const avvisi = a.avvisi.map((x) => tradotto(t, x));
+  if (escluse) avvisi.push(t("avvRigheEscluse", { n: escluse }));
   for (const c of a.colonne) {
     if (!c.includi) {
       avvisi.push(t("avvNonImportata", { nome: c.originale }));
       continue;
     }
-    for (const x of c.avvisi) avvisi.push(t("avvColonna", { nome: c.originale, avviso: tradotto(t, x) }));
+    for (const x of avvisiColonna(c)) avvisi.push(t("avvColonna", { nome: c.originale, avviso: tradotto(t, x) }));
     const n = nonConvertiti[c.nome];
     if (n) avvisi.push(t("avvNonConvertibili", { nome: c.originale, n, tipo: t(`tipo_${c.tipo}`) }));
+    const k = corretti[c.nome];
+    if (k) avvisi.push(t("avvCorretti", { nome: c.originale, n: k }));
   }
   return avvisi;
 }
@@ -163,7 +168,7 @@ export async function importa(
     // 3. Una tabella per ogni destinazione, righe a blocchi
     for (; r.destinazione < destinazioni.length; r = { ...r, destinazione: r.destinazione + 1, datasetId: undefined, blocco: 0, saltate: 0 }) {
       const d = destinazioni[r.destinazione];
-      const { righe, nonConvertiti } = preparate[r.destinazione];
+      const { righe } = preparate[r.destinazione];
 
       if (!r.datasetId) {
         if (accodaRighe(d.modalita) && d.esistente) {
@@ -184,7 +189,7 @@ export async function importa(
                 p_nome_originale: d.anteprima.nomeOriginale,
                 p_foglio: d.anteprima.foglio,
                 p_colonne: colonneScelte(d.anteprima),
-                p_avvisi: avvisiImportazione(d.anteprima, nonConvertiti, t),
+                p_avvisi: avvisiImportazione(d.anteprima, preparate[r.destinazione], t),
               })
               .single(),
           );

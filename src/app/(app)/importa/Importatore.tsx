@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { creaFormati, type Formati } from "@/lib/formato";
 import type { Traduttore } from "@/i18n/lingue";
 import { Messaggio } from "@/components/Messaggio";
-import { creaAnteprima, type Anteprima } from "@/lib/import/anteprima";
+import { creaAnteprima, riepilogo, type Anteprima, type Riepilogo } from "@/lib/import/anteprima";
 import {
   accodaRighe,
   compatibilePerAccodare,
@@ -40,6 +40,7 @@ type Voce = {
   schede: Scheda[];
   progresso?: Progresso;
   ripresa?: Ripresa;
+  vuotiAccettati?: number; // valori non validi che l'utente ha accettato di lasciare vuoti
 };
 
 const formatoMB = (byte: number, f: Formati) =>
@@ -299,7 +300,14 @@ export function Importatore() {
                 ) : null,
               )}
 
-              <PulsanteImporta voce={voce} esistenti={esistenti} onAvvia={() => avvia(voce)} t={t} f={f} />
+              <PulsanteImporta
+                voce={voce}
+                esistenti={esistenti}
+                onAvvia={() => avvia(voce)}
+                onAccettaVuoti={(n) => aggiornaVoce(voce.id, (v) => ({ ...v, vuotiAccettati: n }))}
+                t={t}
+                f={f}
+              />
             </>
           )}
 
@@ -380,33 +388,80 @@ function problemi(voce: Voce, esistenti: DatasetEsistente[], t: Traduttore): str
   return elenco;
 }
 
+function totaleRiepilogo(voce: Voce): Riepilogo {
+  return voce.schede
+    .filter((s) => s.selezionata)
+    .map((s) => riepilogo(s.anteprima))
+    .reduce(
+      (tot, r) => ({
+        righe: tot.righe + r.righe,
+        escluse: tot.escluse + r.escluse,
+        vuoti: tot.vuoti + r.vuoti,
+        corretti: tot.corretti + r.corretti,
+      }),
+      { righe: 0, escluse: 0, vuoti: 0, corretti: 0 },
+    );
+}
+
 function PulsanteImporta({
   voce,
   esistenti,
   onAvvia,
+  onAccettaVuoti,
   t,
   f,
 }: {
   voce: Voce;
   esistenti: DatasetEsistente[];
   onAvvia: () => void;
+  onAccettaVuoti: (n: number | undefined) => void;
   t: Traduttore;
   f: Formati;
 }) {
+  const r = totaleRiepilogo(voce);
   const elenco = problemi(voce, esistenti, t);
-  const righe = voce.schede.filter((s) => s.selezionata).reduce((n, s) => n + s.anteprima.righe.length, 0);
+  if (r.righe === 0 && voce.schede.some((s) => s.selezionata)) elenco.push(t("nessunaRiga"));
+  const vuotiDaAccettare = r.vuoti > 0 && voce.vuotiAccettati !== r.vuoti;
   return (
-    <div className="space-y-3 border-t border-slate-200 pt-4 dark:border-slate-800">
+    <section className="space-y-3 border-t border-slate-200 pt-4" aria-labelledby={`${voce.id}-p4`}>
+      <h3 id={`${voce.id}-p4`} className="flex items-center gap-2 font-medium">
+        <span aria-hidden className="grid size-6 place-content-center rounded-full bg-foreground text-xs text-white">
+          4
+        </span>
+        {t("passoConferma")}
+      </h3>
+      <ul className="space-y-1 text-sm">
+        <li>{t("rieRighe", { n: r.righe, testo: f.numero(r.righe) })}</li>
+        {r.corretti > 0 && <li className="text-green-800">{t("rieCorretti", { n: r.corretti, testo: f.numero(r.corretti) })}</li>}
+        {r.escluse > 0 && <li className="text-amber-800">{t("rieEscluse", { n: r.escluse, testo: f.numero(r.escluse) })}</li>}
+        {r.vuoti > 0 && <li className="text-amber-800">{t("rieVuoti", { n: r.vuoti, testo: f.numero(r.vuoti) })}</li>}
+      </ul>
+      {r.vuoti > 0 && (
+        <label className="flex items-start gap-2 text-sm">
+          <input
+            type="checkbox"
+            className="mt-0.5"
+            checked={!vuotiDaAccettare}
+            onChange={(e) => onAccettaVuoti(e.target.checked ? r.vuoti : undefined)}
+          />
+          {t("accettoVuoti", { n: r.vuoti, testo: f.numero(r.vuoti) })}
+        </label>
+      )}
       {elenco.length > 0 && (
-        <ul className="list-inside list-disc text-sm text-amber-700 dark:text-amber-300">
+        <ul className="list-inside list-disc text-sm text-amber-700">
           {elenco.map((p) => (
             <li key={p}>{p}</li>
           ))}
         </ul>
       )}
-      <button type="button" className="bottone" disabled={elenco.length > 0} onClick={onAvvia}>
-        {t("importaN", { n: f.numero(righe) })}
+      <button
+        type="button"
+        className="bottone"
+        disabled={elenco.length > 0 || vuotiDaAccettare || r.righe === 0}
+        onClick={onAvvia}
+      >
+        {t("importaN", { n: f.numero(r.righe) })}
       </button>
-    </div>
+    </section>
   );
 }
