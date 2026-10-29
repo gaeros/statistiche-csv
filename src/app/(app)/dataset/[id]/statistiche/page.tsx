@@ -13,6 +13,7 @@ import { Colonne } from "@/components/grafici/Colonne";
 import { Linee } from "@/components/grafici/Linee";
 import { Torta } from "@/components/grafici/Torta";
 import { Barre } from "./Barre";
+import { OrdinaSchede } from "./OrdinaSchede";
 import { SchedaColonna } from "./SchedaColonna";
 import {
   AGGREGAZIONI,
@@ -100,10 +101,13 @@ export default async function PaginaStatistiche({ params, searchParams }: PagePr
   const originale = (nome: string) => colonne.find((c) => c.nome === nome)?.originale ?? nome;
 
   const { filtri } = leggiFiltri(sp, colonne, { t: tf, f });
-  const [{ etichette, valori: valoriFiltri, queryFiltri }, stat] = await Promise.all([
+  const [{ etichette, valori: valoriFiltri, queryFiltri }, stat, ordine] = await Promise.all([
     filtriDataset(supabase, id, colonne, sp),
     supabase.rpc("statistiche_colonne", { p_dataset: id, p_barre: 10, p_filtri: filtri }),
+    // A parte: se la colonna non c'è ancora nel database, la pagina funziona lo stesso con l'ordine del file.
+    supabase.from("dataset").select("ordine_schede").eq("id", id).maybeSingle(),
   ]);
+  const ordineSchede = ((ordine.data as { ordine_schede?: string[] } | null)?.ordine_schede ?? []);
   const statistiche = stat.data as Statistiche | null;
   const giorniDi = (nome: string) => statistiche?.colonne.find((c) => c.nome === nome)?.giorni;
 
@@ -347,51 +351,60 @@ export default async function PaginaStatistiche({ params, searchParams }: PagePr
       {/* Riepilogo per colonna */}
       {statistiche && (
         <section id="colonne" className="space-y-4">
-          <div>
-            <h2 className="text-xl font-semibold">{t("colonnaPerColonna")}</h2>
-            <p className="text-sm text-slate-500">{t("colonnaPerColonnaSub", { n: f.numero(statistiche.totale) })}</p>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {statistiche.colonne.map((c) => {
+          <OrdinaSchede
+            datasetId={d.id}
+            salvato={ordineSchede}
+            intestazione={
+              <div>
+                <h2 className="text-xl font-semibold">{t("colonnaPerColonna")}</h2>
+                <p className="text-sm text-slate-500">
+                  {t("colonnaPerColonnaSub", { n: f.numero(statistiche.totale) })} {t("trascinaSchede")}
+                </p>
+              </div>
+            }
+            voci={statistiche.colonne.map((c) => {
               const indiceData = date.findIndex((x) => x.nome === c.nome);
               const conteggio = indiceData >= 0 ? (conteggi[indiceData].data as { periodo: string; conteggio: number }[] | null) : null;
               const periodo = periodoConteggi ?? periodoAdatto(c.giorni);
-              return (
-                <SchedaColonna
-                  key={c.nome}
-                  c={c}
-                  totale={statistiche.totale}
-                  conteggioPeriodi={
-                    conteggio && conteggio.length > 0 ? (
-                      <div className="space-y-1">
-                        <div className="flex flex-wrap items-center justify-between gap-2">
-                          <h4 className="text-sm font-medium">{t("righePer", { periodo: tg(`per_${periodo}`) })}</h4>
-                          <div className="flex gap-2 text-xs">
-                            {PERIODI_CHIAVI.map((p) => (
-                              <Link
-                                key={p}
-                                href={linkPeriodo(p)}
-                                scroll={false}
-                                className={p === periodo ? "font-semibold text-foreground dark:text-blue-300" : "link"}
-                              >
-                                {tg(`per_${p}`)}
-                              </Link>
-                            ))}
+              return {
+                chiave: c.nome,
+                nome: c.originale,
+                contenuto: (
+                  <SchedaColonna
+                    c={c}
+                    totale={statistiche.totale}
+                    conteggioPeriodi={
+                      conteggio && conteggio.length > 0 ? (
+                        <div className="space-y-1">
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <h4 className="text-sm font-medium">{t("righePer", { periodo: tg(`per_${periodo}`) })}</h4>
+                            <div className="flex gap-2 text-xs">
+                              {PERIODI_CHIAVI.map((p) => (
+                                <Link
+                                  key={p}
+                                  href={linkPeriodo(p)}
+                                  scroll={false}
+                                  className={p === periodo ? "font-semibold text-foreground dark:text-blue-300" : "link"}
+                                >
+                                  {tg(`per_${p}`)}
+                                </Link>
+                              ))}
+                            </div>
                           </div>
+                          <Colonne
+                            descrizione={t("descRighePer", { periodo: tg(`per_${periodo}`), colonna: c.originale })}
+                            nomeValore={t("righe")}
+                            etichette={conteggio.map((x) => f.periodo(x.periodo, periodo))}
+                            valori={conteggio.map((x) => x.conteggio)}
+                          />
                         </div>
-                        <Colonne
-                          descrizione={t("descRighePer", { periodo: tg(`per_${periodo}`), colonna: c.originale })}
-                          nomeValore={t("righe")}
-                          etichette={conteggio.map((x) => f.periodo(x.periodo, periodo))}
-                          valori={conteggio.map((x) => x.conteggio)}
-                        />
-                      </div>
-                    ) : undefined
-                  }
-                />
-              );
+                      ) : undefined
+                    }
+                  />
+                ),
+              };
             })}
-          </div>
+          />
         </section>
       )}
 
