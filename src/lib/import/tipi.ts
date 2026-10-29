@@ -47,6 +47,8 @@ function formaNumero(v: string): FormaNumero {
 
 export function convertiNumero(v: string, formato: FormatoNumero): number | null {
   let s = pulisciNumero(v);
+  // "70.5" non è un numero italiano (e "70,5" non è inglese): meglio segnalarlo che leggere 705.
+  if (!INTERO_SEMPLICE.test(s) && !(formato === "it" ? IT_SOLO : EN_SOLO).test(s)) return null;
   if (formato === "it") s = s.replace(/\./g, "").replace(",", ".");
   else s = s.replace(/,/g, "");
   if (!/^-?\d+(\.\d+)?$/.test(s)) return null;
@@ -167,6 +169,7 @@ export type Rilevamento = {
   valori: number; // non mancanti
   mancanti: number;
   avviso?: Messaggio;
+  suggerito?: Tipo; // per le colonne quasi tutte numeri o date, importate come testo
 };
 
 // I valori arrivano tutti come testo (anche quelli di Excel, normalizzati prima).
@@ -215,17 +218,33 @@ export function rilevaTipo(valori: string[], formatoPredefinito: FormatoNumero):
   const quota = Math.max(numerici, date) / presenti.length;
   if (quota >= 0.8) {
     const altri = presenti.length - Math.max(numerici, date);
-    return esito(
-      "testo",
-      formatoPredefinito,
-      {
-        chiave: `avvNon${numerici >= date ? "Numerico" : "Data"}${altri === 1 ? "Uno" : "Molti"}`,
-        valori: { n: altri },
-      },
-    );
+    const avviso = {
+      chiave: `avvNon${numerici >= date ? "Numerico" : "Data"}${altri === 1 ? "Uno" : "Molti"}`,
+      valori: { n: altri },
+    };
+    // Il tipo che avrebbe la colonna senza i valori fuori posto: lo si propone nell'anteprima.
+    if (numerici >= date) {
+      const it = forme.includes("it");
+      const en = forme.includes("en");
+      const conZeri = presenti.some((v) => /^-?0\d/.test(pulisciNumero(v)));
+      if ((it && en) || conZeri) return esito("testo", formatoPredefinito, avviso);
+      const formato: FormatoNumero = it ? "it" : en ? "en" : formatoPredefinito;
+      const numeri = presenti.map((v) => convertiNumero(v, formato)).filter((n) => n !== null);
+      const suggerito = numeri.every((n) => Number.isSafeInteger(n)) ? "intero" : "decimale";
+      return { ...esito("testo", formato, avviso), suggerito };
+    }
+    const suggerito = presenti.some((v) => convertiData(v) !== null && haOra(v)) ? "data_ora" : "data";
+    return { ...esito("testo", formatoPredefinito, avviso), suggerito };
   }
 
   return esito("testo");
+}
+
+// Il valore si converte nel tipo scelto? Più veloce di converti per data e ora (niente fusi).
+export function valido(v: string, tipo: Tipo, formato: FormatoNumero): boolean {
+  if (mancante(v)) return true;
+  if (tipo === "data_ora") return convertiData(v) !== null;
+  return converti(v, tipo, formato) !== null;
 }
 
 // Converte un valore nel tipo scelto. null = mancante o non convertibile.
