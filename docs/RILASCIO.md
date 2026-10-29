@@ -60,6 +60,11 @@ Da qui in poi ogni modifica unita in `main` va in rete da sola; ogni pull reques
 Segui il punto 8 di [AVVIO-LOCALE.md](AVVIO-LOCALE.md), aggiungendo in Google:
 *Authorized JavaScript origins* → anche l'indirizzo di Vercel.
 
+Prima di mettere `GOOGLE_ATTIVO` a `true`, controlla in Supabase *Authentication → Hooks* che
+**Before User Created** → `public.hook_solo_su_invito` sia attivo: è quello che impedisce a un account
+Google qualsiasi di registrarsi. Come seconda difesa l'app, al ritorno da Google, disconnette chi non è
+nella tabella `inviti` (anche una persona con invito revocato) e mostra «Registrazione solo su invito».
+
 ## 6. Pulizia automatica dei file originali (30 giorni)
 
 Vercel chiama ogni giorno `/api/cron/pulizia-originali` (vedi `vercel.json`). Serve una variabile in Vercel:
