@@ -39,6 +39,7 @@ export default async function PaginaAccount() {
                 <span className="flex items-center gap-3">
                   <span className="text-slate-500">{t("righe", { n: f.numero(d.righe) })}</span>
                   <a href={`/dataset/${d.id}/esporta`} download className="link">{t("scaricaCsv")}</a>
+                  <a href={`/dataset/${d.id}/excel`} download className="link">{t("scaricaExcel")}</a>
                 </span>
               </li>
             ))}
