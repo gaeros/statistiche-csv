@@ -16,13 +16,29 @@ function Voce({ etichetta, valore }: { etichetta: string; valore: string }) {
   );
 }
 
-function Riquadro({ etichetta, valore }: { etichetta: string; valore: string }) {
+// Le cifre dei tre riquadri hanno la stessa dimensione, scelta in base al numero più lungo e alla
+// larghezza del riquadro (unità cqi): anche numeri come 1.022.800.633 si leggono interi.
+// Se lo spazio non basta neppure alla dimensione minima, i riquadri vanno a capo (vedi RIQUADRI_MIN).
+const LARGHEZZA_CIFRA = 0.55; // in em, media di cifre tabulari e separatori
+const CORPO_MIN = 13; // px
+
+function Riquadro({ etichetta, valore, caratteri }: { etichetta: string; valore: string; caratteri: number }) {
   return (
-    <div className="rounded-lg bg-slate-50 px-3 py-2 dark:bg-slate-800/60">
-      <div className="text-xs text-slate-500">{etichetta}</div>
-      <div className="text-lg font-semibold tabular-nums">{valore}</div>
+    <div className="min-w-0 rounded-lg bg-slate-50 px-3 py-2 [container-type:inline-size] dark:bg-slate-800/60">
+      <div className="truncate text-xs text-slate-500">{etichetta}</div>
+      <div
+        className="leading-tight font-semibold whitespace-nowrap tabular-nums"
+        style={{ fontSize: `clamp(${CORPO_MIN}px, calc(100cqi / ${(caratteri * LARGHEZZA_CIFRA).toFixed(2)}), 1.125rem)` }}
+      >
+        {valore}
+      </div>
     </div>
   );
+}
+
+// Larghezza minima di un riquadro: la cifra più lunga al corpo minimo, più i margini interni.
+function larghezzaRiquadri(caratteri: number) {
+  return `repeat(auto-fit, minmax(${Math.ceil(caratteri * LARGHEZZA_CIFRA * CORPO_MIN + 26)}px, 1fr))`;
 }
 
 export async function SchedaColonna({
@@ -56,11 +72,17 @@ export async function SchedaColonna({
 
       {numerica && c.valori > 0 && (
         <>
-          <div className="grid grid-cols-3 gap-2">
-            <Riquadro etichetta={t("media")} valore={f.statistica(c.media)} />
-            <Riquadro etichetta={t("minimo")} valore={f.statistica(c.minimo)} />
-            <Riquadro etichetta={t("massimo")} valore={f.statistica(c.massimo)} />
-          </div>
+          {(() => {
+            const valori = [f.statistica(c.media), f.statistica(c.minimo), f.statistica(c.massimo)];
+            const caratteri = Math.max(4, ...valori.map((v) => v.length));
+            return (
+              <div className="grid gap-2" style={{ gridTemplateColumns: larghezzaRiquadri(caratteri) }}>
+                <Riquadro etichetta={t("media")} valore={valori[0]} caratteri={caratteri} />
+                <Riquadro etichetta={t("minimo")} valore={valori[1]} caratteri={caratteri} />
+                <Riquadro etichetta={t("massimo")} valore={valori[2]} caratteri={caratteri} />
+              </div>
+            );
+          })()}
           {c.istogramma && c.istogramma.length > 0 && (
             <div className="space-y-1">
               <h4 className="text-sm font-medium">{t("perFascia")}</h4>
