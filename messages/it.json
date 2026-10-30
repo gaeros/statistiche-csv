@@ -609,7 +609,7 @@
     "nota": "L'app mostra i tuoi dati e non fornisce consigli medici.",
     "inizia": "Importa il primo file",
     "aspettoTitolo": "Tema chiaro o scuro",
-    "aspettoTesto": "In alto, accanto a IT | EN, scegli il tema: automatico (segue il telefono o il computer, anche quando passa al tema scuro la sera), chiaro o scuro. La scelta resta in questo browser. I file PNG e PDF scaricati sono sempre chiari, pronti da stampare.",
+    "aspettoTesto": "In alto, accanto a IT | EN, scegli il tema: chiaro (quello predefinito), scuro o automatico (segue il telefono o il computer, anche quando passa al tema scuro la sera). La scelta resta in questo browser. I file PNG e PDF scaricati sono sempre chiari, pronti da stampare.",
     "appTitolo": "Installa l'app sul telefono",
     "appTesto": "Datahue si può aggiungere alla schermata Home e aprire come un'app, a tutto schermo. Su Android con Chrome: menu ⋮ → «Installa app» (o il pulsante qui sotto, se compare). Su iPhone con Safari: pulsante Condividi → «Aggiungi alla schermata Home». Sul computer con Chrome o Edge: icona di installazione nella barra degli indirizzi. L'app mostra sempre i dati aggiornati e serve internet: senza connessione compare solo un avviso.",
     "installa": "Installa Datahue",

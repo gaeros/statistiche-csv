@@ -50,8 +50,8 @@ const ICONE: Record<Tema, React.ReactNode> = {
 // Tre pulsanti (automatico, chiaro, scuro) nello stesso stile del selettore della lingua.
 export function SelettoreTema({ className = "" }: { className?: string }) {
   const t = useTranslations("tema");
-  // Sul server non si conosce la scelta: si mostra "auto" e si corregge appena carica la pagina.
-  const attuale = useSyncExternalStore(osservaScelta, leggiTema, () => "auto" as Tema);
+  // Sul server non si conosce la scelta: si mostra "chiaro" (il predefinito) e si corregge appena carica la pagina.
+  const attuale = useSyncExternalStore(osservaScelta, leggiTema, () => "chiaro" as Tema);
   const scegli = (tema: Tema) => {
     salvaTema(tema);
     window.dispatchEvent(new Event(EVENTO));
