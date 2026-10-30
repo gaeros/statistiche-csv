@@ -52,6 +52,7 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
   const { id } = await params;
   const t = await getTranslations("graficiPagina");
   const tg = await getTranslations("grafici");
+  const tc = await getTranslations("chart");
   const f = creaFormati(await getLocale());
   const sp = await searchParams;
 
@@ -91,6 +92,10 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
   const xData = colonne.some((c) => c.nome === config.x && (c.tipo === "data" || c.tipo === "data_ora"));
   const titolo = titoloAutomatico(config, colonne, tg);
   const ritorno = conParametri(sp, {});
+  // Nei PNG e PDF esportati: da quale dataset vengono i dati e con quali filtri.
+  const sottotitolo = etichette.length
+    ? tc("sottotitoloFiltri", { nome: d.nome, filtri: etichette.map((e) => e.testo).join("; ") })
+    : tc("sottotitoloTutte", { nome: d.nome });
 
   return (
     <div className="space-y-8">
@@ -151,7 +156,7 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
                   </div>
                 </header>
                 {g.errore && <p className="text-sm text-red-600">{g.errore}</p>}
-                {g.preparato && <GraficoLibero titolo={g.titolo} preparato={g.preparato} altezza={300} />}
+                {g.preparato && <GraficoLibero titolo={g.titolo} preparato={g.preparato} altezza={300} sottotitolo={sottotitolo} />}
               </article>
             ))}
           </div>
@@ -248,7 +253,7 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
           anteprima.data && (
             <div className="space-y-4 border-t border-slate-200 pt-4 dark:border-slate-800">
               <h3 className="font-semibold">{titolo}</h3>
-              <GraficoLibero titolo={titolo} preparato={prepara(config, anteprima.data, colonne, f, tg)} />
+              <GraficoLibero titolo={titolo} preparato={prepara(config, anteprima.data, colonne, f, tg)} sottotitolo={sottotitolo} />
               <form action={salvaGrafico.bind(null, id)} className="flex flex-wrap items-end gap-3">
                 {Object.entries(parametriConfigurazione(config)).flatMap(([k, v]) =>
                   (Array.isArray(v) ? v : [v]).map((x) => <input key={`${k}-${x}`} type="hidden" name={k} value={x} />),
