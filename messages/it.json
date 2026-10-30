@@ -369,7 +369,8 @@
     "colCategoria": "Categoria",
     "colValore": "Valore",
     "colPercentuale": "%",
-    "colFascia": "Fascia di valori"
+    "colFascia": "Fascia di valori",
+    "altPdf": "Grafico «{titolo}». I valori sono nella tabella delle pagine seguenti."
   },
   "graficiPagina": {
     "dashboard": "Grafici salvati",
@@ -635,7 +636,7 @@
     "p4Titolo": "Leggi le statistiche",
     "p4Testo": "La scheda «Statistiche» riassume il file: numero di righe, periodo, medie, andamento nel tempo, un riepilogo di ogni colonna, il confronto fra gruppi (per esempio la media per momento della giornata) e le colonne che vanno insieme. Nel riepilogo «Colonna per colonna» puoi trascinare le schede per metterle nell'ordine che preferisci (l'app lo ricorda; «Ripristina ordine» torna a quello del file) e aprirne una più grande con la lente.",
     "p5Titolo": "Costruisci i grafici",
-    "p5Testo": "Nella scheda «Grafici» scegli il tipo (barre, linee, torta, dispersione, istogramma, box plot…), le colonne e il calcolo. Il grafico si aggiorna a ogni scelta. Con «Salva il grafico» lo tieni per la prossima volta, tra i «Grafici salvati» del dataset; sotto ogni grafico puoi scaricarlo come immagine (PNG), come PDF (una pagina A4 orizzontale, pronta da stampare o da condividere) o come dati (CSV). Il file scaricato segue i filtri attivi e riporta sotto il titolo il nome del dataset, i filtri usati e la data.",
+    "p5Testo": "Nella scheda «Grafici» scegli il tipo (barre, linee, torta, dispersione, istogramma, box plot…), le colonne e il calcolo. Il grafico si aggiorna a ogni scelta. Con «Salva il grafico» lo tieni per la prossima volta, tra i «Grafici salvati» del dataset; sotto ogni grafico puoi scaricarlo come immagine (PNG), come PDF (A4 orizzontale, pronto da stampare o da condividere: il grafico nella prima pagina e i suoi valori in tabella nelle seguenti, leggibile anche con i lettori di schermo) o come dati (CSV). Il file scaricato segue i filtri attivi e riporta sotto il titolo il nome del dataset, i filtri usati e la data.",
     "p6Titolo": "Componi la tua dashboard",
     "p6Testo": "Sotto un grafico salvato premi «Fissa in dashboard»: lo trovi nel menu «Dashboard», insieme ai grafici fissati dagli altri dataset. Lì puoi trascinarli nell'ordine che preferisci (anche da tastiera, con le frecce sulla maniglia), aprirne uno più grande con la lente o toglierlo con «Togli dalla dashboard»: il grafico resta salvato nel suo dataset. In alto, «Cerca un dataset…» propone i nomi dei tuoi dataset e apre subito i grafici di quello scelto. Nella dashboard i grafici usano tutte le righe, senza filtri; anche da lì puoi scaricarli in PNG, PDF o CSV.",
     "p7Titolo": "Condividi con un link",

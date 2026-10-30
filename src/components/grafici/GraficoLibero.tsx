@@ -1,12 +1,12 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useRef } from "react";
 import type { ECharts } from "echarts/core";
 import { useFormati } from "@/components/FormatiUtente";
-import type { Traduttore } from "@/i18n/lingue";
+import { LOCALE_INTL, èLingua, type Traduttore } from "@/i18n/lingue";
 import { csvPreparato, tabellaPreparato, type Preparato } from "@/lib/grafici";
-import { pdfDaJpeg } from "@/lib/pdf";
+import { leggiFont, pdfGrafico, type FontPdf } from "@/lib/pdf";
 import { DatiGrafico } from "./DatiGrafico";
 import { Grafico, svgChiaro } from "./Grafico";
 import { colori, FONT_GRAFICI, stileAssi, stileTooltip, type Colori } from "./tema";
@@ -170,6 +170,35 @@ async function disegnaTela(svg: string, titolo: string, sottotitolo: string | un
   return tela;
 }
 
+// Solo il grafico, su sfondo bianco e a doppia risoluzione: nel PDF titolo e testi sono testo vero.
+async function telaGrafico(svg: string) {
+  const img = new Image();
+  img.src = svg;
+  await img.decode();
+  const tela = document.createElement("canvas");
+  tela.width = img.width * 2;
+  tela.height = img.height * 2;
+  const ctx = tela.getContext("2d")!;
+  ctx.scale(2, 2);
+  ctx.fillStyle = colori(false).sfondo;
+  ctx.fillRect(0, 0, img.width, img.height);
+  ctx.drawImage(img, 0, 0);
+  return tela;
+}
+
+// Font incorporati nel PDF (public/fonts, creati da scripts/font-pdf.py): scaricati una volta sola.
+let fontPdf: Promise<{ normale: FontPdf; grassetto: FontPdf }> | null = null;
+function caricaFontPdf() {
+  const leggi = async (nome: string) => {
+    const r = await fetch(`/fonts/InterTight-${nome}.ttf`);
+    if (!r.ok) throw new Error(`Font ${nome}: ${r.status}`);
+    return leggiFont(new Uint8Array(await r.arrayBuffer()));
+  };
+  fontPdf ??= Promise.all([leggi("Regular"), leggi("SemiBold")]).then(([normale, grassetto]) => ({ normale, grassetto }));
+  fontPdf.catch(() => (fontPdf = null));
+  return fontPdf;
+}
+
 // Grafico del costruttore, con esportazione in PNG o PDF e dei suoi dati in CSV.
 // `sottotitolo` finisce solo nei file esportati: dice da dove vengono i dati e con quali filtri.
 export function GraficoLibero({
@@ -186,6 +215,7 @@ export function GraficoLibero({
   const t = useTranslations("chart");
   const tg = useTranslations("grafici");
   const f = useFormati();
+  const lingua = useLocale();
   const grafico = useRef<ECharts | null>(null);
   const riferimento = useCallback((g: ECharts | null) => {
     grafico.current = g;
@@ -211,12 +241,33 @@ export function GraficoLibero({
     if (c) scarica(`${nomeFile(titolo, t("grafico"))}.png`, c.toDataURL("image/png"));
   }
 
+  // PDF accessibile (PDF/UA): testi veri, grafico con testo alternativo e i suoi valori in tabella
   async function esportaPdf() {
-    const c = await tela();
-    if (!c) return;
+    const g = grafico.current;
+    if (!g) return;
+    const [c, fonts] = await Promise.all([svgChiaro(g, opzioniGrafico, f.localeNumeri).then(telaGrafico), caricaFontPdf()]);
     const jpeg = await new Promise<Blob | null>((ok) => c.toBlob(ok, "image/jpeg", 0.92));
     if (!jpeg) return;
-    const pdf = pdfDaJpeg(new Uint8Array(await jpeg.arrayBuffer()), c.width, c.height, titolo);
+    const { intestazione, righe } = tabellaPreparato(preparato, tg);
+    const pdf = pdfGrafico(
+      {
+        titolo,
+        sottotitolo,
+        piede: t("piede", { quando: f.dataOra(new Date().toISOString()) }),
+        lingua: èLingua(lingua) ? LOCALE_INTL[lingua] : LOCALE_INTL.it,
+        alt: t("altPdf", { titolo }),
+        immagine: { jpeg: new Uint8Array(await jpeg.arrayBuffer()), larghezza: c.width, altezza: c.height, densita: 2 },
+        tabella: {
+          titolo: t("datiDi", { titolo }),
+          intestazione,
+          righe: righe.map((r) =>
+            r.map((x) => (typeof x === "number" ? { testo: f.valore(x, "decimale"), numero: true } : { testo: x ?? "–", numero: x === null })),
+          ),
+          nota: (n, totale) => t("primeRighe", { n: f.numero(n), totale: f.numero(totale) }),
+        },
+      },
+      fonts,
+    );
     const url = URL.createObjectURL(new Blob([pdf as BlobPart], { type: "application/pdf" }));
     scarica(`${nomeFile(titolo, t("grafico"))}.pdf`, url);
     setTimeout(() => URL.revokeObjectURL(url), 1000);
