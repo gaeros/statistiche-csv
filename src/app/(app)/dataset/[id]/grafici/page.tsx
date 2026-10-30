@@ -144,6 +144,9 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
                     <Link href={`${conParametri(sp, parametriConfigurazione(g.config))}#costruttore`} className="link">
                       {t("modifica")}
                     </Link>
+                    <Link href={`/condivisioni?grafico=${g.id}`} className="link">
+                      {t("condividi")}
+                    </Link>
                     <ConfermaElimina
                       etichetta={t("elimina")}
                       titolo={t("eliminaTitolo", { titolo: g.titolo })}

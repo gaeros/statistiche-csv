@@ -41,6 +41,7 @@ export default async function PaginaPrivacy() {
       <h2>{t("chiVedeH")}</h2>
       <ul>
         <li>{t("chiVede1")}</li>
+        <li>{t("chiVedeLink")}</li>
         <li>{t("chiVede2")}</li>
         <li>{t("chiVede3")}</li>
         <li>{t("chiVede4")}</li>

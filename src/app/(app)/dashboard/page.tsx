@@ -2,6 +2,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { GraficoLibero } from "@/components/grafici/GraficoLibero";
 import { SchedeRiordinabili } from "@/components/SchedeRiordinabili";
+import { DASHBOARD } from "@/lib/condivisioni";
 import { conParametri, type Colonna } from "@/lib/filtri";
 import { creaFormati } from "@/lib/formato";
 import { leggiConfigurazione, parametriConfigurazione, prepara, type Configurazione } from "@/lib/grafici";
@@ -67,12 +68,19 @@ export default async function PaginaDashboard() {
   );
 
   const intestazione = (
-    <div>
-      <h1 className="text-3xl font-semibold tracking-normal">{t("titolo")}</h1>
+    <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
+      <div>
+        <h1 className="text-3xl font-semibold tracking-normal">{t("titolo")}</h1>
+        {schede.length > 0 && (
+          <p className="text-sm text-slate-500">
+            {t("sottotitolo")} {t("senzaFiltri")}
+          </p>
+        )}
+      </div>
       {schede.length > 0 && (
-        <p className="text-sm text-slate-500">
-          {t("sottotitolo")} {t("senzaFiltri")}
-        </p>
+        <Link href={`/condivisioni?grafico=${DASHBOARD}`} className="bottone-secondario text-sm" title={t("condividiAiuto")}>
+          {t("condividi")}
+        </Link>
       )}
     </div>
   );
