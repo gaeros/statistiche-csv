@@ -11,7 +11,7 @@ export function SelettoreLingua({ className = "", nero = true }: { className?: s
   const t = useTranslations("lingua");
   const [, avvia] = useTransition();
   return (
-    <div role="group" aria-label={t("etichetta")} className={`inline-flex overflow-hidden ${nero ? "rounded-full" : "rounded-md"} border border-slate-300 text-sm ${className}`}>
+    <div role="group" aria-label={t("etichetta")} className={`inline-flex h-9 overflow-hidden ${nero ? "rounded-full" : "rounded-md"} border border-slate-300 text-sm ${className}`}>
       {LINGUE.map((l) => (
         <button
           key={l}
@@ -20,7 +20,7 @@ export function SelettoreLingua({ className = "", nero = true }: { className?: s
           aria-pressed={l === attuale}
           title={t(l)}
           onClick={() => avvia(() => impostaLingua(l))}
-          className={`px-3 py-1.5 font-medium uppercase ${l === attuale ? (nero ? "bg-foreground text-white" : "bg-foreground text-white") : "bg-white text-slate-700 hover:bg-slate-100"}`}
+          className={`flex w-10 items-center justify-center font-medium uppercase ${l === attuale ? (nero ? "bg-foreground text-white" : "bg-foreground text-white") : "bg-white text-slate-700 hover:bg-slate-100"}`}
         >
           {l}
         </button>
