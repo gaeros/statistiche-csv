@@ -16,7 +16,7 @@ export type Colori = {
 
 const formatiNumero = new Map<string, Intl.NumberFormat>();
 
-// `locale` è quello di Intl (it-IT, en-GB): i numeri dei grafici seguono la lingua dell'utente.
+// `locale` è quello di Intl (it-IT, en-GB): i numeri dei grafici seguono il separatore decimale scelto.
 export function colori(scuro: boolean, locale = "it-IT"): Colori {
   let fmt = formatiNumero.get(locale);
   if (!fmt) formatiNumero.set(locale, (fmt = new Intl.NumberFormat(locale, { maximumFractionDigits: 2 })));

@@ -31,6 +31,10 @@ export default async function PaginaGuida() {
         <h2 className="font-semibold">{t("aspettoTitolo")}</h2>
         <p className="text-slate-600">{t("aspettoTesto")}</p>
       </section>
+      <section className="scheda space-y-1">
+        <h2 className="font-semibold">{t("formatiTitolo")}</h2>
+        <p className="text-slate-600">{t("formatiTesto")}</p>
+      </section>
       <section className="scheda space-y-3">
         <div className="space-y-1">
           <h2 className="font-semibold">{t("appTitolo")}</h2>

@@ -1,10 +1,10 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { CopiaLink } from "@/components/CopiaLink";
 import { DASHBOARD, percorsoCondiviso, SCADENZE, scaduto } from "@/lib/condivisioni";
-import { creaFormati } from "@/lib/formato";
 import { createClient } from "@/lib/supabase/server";
 import { creaLink, revocaLink } from "./actions";
+import { formatiUtente } from "@/lib/utente";
 
 type LinkSalvato = {
   id: string;
@@ -26,7 +26,7 @@ export async function generateMetadata() {
 // Link di sola lettura: crearne uno per un grafico salvato o per la dashboard, copiarlo, revocarlo.
 export default async function PaginaCondivisioni({ searchParams }: PageProps<"/condivisioni">) {
   const t = await getTranslations("condivisioni");
-  const f = creaFormati(await getLocale());
+  const f = await formatiUtente();
   const sp = await searchParams;
   const scelto = typeof sp.grafico === "string" ? sp.grafico : DASHBOARD;
   const nuovo = typeof sp.nuovo === "string" ? sp.nuovo : undefined;

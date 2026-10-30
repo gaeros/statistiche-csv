@@ -1,15 +1,14 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { creaFormati } from "@/lib/formato";
 import { createClient } from "@/lib/supabase/server";
-import { utenteCorrente } from "@/lib/utente";
+import { formatiUtente, utenteCorrente } from "@/lib/utente";
 import { revocaInvito } from "./actions";
 import { BottoneElimina } from "./BottoneElimina";
 import { FormInvito } from "./FormInvito";
 
 export default async function PaginaInviti() {
   const t = await getTranslations("inviti");
-  const f = creaFormati(await getLocale());
+  const f = await formatiUtente();
   const { amministratore } = await utenteCorrente();
   if (!amministratore) notFound();
 

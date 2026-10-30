@@ -207,9 +207,9 @@ export function prepara(c: Configurazione, r: Risultato, colonne: Colonna[], f: 
   };
 }
 
-// Dati del grafico in CSV (separatore ";" e virgola decimale, come vuole Excel in italiano e nei paesi europei)
-export function csvPreparato(p: Preparato, t: Traduttore): string {
-  const n = cellaNumero;
+// Dati del grafico in CSV: separatore ";" e virgola decimale (Excel in italiano) oppure "," e punto decimale
+export function csvPreparato(p: Preparato, t: Traduttore, virgola = true): string {
+  const n = (x: number | string | null | undefined) => cellaNumero(x, virgola);
   const q = cellaTesto;
   let righe: string[][];
   switch (p.forma) {
@@ -229,5 +229,5 @@ export function csvPreparato(p: Preparato, t: Traduttore): string {
       righe = [[t("csvGruppo"), t("agg_minimo"), t("csvQ1"), t("agg_mediana"), t("csvQ3"), t("agg_massimo")], ...p.categorie.map((c, i) => [q(c), ...p.scatole[i].map(n)])];
       break;
   }
-  return BOM + righe.map(riga).join("");
+  return BOM + righe.map((r) => riga(r, virgola)).join("");
 }

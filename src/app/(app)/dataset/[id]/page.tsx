@@ -1,14 +1,14 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { conParametri } from "@/lib/filtri";
-import { creaFormati } from "@/lib/formato";
 import { createClient } from "@/lib/supabase/server";
 import { Azioni } from "./Azioni";
 import { BarraFiltri } from "./BarraFiltri";
 import { filtriDataset } from "./filtri-dataset";
 import { Intestazione } from "./Intestazione";
 import { TabellaDati } from "./TabellaDati";
+import { formatiUtente } from "@/lib/utente";
 
 const PER_PAGINA = 50;
 
@@ -17,7 +17,7 @@ type Colonna = { nome: string; originale: string; tipo: string };
 export default async function PaginaDettaglio({ params, searchParams }: PageProps<"/dataset/[id]">) {
   const { id } = await params;
   const t = await getTranslations("dettaglio");
-  const f = creaFormati(await getLocale());
+  const f = await formatiUtente();
   const sp = await searchParams;
   const pagina = Math.max(1, Number(sp.pagina) || 1);
   const ordina = typeof sp.ordina === "string" ? sp.ordina : "id";

@@ -1,6 +1,6 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
-import { creaFormati } from "@/lib/formato";
+import { formatiUtente } from "@/lib/utente";
 
 type Colonna = { nome: string; originale: string; tipo: string };
 
@@ -36,7 +36,7 @@ export async function TabellaDati({
   hrefOrdina: (colonna: string, dir: "asc" | "desc") => string;
 }) {
   const t = await getTranslations("dettaglio");
-  const f = creaFormati(await getLocale());
+  const f = await formatiUtente();
   let nascoste = colonne.filter((c) => vuota(c, valori));
   if (nascoste.length === colonne.length) nascoste = [];
   const mostrate = colonne.filter((c) => !nascoste.includes(c));

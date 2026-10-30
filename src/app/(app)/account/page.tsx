@@ -1,13 +1,14 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
-import { creaFormati } from "@/lib/formato";
 import { createClient } from "@/lib/supabase/server";
-import { utenteCorrente } from "@/lib/utente";
+import { formatiUtente, utenteCorrente } from "@/lib/utente";
+import { leggiPreferenze } from "@/lib/preferenze";
 import { FormElimina } from "./FormElimina";
+import { FormFormati } from "./FormFormati";
 
 export default async function PaginaAccount() {
   const t = await getTranslations("account");
-  const f = creaFormati(await getLocale());
+  const f = await formatiUtente();
   const { utente } = await utenteCorrente();
   const supabase = await createClient();
   const { data: dataset } = await supabase.from("dataset").select("id, nome, righe").order("nome");
@@ -27,6 +28,14 @@ export default async function PaginaAccount() {
             <Link href="/privacy" className="link">{t("informativa")}</Link>
           </p>
         )}
+      </section>
+
+      <section className="scheda space-y-3">
+        <div>
+          <h2 className="text-lg font-semibold">{t("formatiH")}</h2>
+          <p className="text-sm text-slate-500">{t("formatiP")}</p>
+        </div>
+        <FormFormati preferenze={leggiPreferenze(utente.user_metadata)} />
       </section>
 
       <section className="scheda space-y-3">

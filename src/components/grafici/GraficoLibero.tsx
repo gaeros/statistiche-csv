@@ -1,9 +1,10 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useCallback, useRef } from "react";
 import type { ECharts } from "echarts/core";
-import { LINGUA_BASE, LOCALE_INTL, èLingua, type Traduttore } from "@/i18n/lingue";
+import { useFormati } from "@/components/FormatiUtente";
+import type { Traduttore } from "@/i18n/lingue";
 import { csvPreparato, type Preparato } from "@/lib/grafici";
 import { pdfDaJpeg } from "@/lib/pdf";
 import { Grafico, svgChiaro } from "./Grafico";
@@ -183,7 +184,7 @@ export function GraficoLibero({
 }) {
   const t = useTranslations("chart");
   const tg = useTranslations("grafici");
-  const lingua = useLocale();
+  const f = useFormati();
   const grafico = useRef<ECharts | null>(null);
   const riferimento = useCallback((g: ECharts | null) => {
     grafico.current = g;
@@ -200,9 +201,8 @@ export function GraficoLibero({
   const tela = async () => {
     const g = grafico.current;
     if (!g) return null;
-    const locale = LOCALE_INTL[èLingua(lingua) ? lingua : LINGUA_BASE];
-    const quando = new Intl.DateTimeFormat(locale, { dateStyle: "long", timeStyle: "short" }).format(new Date());
-    return disegnaTela(await svgChiaro(g, opzioniGrafico, locale), titolo, sottotitolo, t("piede", { quando }));
+    const quando = f.dataOra(new Date().toISOString());
+    return disegnaTela(await svgChiaro(g, opzioniGrafico, f.localeNumeri), titolo, sottotitolo, t("piede", { quando }));
   };
 
   async function esportaPng() {
@@ -222,7 +222,7 @@ export function GraficoLibero({
   }
 
   function esportaCsv() {
-    const url = URL.createObjectURL(new Blob([csvPreparato(preparato, tg)], { type: "text/csv;charset=utf-8" }));
+    const url = URL.createObjectURL(new Blob([csvPreparato(preparato, tg, f.virgola)], { type: "text/csv;charset=utf-8" }));
     scarica(`${nomeFile(titolo, t("grafico"))}.csv`, url);
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }

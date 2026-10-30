@@ -1,14 +1,14 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { GraficoLibero } from "@/components/grafici/GraficoLibero";
 import { ScegliDataset } from "@/components/ScegliDataset";
 import { SchedeRiordinabili } from "@/components/SchedeRiordinabili";
 import { DASHBOARD } from "@/lib/condivisioni";
 import { conParametri, type Colonna } from "@/lib/filtri";
-import { creaFormati } from "@/lib/formato";
 import { leggiConfigurazione, parametriConfigurazione, prepara, type Configurazione } from "@/lib/grafici";
 import { createClient } from "@/lib/supabase/server";
 import { salvaOrdineDashboard, togliDallaDashboard } from "./actions";
+import { formatiUtente } from "@/lib/utente";
 
 type GraficoSalvato = {
   id: string;
@@ -26,7 +26,7 @@ export default async function PaginaDashboard() {
   const t = await getTranslations("dashboard");
   const tg = await getTranslations("grafici");
   const tc = await getTranslations("chart");
-  const f = creaFormati(await getLocale());
+  const f = await formatiUtente();
 
   const supabase = await createClient();
   const [{ data: elenco, error: errDataset }, { data: riga, error }] = await Promise.all([

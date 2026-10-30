@@ -1,8 +1,7 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { CampiNascosti } from "@/components/CampiNascosti";
 import { FormPulito } from "@/components/FormPulito";
-import { creaFormati } from "@/lib/formato";
 import {
   chiave,
   conParametri,
@@ -16,6 +15,7 @@ import {
 } from "@/lib/filtri";
 import { normalizza, stessiFiltri, type FiltroSalvato } from "@/lib/filtri-salvati";
 import { FiltriSalvati } from "./filtri-salvati/FiltriSalvati";
+import { formatiUtente } from "@/lib/utente";
 
 type Valore = { valore: string; conteggio: number };
 
@@ -72,7 +72,7 @@ export async function BarraFiltri({
 }) {
   const t = await getTranslations("barraFiltri");
   const tf = await getTranslations("filtri");
-  const f = creaFormati(await getLocale());
+  const f = await formatiUtente();
   const attivi = etichette.length > 0;
   const campo = "campo py-1.5 text-sm";
   const correnti = normalizza(sp);

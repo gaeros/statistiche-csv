@@ -1,8 +1,8 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { BOM, cella, cellaTesto, riga } from "@/lib/csv";
-import { creaFormati } from "@/lib/formato";
 import { leggiFiltri, type Colonna } from "@/lib/filtri";
 import { createClient } from "@/lib/supabase/server";
+import { formatiUtente } from "@/lib/utente";
 
 const BLOCCO = 500;
 
@@ -11,7 +11,7 @@ const BLOCCO = 500;
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const t = await getTranslations("dettaglio");
-  const f = creaFormati(await getLocale());
+  const f = await formatiUtente();
   const supabase = await createClient();
   const { data: d } = await supabase.from("dataset").select("nome, colonne").eq("id", id).maybeSingle();
   if (!d) return new Response(t("nonTrovato"), { status: 404 });
@@ -25,7 +25,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
   const flusso = new ReadableStream({
     async start(controller) {
-      controller.enqueue(codifica.encode(BOM + riga(colonne.map((c) => cellaTesto(c.originale)))));
+      controller.enqueue(codifica.encode(BOM + riga(colonne.map((c) => cellaTesto(c.originale)), f.virgola)));
       for (let offset = 0; ; offset += BLOCCO) {
         const { data, error } = await supabase.rpc("leggi_righe", {
           p_dataset: id,
@@ -40,7 +40,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
           return;
         }
         const righe = (data?.righe ?? []) as Record<string, unknown>[];
-        if (righe.length) controller.enqueue(codifica.encode(righe.map((r) => riga(colonne.map((c) => cella(r[c.nome], c.tipo, f.si, f.no)))).join("")));
+        if (righe.length) controller.enqueue(codifica.encode(righe.map((r) => riga(colonne.map((c) => cella(r[c.nome], c.tipo, f)), f.virgola)).join("")));
         if (righe.length < BLOCCO) break;
       }
       controller.close();

@@ -3,9 +3,11 @@ import { Logo } from "@/components/Logo";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { esci } from "@/app/accedi/actions";
+import { FormatiUtente } from "@/components/FormatiUtente";
 import { MenuAccount } from "@/components/MenuAccount";
 import { SelettoreLingua } from "@/components/SelettoreLingua";
 import { SelettoreTema } from "@/components/SelettoreTema";
+import { leggiPreferenze } from "@/lib/preferenze";
 import { VERSIONE_INFORMATIVA } from "@/lib/privacy";
 import { utenteCorrente } from "@/lib/utente";
 
@@ -40,7 +42,9 @@ export default async function LayoutApp({ children }: LayoutProps<"/">) {
           </div>
         </div>
       </header>
-      <main className="mx-auto w-full min-w-0 max-w-6xl flex-1 px-4 py-8">{children}</main>
+      <main className="mx-auto w-full min-w-0 max-w-6xl flex-1 px-4 py-8">
+        <FormatiUtente preferenze={leggiPreferenze(utente.user_metadata)}>{children}</FormatiUtente>
+      </main>
       <footer className="mx-auto w-full max-w-6xl px-4 pb-6 text-xs text-slate-500">
         <Link href="/privacy" className="hover:underline">{t("privacy")}</Link> · {t("nota")}
       </footer>
