@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { GraficoLibero } from "@/components/grafici/GraficoLibero";
 import { Logo } from "@/components/Logo";
 import { SelettoreLingua } from "@/components/SelettoreLingua";
+import { SelettoreTema } from "@/components/SelettoreTema";
 import { codiceValido } from "@/lib/condivisioni";
 import type { Colonna } from "@/lib/filtri";
 import { creaFormati } from "@/lib/formato";
@@ -54,15 +55,16 @@ export default async function PaginaCondivisa({ params }: PageProps<"/condiviso/
 
   return (
     <>
-      <header className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+      <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3">
           <Link href="/">
             <Logo className="h-11 w-auto" />
           </Link>
-          <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+          <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
             {t("solaLettura")}
           </span>
-          <div className="ml-auto">
+          <div className="ml-auto flex items-center gap-2">
+            <SelettoreTema />
             <SelettoreLingua />
           </div>
         </div>
@@ -77,7 +79,7 @@ export default async function PaginaCondivisa({ params }: PageProps<"/condiviso/
           </p>
         </div>
 
-        {schede.length === 0 && <p className="scheda text-slate-600 dark:text-slate-300">{t("vuota")}</p>}
+        {schede.length === 0 && <p className="scheda text-slate-600">{t("vuota")}</p>}
 
         <div className={`grid gap-4 ${schede.length > 1 ? "lg:grid-cols-2" : ""}`}>
           {schede.map((g) => (

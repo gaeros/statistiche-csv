@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { SelettoreLingua } from "@/components/SelettoreLingua";
+import { SelettoreTema } from "@/components/SelettoreTema";
 import { VERSIONE_INFORMATIVA } from "@/lib/privacy";
 
 export async function generateMetadata() {
@@ -15,13 +16,16 @@ export default async function PaginaPrivacy() {
   const data = `${giorno}/${mese}/${anno}`;
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 space-y-6 px-4 py-10 text-slate-700 dark:text-slate-300 [&_h2]:mt-6 [&_h2]:text-lg [&_h2]:font-semibold [&_h2]:text-slate-900 dark:[&_h2]:text-slate-100 [&_li]:ml-5 [&_li]:list-disc">
+    <main className="mx-auto w-full max-w-3xl flex-1 space-y-6 px-4 py-10 text-slate-700 [&_h2]:mt-6 [&_h2]:text-lg [&_h2]:font-semibold [&_h2]:text-slate-900 [&_li]:ml-5 [&_li]:list-disc">
       <div className="space-y-1">
         <div className="flex items-center justify-between">
           <Link href="/" className="link text-sm">← Datahue</Link>
-          <SelettoreLingua />
+          <div className="flex items-center gap-2">
+            <SelettoreTema />
+            <SelettoreLingua />
+          </div>
         </div>
-        <h1 className="text-3xl font-semibold tracking-normal text-slate-900 dark:text-slate-100">{t("titolo")}</h1>
+        <h1 className="text-3xl font-semibold tracking-normal text-slate-900">{t("titolo")}</h1>
         <p className="text-sm text-slate-500">{t("versione", { data })}</p>
       </div>
 
@@ -56,6 +60,7 @@ export default async function PaginaPrivacy() {
         <li>{t("cookie1")}</li>
         <li>{t("cookie2")}</li>
         <li>{t("cookie3")}</li>
+        <li>{t("cookie4")}</li>
       </ul>
 
       <h2>{t("dirittiH")}</h2>

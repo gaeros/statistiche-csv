@@ -9,7 +9,7 @@ const MAX_FETTE = 8;
 
 function Voce({ etichetta, valore }: { etichetta: string; valore: string }) {
   return (
-    <div className="flex justify-between gap-2 border-b border-slate-100 py-1 last:border-0 dark:border-slate-800">
+    <div className="flex justify-between gap-2 border-b border-slate-100 py-1 last:border-0">
       <dt className="text-slate-500">{etichetta}</dt>
       <dd className="text-right tabular-nums">{valore}</dd>
     </div>
@@ -24,7 +24,7 @@ const CORPO_MIN = 13; // px
 
 function Riquadro({ etichetta, valore, caratteri }: { etichetta: string; valore: string; caratteri: number }) {
   return (
-    <div className="min-w-0 rounded-lg bg-slate-50 px-3 py-2 [container-type:inline-size] dark:bg-slate-800/60">
+    <div className="min-w-0 rounded-lg bg-slate-50 px-3 py-2 [container-type:inline-size]">
       <div className="truncate text-xs text-slate-500">{etichetta}</div>
       <div
         className="leading-tight font-semibold whitespace-nowrap tabular-nums"
@@ -136,7 +136,7 @@ export async function SchedaColonna({
       {conteggioPeriodi}
 
       <details className="text-sm">
-        <summary className="cursor-pointer text-slate-500 select-none hover:text-slate-700 dark:hover:text-slate-300">
+        <summary className="cursor-pointer text-slate-500 select-none hover:text-slate-700">
           {t("altriDettagli")}
         </summary>
         <dl className="mt-2">

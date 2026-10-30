@@ -17,7 +17,7 @@ export default function PaginaConsenso() {
     <PaginaAuth titolo={t("titolo")}>
       <form action={azione} className="space-y-4 text-sm">
         <Messaggio tipo="errore" testo={stato?.errore} />
-        <p className="text-slate-600 dark:text-slate-300">
+        <p className="text-slate-600">
           {t("intro")}
         </p>
         <label className="flex items-start gap-2">

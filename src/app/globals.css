@@ -1,12 +1,83 @@
 @import "tailwindcss";
 
-/* Solo tema chiaro: le classi dark: non si attivano mai (niente [data-theme=dark] nell'app) */
+/* Tema: <html data-theme="light|dark"> lo imposta lo script in testa a src/app/layout.tsx
+   (scelta salvata o, in automatico, quella del sistema). */
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 :root {
   color-scheme: light;
   --background: #ffffff;
   --foreground: #09090b;
+  /* Verde scuro del logo ("hue" e spicchio più scuro) */
+  --verde-logo: #14532d;
+}
+
+/* Tema scuro: invece di aggiungere dark: a ogni classe si ridefiniscono i colori di Tailwind.
+   bianco = superficie delle schede, la scala slate si capovolge (200 resta un bordo tenue,
+   900 resta il testo forte) e così rosso, verde, ambra e blu: i fondi 50 diventano scuri, i testi
+   600-900 chiari. Così text-white su bg-foreground resta leggibile (testo scuro su pulsante chiaro).
+   Contrasti verificati WCAG AA (vedi SPEC). */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #0f0f12;
+  --foreground: #f4f4f5;
+  --verde-logo: #7fbf8a;
+  --color-white: #17171b;
+  --color-slate-50: #1b1c21;
+  --color-slate-100: #22242a;
+  --color-slate-200: #2c2e35;
+  --color-slate-300: #62666f;
+  --color-slate-400: #868a96;
+  --color-slate-500: #a3a7b1;
+  --color-slate-600: #b6bac3;
+  --color-slate-700: #cfd2d8;
+  --color-slate-800: #e2e4e8;
+  --color-slate-900: #eef0f2;
+  --color-slate-950: #f7f8f9;
+  --color-red-50: oklch(24% 0.064 26.042);
+  --color-red-100: oklch(28% 0.083 26.042);
+  --color-red-200: oklch(36% 0.141 25.723);
+  --color-red-300: oklch(50.5% 0.213 27.518);
+  --color-red-400: oklch(63.7% 0.237 25.331);
+  --color-red-500: oklch(70.4% 0.191 22.216);
+  --color-red-600: oklch(70.4% 0.191 22.216);
+  --color-red-700: oklch(80.8% 0.114 19.571);
+  --color-red-800: oklch(88.5% 0.062 18.334);
+  --color-red-900: oklch(88.5% 0.062 18.334);
+  --color-red-950: oklch(93.6% 0.032 17.717);
+  --color-green-50: oklch(24% 0.045 152.934);
+  --color-green-100: oklch(28% 0.059 152.934);
+  --color-green-200: oklch(36% 0.095 152.535);
+  --color-green-300: oklch(52.7% 0.154 150.069);
+  --color-green-400: oklch(72.3% 0.219 149.579);
+  --color-green-500: oklch(79.2% 0.209 151.711);
+  --color-green-600: oklch(79.2% 0.209 151.711);
+  --color-green-700: oklch(87.1% 0.15 154.449);
+  --color-green-800: oklch(92.5% 0.084 155.995);
+  --color-green-900: oklch(92.5% 0.084 155.995);
+  --color-green-950: oklch(96.2% 0.044 156.743);
+  --color-amber-50: oklch(24% 0.054 45.635);
+  --color-amber-100: oklch(28% 0.069 45.635);
+  --color-amber-200: oklch(36% 0.112 45.904);
+  --color-amber-300: oklch(55.5% 0.163 48.998);
+  --color-amber-400: oklch(76.9% 0.188 70.08);
+  --color-amber-500: oklch(82.8% 0.189 84.429);
+  --color-amber-600: oklch(82.8% 0.189 84.429);
+  --color-amber-700: oklch(87.9% 0.169 91.605);
+  --color-amber-800: oklch(92.4% 0.12 95.746);
+  --color-amber-900: oklch(92.4% 0.12 95.746);
+  --color-amber-950: oklch(96.2% 0.059 95.617);
+  --color-blue-50: oklch(24% 0.064 267.935);
+  --color-blue-100: oklch(28% 0.082 267.935);
+  --color-blue-200: oklch(36% 0.146 265.522);
+  --color-blue-300: oklch(48.8% 0.243 264.376);
+  --color-blue-400: oklch(62.3% 0.214 259.815);
+  --color-blue-500: oklch(70.7% 0.165 254.624);
+  --color-blue-600: oklch(70.7% 0.165 254.624);
+  --color-blue-700: oklch(80.9% 0.105 251.813);
+  --color-blue-800: oklch(88.2% 0.059 254.128);
+  --color-blue-900: oklch(88.2% 0.059 254.128);
+  --color-blue-950: oklch(93.2% 0.032 255.585);
 }
 
 @theme inline {
@@ -89,8 +160,8 @@ input[type="radio"] {
   flex-shrink: 0;
   width: 1.15rem;
   height: 1.15rem;
-  border: 1.5px solid #94a3b8;
-  background: #fff;
+  border: 1.5px solid var(--color-slate-400, #94a3b8);
+  background: var(--color-white, #fff);
   cursor: pointer;
   transition: background-color 120ms ease, border-color 120ms ease;
 }
@@ -107,7 +178,7 @@ input[type="checkbox"]:checked::after {
   content: "";
   width: 0.3rem;
   height: 0.6rem;
-  border: solid #fff;
+  border: solid var(--background);
   border-width: 0 2px 2px 0;
   transform: translateY(-1px) rotate(45deg);
 }
@@ -116,7 +187,7 @@ input[type="radio"]:checked::after {
   width: 0.45rem;
   height: 0.45rem;
   border-radius: 9999px;
-  background: #fff;
+  background: var(--background);
 }
 input[type="checkbox"]:focus-visible,
 input[type="radio"]:focus-visible {

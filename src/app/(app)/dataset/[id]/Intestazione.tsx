@@ -24,8 +24,8 @@ export async function Intestazione({ id, nome, nomeOriginale, foglio, createdAt,
       aria-current={attiva === valore ? "page" : undefined}
       className={`border-b-2 px-1 pb-2 text-sm font-medium ${
         attiva === valore
-          ? "border-foreground text-foreground dark:text-blue-300"
-          : "border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200"
+          ? "border-foreground text-foreground"
+          : "border-transparent text-slate-500 hover:text-slate-800"
       }`}
     >
       {etichetta}
@@ -43,7 +43,7 @@ export async function Intestazione({ id, nome, nomeOriginale, foglio, createdAt,
           {t("info", { data: f.dataOra(createdAt), righe: f.numero(righe), colonne })}
         </p>
       </div>
-      <nav className="flex gap-6 border-b border-slate-200 dark:border-slate-800">
+      <nav className="flex gap-6 border-b border-slate-200">
         {scheda("dati", `/dataset/${id}${query}`, t("schedaDati"))}
         {scheda("statistiche", `/dataset/${id}/statistiche${query}`, t("schedaStatistiche"))}
         {scheda("grafici", `/dataset/${id}/grafici${query}`, t("schedaGrafici"))}

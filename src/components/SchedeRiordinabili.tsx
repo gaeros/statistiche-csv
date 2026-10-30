@@ -238,7 +238,7 @@ export function SchedeRiordinabili({
         onClose={() => setAperta(null)}
         onClick={(e) => e.target === e.currentTarget && chiudi()}
         aria-label={aperta ? perChiave.get(aperta)?.nome : undefined}
-        className="m-auto w-[min(64rem,calc(100vw-2rem))] max-w-none overflow-visible bg-transparent p-0 backdrop:bg-slate-950/50"
+        className="m-auto w-[min(64rem,calc(100vw-2rem))] max-w-none overflow-visible bg-transparent p-0 backdrop:bg-black/55"
       >
         {aperta && perChiave.has(aperta) && (
           <div className="relative max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-3xl text-lg [--scala-grafici:1.6]">

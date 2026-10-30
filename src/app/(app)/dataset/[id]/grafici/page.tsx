@@ -131,7 +131,7 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
                   <h3 className="font-semibold">
                     {g.titolo}
                     {fissati.has(g.id) && (
-                      <span className="ml-2 rounded-full bg-slate-100 px-2 py-0.5 align-middle text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                      <span className="ml-2 rounded-full bg-slate-100 px-2 py-0.5 align-middle text-xs font-medium text-slate-600">
                         {t("inDashboard")}
                       </span>
                     )}
@@ -254,7 +254,7 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
           <p className="text-sm text-red-600">{anteprima.error.message}</p>
         ) : (
           anteprima.data && (
-            <div className="space-y-4 border-t border-slate-200 pt-4 dark:border-slate-800">
+            <div className="space-y-4 border-t border-slate-200 pt-4">
               <h3 className="font-semibold">{titolo}</h3>
               <GraficoLibero titolo={titolo} preparato={prepara(config, anteprima.data, colonne, f, tg)} sottotitolo={sottotitolo} />
               <form action={salvaGrafico.bind(null, id)} className="flex flex-wrap items-end gap-3">

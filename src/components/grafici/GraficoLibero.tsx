@@ -6,7 +6,7 @@ import type { ECharts } from "echarts/core";
 import { LINGUA_BASE, LOCALE_INTL, èLingua, type Traduttore } from "@/i18n/lingue";
 import { csvPreparato, type Preparato } from "@/lib/grafici";
 import { pdfDaJpeg } from "@/lib/pdf";
-import { Grafico } from "./Grafico";
+import { Grafico, svgChiaro } from "./Grafico";
 import { colori, FONT_GRAFICI, stileAssi, stileTooltip, type Colori } from "./tema";
 
 function scarica(nome: string, url: string) {
@@ -134,11 +134,12 @@ function righe(ctx: CanvasRenderingContext2D, testo: string, larghezza: number):
   return riga ? [...out, riga] : out;
 }
 
-// Il grafico è in SVG: lo si ridisegna su una tela, con sfondo bianco, titolo e sottotitolo
-// (dataset e filtri attivi) sopra e una riga con app e data sotto. Serve sia al PNG sia al PDF.
-async function disegnaTela(g: ECharts, titolo: string, sottotitolo: string | undefined, piede: string) {
+// Il grafico è in SVG (sempre nei colori chiari, vedi svgChiaro): lo si ridisegna su una tela, con
+// sfondo bianco, titolo e sottotitolo (dataset e filtri attivi) sopra e una riga con app e data sotto.
+// Serve sia al PNG sia al PDF.
+async function disegnaTela(svg: string, titolo: string, sottotitolo: string | undefined, piede: string) {
   const img = new Image();
-  img.src = g.getDataURL({ type: "svg" });
+  img.src = svg;
   await img.decode();
   const scala = 2;
   const lato = 16;
@@ -194,11 +195,14 @@ export function GraficoLibero({
     (preparato.forma === "istogramma" && preparato.valori.length === 0) ||
     (preparato.forma === "box" && preparato.scatole.length === 0);
 
-  const tela = () => {
+  const opzioniGrafico = (c: Colori) => opzioni(preparato, c, t);
+
+  const tela = async () => {
     const g = grafico.current;
     if (!g) return null;
-    const quando = new Intl.DateTimeFormat(LOCALE_INTL[èLingua(lingua) ? lingua : LINGUA_BASE], { dateStyle: "long", timeStyle: "short" }).format(new Date());
-    return disegnaTela(g, titolo, sottotitolo, t("piede", { quando }));
+    const locale = LOCALE_INTL[èLingua(lingua) ? lingua : LINGUA_BASE];
+    const quando = new Intl.DateTimeFormat(locale, { dateStyle: "long", timeStyle: "short" }).format(new Date());
+    return disegnaTela(await svgChiaro(g, opzioniGrafico, locale), titolo, sottotitolo, t("piede", { quando }));
   };
 
   async function esportaPng() {
@@ -227,7 +231,7 @@ export function GraficoLibero({
 
   return (
     <div className="space-y-2">
-      <Grafico descrizione={titolo} altezza={altezza} riferimento={riferimento} opzioni={(c) => opzioni(preparato, c, t)} />
+      <Grafico descrizione={titolo} altezza={altezza} riferimento={riferimento} opzioni={opzioniGrafico} />
       <div className="flex flex-wrap justify-end gap-3 text-sm">
         <button type="button" onClick={esportaPng} className="link">{t("scaricaPng")}</button>
         <button type="button" onClick={esportaPdf} className="link">{t("scaricaPdf")}</button>

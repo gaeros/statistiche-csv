@@ -52,7 +52,7 @@ export default async function PaginaCondivisioni({ searchParams }: PageProps<"/c
     <div className="max-w-4xl space-y-8">
       <div className="space-y-1">
         <h1 className="text-3xl font-semibold tracking-normal">{t("titolo")}</h1>
-        <p className="text-slate-600 dark:text-slate-400">{t("intro")}</p>
+        <p className="text-slate-600">{t("intro")}</p>
       </div>
 
       <section className="scheda space-y-4">
@@ -102,7 +102,7 @@ export default async function PaginaCondivisioni({ searchParams }: PageProps<"/c
               >
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
                   <h3 className="font-semibold break-all">{cosa}</h3>
-                  <span className={`text-sm ${finito ? "text-red-600 dark:text-red-400" : "text-slate-500"}`}>
+                  <span className={`text-sm ${finito ? "text-red-600" : "text-slate-500"}`}>
                     {finito
                       ? t("scadutoIl", { data: f.dataOra(l.scade_il!) })
                       : l.scade_il
@@ -110,7 +110,7 @@ export default async function PaginaCondivisioni({ searchParams }: PageProps<"/c
                         : t("nonScade")}
                   </span>
                 </div>
-                {l.id === nuovo && <p role="status" className="text-sm text-green-700 dark:text-green-400">{t("creato")}</p>}
+                {l.id === nuovo && <p role="status" className="text-sm text-green-700">{t("creato")}</p>}
                 {!finito && <CopiaLink percorso={percorsoCondiviso(l.token)} etichetta={t("indirizzo", { cosa })} />}
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-500">
                   <span>{t("creatoIl", { data: f.dataOra(l.created_at) })}</span>
@@ -125,7 +125,7 @@ export default async function PaginaCondivisioni({ searchParams }: PageProps<"/c
                     </Link>
                   )}
                   <form action={revocaLink.bind(null, l.id)}>
-                    <button type="submit" className="text-red-600 hover:underline dark:text-red-400">
+                    <button type="submit" className="text-red-600 hover:underline">
                       {finito ? t("elimina") : t("revoca")}
                     </button>
                   </form>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { esci } from "@/app/accedi/actions";
 import { SelettoreLingua } from "@/components/SelettoreLingua";
+import { SelettoreTema } from "@/components/SelettoreTema";
 import { VERSIONE_INFORMATIVA } from "@/lib/privacy";
 import { utenteCorrente } from "@/lib/utente";
 
@@ -14,7 +15,7 @@ export default async function LayoutApp({ children }: LayoutProps<"/">) {
 
   return (
     <>
-      <header className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+      <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3">
           <Link href="/dataset">
             <Logo className="h-11 w-auto" />
@@ -28,11 +29,12 @@ export default async function LayoutApp({ children }: LayoutProps<"/">) {
               <Link href="/admin/inviti" className="link">{t("inviti")}</Link>
             )}
           </nav>
-          <div className="ml-auto flex items-center gap-3 text-sm">
+          <div className="ml-auto flex flex-wrap items-center justify-end gap-2 text-sm sm:gap-3">
             <Link href="/account" className="text-slate-500 hover:underline" title={t("account")}>
               <span className="hidden sm:inline">{utente.email}</span>
               <span className="sm:hidden">{t("accountBreve")}</span>
             </Link>
+            <SelettoreTema />
             <SelettoreLingua />
             <form action={esci}>
               <button type="submit" className="bottone-secondario px-3 py-1 text-sm">{t("esci")}</button>

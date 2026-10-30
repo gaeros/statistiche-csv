@@ -25,7 +25,7 @@ export function ConfermaElimina({
   conferma,
   azione,
   errore,
-  classeApri = "text-red-600 hover:underline dark:text-red-400",
+  classeApri = "text-red-600 hover:underline",
   children,
 }: {
   etichetta: string;
@@ -54,11 +54,11 @@ export function ConfermaElimina({
         onClick={(e) => e.target === e.currentTarget && finestra.current?.close()}
         aria-labelledby={`${id}-titolo`}
         aria-describedby={`${id}-avviso`}
-        className="m-auto w-[min(28rem,calc(100vw-2rem))] rounded-3xl bg-white p-6 text-left text-base font-normal text-foreground backdrop:bg-slate-950/50 dark:bg-slate-900"
+        className="m-auto w-[min(28rem,calc(100vw-2rem))] rounded-3xl bg-white p-6 text-left text-base font-normal text-foreground backdrop:bg-black/55"
       >
         <form action={azione} className="space-y-4">
           {children}
-          <h2 id={`${id}-titolo`} className="text-lg font-semibold text-red-700 dark:text-red-400">{titolo}</h2>
+          <h2 id={`${id}-titolo`} className="text-lg font-semibold text-red-700">{titolo}</h2>
           <p id={`${id}-avviso`} className="text-sm">{avviso}</p>
           <Messaggio tipo="errore" testo={errore} />
           <label className="block space-y-1 text-sm">

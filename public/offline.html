@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Datahue – offline</title>
+<style>
+  :root { color-scheme: light dark; --sfondo: #ffffff; --testo: #09090b; --tenue: #475569; --bordo: #cbd5e1; }
+  @media (prefers-color-scheme: dark) { :root { --sfondo: #0f0f12; --testo: #f4f4f5; --tenue: #a3a7b1; --bordo: #3d4049; } }
+  body { margin: 0; min-height: 100svh; display: grid; place-items: center; padding: 24px; box-sizing: border-box;
+    background: var(--sfondo); color: var(--testo); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; text-align: center; }
+  main { max-width: 22rem; }
+  img { width: 72px; height: 72px; }
+  h1 { font-size: 1.5rem; margin: 16px 0 8px; }
+  p { color: var(--tenue); line-height: 1.5; margin: 0 0 8px; }
+  button { margin-top: 16px; font: inherit; font-weight: 600; padding: 10px 22px; border-radius: 9999px; border: 0;
+    background: var(--testo); color: var(--sfondo); cursor: pointer; }
+</style>
+</head>
+<body>
+<main>
+  <img src="/icone/icona-192.png" alt="">
+  <h1>Sei offline</h1>
+  <p>Datahue ha bisogno di internet per mostrare i tuoi dati. Controlla la connessione e riprova.</p>
+  <p lang="en">You are offline. Datahue needs an internet connection to show your data.</p>
+  <button type="button" onclick="location.reload()">Riprova / Retry</button>
+</main>
+</body>
+</html>

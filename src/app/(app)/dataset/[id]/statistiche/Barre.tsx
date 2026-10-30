@@ -11,10 +11,10 @@ export function Barre({
     <ul className="space-y-1 text-sm">
       {righe.map((r, i) => (
         <li key={`${r.etichetta}-${i}`} className="grid grid-cols-[minmax(5rem,10rem)_1fr_auto] items-center gap-2">
-          <span className="truncate text-slate-600 dark:text-slate-300" title={r.etichetta}>
+          <span className="truncate text-slate-600" title={r.etichetta}>
             {r.etichetta}
           </span>
-          <span className="h-3 rounded-sm bg-slate-100 dark:bg-slate-800">
+          <span className="h-3 rounded-sm bg-slate-100">
             {r.valore !== null && massimo > 0 && (
               <span
                 className="block h-full rounded-sm bg-slate-800"
