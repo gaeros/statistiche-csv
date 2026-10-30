@@ -197,6 +197,12 @@ export async function BarraFiltri({
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <button type="submit" className="bottone">{t("applica")}</button>
+            {/* Applica i filtri e porta subito al campo per salvarli con un nome (FiltriSalvati). */}
+            {salvati && (
+              <button type="submit" formAction="#salva-filtri" className="bottone-secondario">
+                {t("applicaESalva")}
+              </button>
+            )}
             {attivi && (
               <Link href={conParametri(senzaFiltri(sp), { pagina: null })} className="link text-sm">
                 {t("azzera")}

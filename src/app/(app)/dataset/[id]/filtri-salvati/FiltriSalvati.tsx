@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useEffect, useRef } from "react";
 import { ConfermaElimina } from "@/components/ConfermaElimina";
 import { Messaggio } from "@/components/Messaggio";
 import { MAX_NOME } from "@/lib/filtri-salvati";
@@ -62,7 +62,13 @@ export function FiltriSalvati({
   const t = useTranslations("filtriSalvati");
   const [stato, azione, inCorso] = useActionState(salvaFiltri.bind(null, id), undefined);
   const giaSalvato = salvati.find((s) => s.attivo);
-  if (!attivi && salvati.length === 0) return null;
+  const campo = useRef<HTMLInputElement>(null);
+  // Arrivando da «Applica e salva…» il cursore è già nel campo del nome.
+  useEffect(() => {
+    if (window.location.hash === "#salva-filtri") campo.current?.focus();
+  }, []);
+
+  if (!attivi && salvati.length === 0) return <p className="text-sm text-slate-500">{t("suggerimento")}</p>;
 
   return (
     <div className="space-y-2 text-sm">
@@ -88,19 +94,16 @@ export function FiltriSalvati({
 
       <div className="flex flex-col gap-2">
         {attivi && !giaSalvato && (
-          <details className="group">
-            <summary className="link w-fit cursor-pointer list-none">{t("salvaQuesti")}</summary>
-            <form action={azione} className="mt-2 flex max-w-xl flex-col gap-2 sm:flex-row sm:items-end">
-              <input type="hidden" name="query" value={query} />
-              <label className="block min-w-0 flex-1 space-y-1">
-                <span className="text-xs text-slate-500">{t("nome")}</span>
-                <input name="nome" maxLength={MAX_NOME} required placeholder={t("esempio")} className="campo py-1.5 text-sm" />
-              </label>
-              <button type="submit" disabled={inCorso} className="bottone shrink-0 px-3 py-1.5">
-                {t("salva")}
-              </button>
-            </form>
-          </details>
+          <form id="salva-filtri" action={azione} className="flex max-w-xl scroll-mt-24 flex-col gap-2 sm:flex-row sm:items-end">
+            <input type="hidden" name="query" value={query} />
+            <label className="block min-w-0 flex-1 space-y-1">
+              <span className="font-medium">{t("salvaQuesti")}</span>
+              <input ref={campo} name="nome" maxLength={MAX_NOME} required placeholder={t("esempio")} className="campo py-1.5 text-sm" />
+            </label>
+            <button type="submit" disabled={inCorso} className="bottone shrink-0 px-3 py-1.5">
+              {t("salva")}
+            </button>
+          </form>
         )}
         <Messaggio tipo="errore" testo={stato?.errore} />
         <Messaggio tipo="ok" testo={stato?.ok} />
