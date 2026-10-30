@@ -23,6 +23,7 @@ import { Intestazione } from "../Intestazione";
 import { ConfermaElimina } from "@/components/ConfermaElimina";
 import { eliminaGrafico, fissaInDashboard, salvaGrafico } from "./actions";
 import { formatiUtente } from "@/lib/utente";
+import { titoloDataset } from "../titolo";
 
 const SERIE = ["barre", "barre_impilate", "linee", "area"];
 
@@ -46,6 +47,10 @@ function Opzioni({ elenco, vuota }: { elenco: { valore: string; etichetta: strin
       ))}
     </>
   );
+}
+
+export async function generateMetadata({ params }: PageProps<"/dataset/[id]/grafici">) {
+  return titoloDataset((await params).id, "grafici");
 }
 
 export default async function PaginaGrafici({ params, searchParams }: PageProps<"/dataset/[id]/grafici">) {

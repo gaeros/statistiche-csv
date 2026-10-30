@@ -22,6 +22,10 @@ type GraficoSalvato = {
 // nell'ordine scelto da lui (trascinamento, tastiera, lente come in «Colonna per colonna»).
 // I grafici si calcolano su tutte le righe: i filtri valgono solo nella pagina del dataset.
 // In alto una ricerca compatta (solo i nomi) apre i grafici di un dataset: lo spazio resta ai grafici.
+export async function generateMetadata() {
+  return { title: `${(await getTranslations("dashboard"))("titolo")} – Datahue` };
+}
+
 export default async function PaginaDashboard() {
   const t = await getTranslations("dashboard");
   const tg = await getTranslations("grafici");

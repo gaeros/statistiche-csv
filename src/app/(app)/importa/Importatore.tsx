@@ -275,7 +275,7 @@ export function Importatore() {
                           }
                         />
                         {s.anteprima.foglio}
-                        {s.anteprima.colonne.length === 0 && <span className="text-slate-400">{t("foglioVuoto")}</span>}
+                        {s.anteprima.colonne.length === 0 && <span className="text-slate-500">{t("foglioVuoto")}</span>}
                       </label>
                     ))}
                   </div>

@@ -9,10 +9,15 @@ import { filtriDataset } from "./filtri-dataset";
 import { Intestazione } from "./Intestazione";
 import { TabellaDati } from "./TabellaDati";
 import { formatiUtente } from "@/lib/utente";
+import { titoloDataset } from "./titolo";
 
 const PER_PAGINA = 50;
 
 type Colonna = { nome: string; originale: string; tipo: string };
+
+export async function generateMetadata({ params }: PageProps<"/dataset/[id]">) {
+  return titoloDataset((await params).id, "dati");
+}
 
 export default async function PaginaDettaglio({ params, searchParams }: PageProps<"/dataset/[id]">) {
   const { id } = await params;
@@ -98,7 +103,7 @@ export default async function PaginaDettaglio({ params, searchParams }: PageProp
         hrefOrdina={(c, dir) => link({ ordina: c, dir, pagina: 1 })}
       />
 
-      <nav className="flex flex-wrap items-center justify-between gap-3 text-sm">
+      <nav aria-label={t("navigazionePagine")} className="flex flex-wrap items-center justify-between gap-3 text-sm">
         <span className="text-slate-500">
           {etichette.length > 0 && t("conFiltri", { n: f.numero(totale) })}{t("pagina", { pagina, pagine })}
         </span>

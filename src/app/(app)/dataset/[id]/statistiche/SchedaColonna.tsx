@@ -51,6 +51,7 @@ export async function SchedaColonna({
   conteggioPeriodi?: React.ReactNode;
 }) {
   const t = await getTranslations("colonna");
+  const tc = await getTranslations("chart");
   const f = await formatiUtente();
   const numerica = NUMERICI.includes(c.tipo);
   const data = DATE.includes(c.tipo);
@@ -89,6 +90,7 @@ export async function SchedaColonna({
               <Colonne
                 descrizione={t("descDistribuzione", { colonna: c.originale })}
                 nomeValore={t("righe")}
+                nomeEtichette={tc("colFascia")}
                 etichette={c.istogramma.map((b) =>
                   c.tipo === "intero" && b.da === b.a
                     ? f.statistica(b.da)
@@ -116,6 +118,7 @@ export async function SchedaColonna({
               orizzontale
               descrizione={t("descFrequenti", { colonna: c.originale })}
               nomeValore={t("righe")}
+              nomeEtichette={tc("colValore")}
               etichette={[...frequenti.map((f) => etichetta(f.valore)), ...(altri > 0 ? [t("altriValori")] : [])]}
               valori={[...frequenti.map((f) => f.conteggio), ...(altri > 0 ? [altri] : [])]}
             />

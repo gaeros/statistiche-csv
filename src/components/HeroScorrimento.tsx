@@ -111,17 +111,33 @@ function Torta({ attivo }: { attivo: boolean }) {
   );
 }
 
-export function HeroScorrimento({ a, b, descrizione, scorri }: { a: string; b: string; descrizione: string; scorri: string }) {
+export function HeroScorrimento({
+  a,
+  b,
+  descrizione,
+  scorri,
+  ferma,
+  riprendi,
+}: {
+  a: string;
+  b: string;
+  descrizione: string;
+  scorri: string;
+  ferma: string;
+  riprendi: string;
+}) {
   const contenitore = useRef<HTMLDivElement>(null);
   const fisso = useRef<HTMLDivElement>(null);
   const [p, setP] = useState(0);
   const ridotto = useSyncExternalStore(osservaRiduciMovimento, () => window.matchMedia(RIDUCI).matches, () => false);
   const [numeri, setNumeri] = useState<Numero[]>([]);
+  // Pulsante «Ferma animazione» (WCAG 2.2.2): ferma il movimento e il cambio dei numeri.
+  const [fermo, setFermo] = useState(false);
 
   useEffect(() => {
     // I numeri sono casuali: si creano solo nel browser, dopo il primo disegno, per non sfasare il rendering del server.
     const avvio = setTimeout(() => setNumeri(creaNumeri(window.innerWidth < 640 ? 18 : 30)), 0);
-    const cambia = ridotto
+    const cambia = ridotto || fermo
       ? undefined
       : setInterval(() => {
           setNumeri((v) => v.map((n) => (Math.random() < 0.12 ? { ...n, testo: testoCasuale() } : n)));
@@ -130,7 +146,7 @@ export function HeroScorrimento({ a, b, descrizione, scorri }: { a: string; b: s
       clearTimeout(avvio);
       if (cambia) clearInterval(cambia);
     };
-  }, [ridotto]);
+  }, [ridotto, fermo]);
 
   useEffect(() => {
     if (ridotto) return;
@@ -159,7 +175,7 @@ export function HeroScorrimento({ a, b, descrizione, scorri }: { a: string; b: s
       <div className="mx-auto max-w-5xl space-y-6 px-4 py-16 text-center">
         <h1 className={titolo}>
           <span className="sr-only">{descrizione}</span>
-          <span aria-hidden className="block text-slate-400">{a}</span>
+          <span aria-hidden className="block text-slate-500">{a}</span>
           <span aria-hidden className="block text-foreground">{b}</span>
         </h1>
         <div aria-hidden className="flex flex-wrap items-end justify-center gap-10 pt-6">
@@ -180,8 +196,18 @@ export function HeroScorrimento({ a, b, descrizione, scorri }: { a: string; b: s
 
   return (
     <div ref={contenitore} className="relative" style={{ height: "340svh" }}>
-      <div ref={fisso} className="sticky overflow-hidden" style={{ top: SCARTO_INTESTAZIONE, height: `calc(100svh - ${SCARTO_INTESTAZIONE}px)` }}>
+      <div ref={fisso} className={`sticky overflow-hidden ${fermo ? "animazioni-ferme" : ""}`} style={{ top: SCARTO_INTESTAZIONE, height: `calc(100svh - ${SCARTO_INTESTAZIONE}px)` }}>
         <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col items-center justify-center px-4 text-center">
+          <button
+            type="button"
+            onClick={() => setFermo((v) => !v)}
+            className="bottone-bordo absolute right-4 top-3 z-20 h-9 px-3 py-0 text-xs"
+          >
+            <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="currentColor" aria-hidden="true">
+              {fermo ? <path d="M8 5v14l11-7z" /> : <path d="M7 5h4v14H7zM13 5h4v14h-4z" />}
+            </svg>
+            {fermo ? riprendi : ferma}
+          </button>
           <div className="relative w-full px-2 py-10 sm:py-14">
             <div aria-hidden className="absolute inset-0 z-0 overflow-hidden">
               <div className="absolute inset-0" style={{ opacity: opNumeri }}>
@@ -193,7 +219,7 @@ export function HeroScorrimento({ a, b, descrizione, scorri }: { a: string; b: s
                       left: `${n.x}%`,
                       top: `${n.y}%`,
                       fontSize: n.dim,
-                      color: n.scuro ? "var(--foreground)" : "var(--color-slate-400, #94a3b8)",
+                      color: n.scuro ? "var(--foreground)" : "var(--color-slate-500, #62748e)",
                       animationDuration: `${n.dur}s`,
                       animationDelay: `${n.ritardo}s`,
                       ["--dx" as string]: `${n.dx}px`,
@@ -217,7 +243,7 @@ export function HeroScorrimento({ a, b, descrizione, scorri }: { a: string; b: s
 
             <h1 className={`relative z-10 grid ${titolo}`}>
               <span className="sr-only">{descrizione}</span>
-              <span aria-hidden className="col-start-1 row-start-1 text-slate-400" style={{ opacity: opA }}>{a}</span>
+              <span aria-hidden className="col-start-1 row-start-1 text-slate-500" style={{ opacity: opA }}>{a}</span>
               <span
                 aria-hidden
                 className="col-start-1 row-start-1 text-foreground"
@@ -229,7 +255,7 @@ export function HeroScorrimento({ a, b, descrizione, scorri }: { a: string; b: s
           </div>
         </div>
 
-        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-4 z-10 text-center text-sm font-medium text-slate-400" style={{ opacity: opSuggerimento }}>
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-4 z-10 text-center text-sm font-medium text-slate-500" style={{ opacity: opSuggerimento }}>
           <span className="anim-suggerimento inline-block">{scorri} ↓</span>
         </div>
       </div>

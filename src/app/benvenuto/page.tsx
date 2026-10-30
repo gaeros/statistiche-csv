@@ -49,19 +49,29 @@ export default async function PaginaBenvenuto() {
 
   return (
     <div className="flex flex-1 flex-col bg-white">
-      <div className="sticky top-0 z-10 border-b border-slate-100 bg-white/90 backdrop-blur">
+      <header className="sticky top-0 z-10 border-b border-slate-100 bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
           <Link href="/benvenuto" className="text-foreground"><Logo className="h-11 w-auto sm:h-14" /></Link>
-          <div className="flex items-center gap-3">
-            <SelettoreTema className="hidden sm:inline-flex" />
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Sul telefono il tema non ci sta nella barra (si sceglie dopo l'accesso): niente scorrimento di lato */}
+            <span className="hidden sm:contents"><SelettoreTema /></span>
             <SelettoreLingua nero />
             <Link href={collegato ? "/dataset" : "/accedi"} className="bottone-nero">
               {collegato ? t("vaiDati") : t("accedi")}
             </Link>
           </div>
         </div>
-      </div>
-      <HeroScorrimento a={t("titoloA")} b={t("titoloB")} descrizione={t("titoloAnimazione")} scorri={t("scorri")} />
+      </header>
+      <section aria-label={t("titoloAnimazione")}>
+      <HeroScorrimento
+        a={t("titoloA")}
+        b={t("titoloB")}
+        descrizione={t("titoloAnimazione")}
+        scorri={t("scorri")}
+        ferma={t("fermaAnimazione")}
+        riprendi={t("riprendiAnimazione")}
+      />
+      </section>
     <main className="mx-auto w-full max-w-5xl flex-1 space-y-16 px-4 pb-16 pt-4 [&_.scheda]:rounded-3xl [&_.scheda]:border-slate-200 [&_.scheda]:shadow-none">
       <header className="space-y-8 text-center">
         <p className="mx-auto max-w-2xl text-lg text-slate-600 sm:text-2xl">
@@ -87,7 +97,7 @@ export default async function PaginaBenvenuto() {
         <ol className="grid gap-4 sm:grid-cols-3">
           {PASSI.map((p, i) => (
             <li key={p} className="scheda space-y-1">
-              <span className="text-sm font-semibold text-slate-400">{t("passo", { n: i + 1 })}</span>
+              <span className="text-sm font-semibold text-slate-500">{t("passo", { n: i + 1 })}</span>
               <h3 className="font-semibold">{t(`${p}T`)}</h3>
               <p className="text-sm text-slate-600">{t(p)}</p>
             </li>

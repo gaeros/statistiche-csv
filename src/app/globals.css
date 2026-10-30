@@ -138,6 +138,8 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .anim-deriva, .anim-respira, .anim-ruota, .anim-fetta, .anim-suggerimento { animation: none; }
 }
+/* Pulsante «Ferma animazione» del benvenuto */
+.animazioni-ferme :is(.anim-deriva, .anim-respira, .anim-ruota, .anim-fetta, .anim-suggerimento) { animation-play-state: paused; }
 
 /* Pulsanti a pillola, bianco e nero (pagina di benvenuto) */
 @layer components {

@@ -6,6 +6,10 @@ import { leggiPreferenze } from "@/lib/preferenze";
 import { FormElimina } from "./FormElimina";
 import { FormFormati } from "./FormFormati";
 
+export async function generateMetadata() {
+  return { title: `${(await getTranslations("account"))("titolo")} – Datahue` };
+}
+
 export default async function PaginaAccount() {
   const t = await getTranslations("account");
   const f = await formatiUtente();

@@ -7,7 +7,8 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Tutto tranne file statici e immagini, e i file dell'app installabile (devono aprirsi anche senza login).
-    "/((?!_next/static|_next/image|favicon.ico|sw\\.js|manifest\\.webmanifest|offline\\.html|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    // Tutto tranne file statici e immagini, i file dell'app installabile (devono aprirsi anche senza login)
+    // e i font dei PDF (servono anche nella pagina condivisa, senza login).
+    "/((?!_next/static|_next/image|favicon.ico|sw\\.js|manifest\\.webmanifest|offline\\.html|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ttf)$).*)",
   ],
 };

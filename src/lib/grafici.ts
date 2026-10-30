@@ -208,26 +208,31 @@ export function prepara(c: Configurazione, r: Risultato, colonne: Colonna[], f: 
 }
 
 // Dati del grafico in CSV: separatore ";" e virgola decimale (Excel in italiano) oppure "," e punto decimale
-export function csvPreparato(p: Preparato, t: Traduttore, virgola = true): string {
-  const n = (x: number | string | null | undefined) => cellaNumero(x, virgola);
-  const q = cellaTesto;
-  let righe: string[][];
+// Dati di un grafico come tabella (intestazione + righe): per il CSV scaricato e per la tabella
+// «Mostra i dati» sotto il grafico, l'alternativa testuale per chi non vede il disegno (WCAG 1.1.1).
+// Le etichette sono testo, i valori numeri.
+export type TabellaGrafico = { intestazione: string[]; righe: (string | number | null)[][] };
+
+export function tabellaPreparato(p: Preparato, t: Traduttore): TabellaGrafico {
   switch (p.forma) {
     case "serie":
-      righe = [[q(p.asseX), ...p.serie.map((s) => q(s.nome))], ...p.categorie.map((c, i) => [q(c), ...p.serie.map((s) => n(s.valori[i]))])];
-      break;
+      return { intestazione: [p.asseX, ...p.serie.map((s) => s.nome)], righe: p.categorie.map((c, i) => [c, ...p.serie.map((s) => s.valori[i])]) };
     case "torta":
-      righe = [[t("csvValore"), q(p.asseY)], ...p.fette.map((f) => [q(f.nome), n(f.valore)])];
-      break;
+      return { intestazione: [t("csvValore"), p.asseY], righe: p.fette.map((f) => [f.nome, f.valore]) };
     case "dispersione":
-      righe = [[q(p.asseX), q(p.asseY)], ...p.punti.map(([a, b]) => [n(a), n(b)])];
-      break;
+      return { intestazione: [p.asseX, p.asseY], righe: p.punti.map(([a, b]) => [a, b]) };
     case "istogramma":
-      righe = [[t("csvFascia"), t("righe")], ...p.categorie.map((c, i) => [q(c), n(p.valori[i])])];
-      break;
+      return { intestazione: [t("csvFascia"), t("righe")], righe: p.categorie.map((c, i) => [c, p.valori[i]]) };
     case "box":
-      righe = [[t("csvGruppo"), t("agg_minimo"), t("csvQ1"), t("agg_mediana"), t("csvQ3"), t("agg_massimo")], ...p.categorie.map((c, i) => [q(c), ...p.scatole[i].map(n)])];
-      break;
+      return {
+        intestazione: [t("csvGruppo"), t("agg_minimo"), t("csvQ1"), t("agg_mediana"), t("csvQ3"), t("agg_massimo")],
+        righe: p.categorie.map((c, i) => [c, ...p.scatole[i]]),
+      };
   }
-  return BOM + righe.map((r) => riga(r, virgola)).join("");
+}
+
+export function csvPreparato(p: Preparato, t: Traduttore, virgola = true): string {
+  const { intestazione, righe } = tabellaPreparato(p, t);
+  const cella = (x: string | number | null) => (typeof x === "string" ? cellaTesto(x) : cellaNumero(x, virgola));
+  return BOM + [intestazione.map(cellaTesto), ...righe.map((r) => r.map(cella))].map((r) => riga(r, virgola)).join("");
 }

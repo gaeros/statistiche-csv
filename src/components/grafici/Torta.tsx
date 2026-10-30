@@ -1,10 +1,13 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+import { DatiGrafico } from "./DatiGrafico";
 import { Grafico } from "./Grafico";
 import { SERIE_CHIARO, stileTooltip } from "./tema";
 
 // Grafico a ciambella: per poche categorie (al massimo 8 fette, le altre vanno raccolte in "Altri").
 export function Torta({ fette, descrizione }: { fette: { nome: string; valore: number }[]; descrizione: string }) {
+  const t = useTranslations("chart");
   const totale = fette.reduce((s, f) => s + f.valore, 0);
   const percentuale = (v: number) => (totale ? Math.round((v / totale) * 100) : 0);
   // Con nomi lunghi la legenda diventa un elenco, una voce per riga.
@@ -58,6 +61,13 @@ export function Torta({ fette, descrizione }: { fette: { nome: string; valore: n
         ))}
       </ul>
     )}
+    <DatiGrafico
+      nome={descrizione}
+      tabella={() => ({
+        intestazione: [t("colCategoria"), t("colValore"), t("colPercentuale")],
+        righe: fette.map((f) => [f.nome, f.valore, percentuale(f.valore)]),
+      })}
+    />
     </div>
   );
 }

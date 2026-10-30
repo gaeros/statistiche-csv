@@ -2,6 +2,10 @@ import { getTranslations } from "next-intl/server";
 import { PaginaAuth } from "@/components/PaginaAuth";
 import { FormAccesso } from "./FormAccesso";
 
+export async function generateMetadata() {
+  return { title: `${(await getTranslations("accedi"))("titolo")} – Datahue` };
+}
+
 export default async function PaginaAccedi({ searchParams }: PageProps<"/accedi">) {
   const { errore, ok, eliminato } = await searchParams;
   const t = await getTranslations("accedi");

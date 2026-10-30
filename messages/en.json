@@ -55,7 +55,11 @@
     "vaiAccesso": "Go to sign in"
   },
   "meta": {
-    "descrizione": "Upload CSV and Excel files and see your data as charts."
+    "descrizione": "Upload CSV and Excel files and see your data as charts.",
+    "titoloDataset": "{nome} · {scheda} – Datahue",
+    "scheda_dati": "Data",
+    "scheda_statistiche": "Statistics",
+    "scheda_grafici": "Charts"
   },
   "cookieBanner": {
     "titolo": "We use cookies",
@@ -201,7 +205,9 @@
     "esci": "Sign out",
     "privacy": "Privacy notice",
     "nota": "The app shows your data and does not give medical advice.",
-    "condivisi": "Shared links"
+    "condivisi": "Shared links",
+    "vaiAlContenuto": "Skip to content",
+    "menuPrincipale": "Main menu"
   },
   "elenco": {
     "titolo": "My datasets",
@@ -214,7 +220,8 @@
     "importaPrimo": "Import your first file",
     "foglio": "sheet {nome}",
     "righeColonne": "{righe} rows · {colonne} columns",
-    "importatoIl": "Imported on {data}"
+    "importatoIl": "Imported on {data}",
+    "cercaEtichetta": "Search your datasets"
   },
   "dettaglio": {
     "tornaElenco": "← My datasets",
@@ -248,7 +255,9 @@
     "nomeLungo": "The name can be at most 100 characters long.",
     "nomeDuplicato": "You already have a dataset with this name.",
     "nomeAggiornato": "Name updated.",
-    "eliminazioneFallita": "Deletion failed: {dettaglio}"
+    "eliminazioneFallita": "Deletion failed: {dettaglio}",
+    "sezioni": "Dataset sections",
+    "navigazionePagine": "Table pages"
   },
   "barraFiltri": {
     "titolo": "Filter the data",
@@ -351,7 +360,17 @@
     "sottotitoloFiltri": "Dataset “{nome}” · filters: {filtri}",
     "sottotitoloTutte": "Dataset “{nome}” · all rows, no filters",
     "scaricaCsv": "Download data (CSV)",
-    "grafico": "chart"
+    "grafico": "chart",
+    "descrizione": "Chart “{titolo}”. The values are in the “Show data” table below.",
+    "mostraDati": "Show data",
+    "datiDi": "Data of the chart “{titolo}”",
+    "primeRighe": "Showing the first {n} rows of {totale}.",
+    "colPeriodo": "Period",
+    "colCategoria": "Category",
+    "colValore": "Value",
+    "colPercentuale": "%",
+    "colFascia": "Value range",
+    "altPdf": "Chart “{titolo}”. The values are in the table on the following pages."
   },
   "graficiPagina": {
     "dashboard": "Saved charts",
@@ -551,7 +570,8 @@
     "autorizzato": "{email} is authorised.",
     "eliminaTitolo": "Delete {email} completely?",
     "eliminaAvviso": "The account, datasets, charts and uploaded files will be erased. This cannot be undone.",
-    "eliminaConferma": "Delete permanently"
+    "eliminaConferma": "Delete permanently",
+    "azioni": "Actions"
   },
   "benvenuto": {
     "metaTitolo": "Welcome – Datahue",
@@ -598,7 +618,9 @@
     "cosa4": "Download charts as images (PNG) or PDF and filtered data as CSV or Excel.",
     "privacyT": "Your data stays yours",
     "privacy": "You only see your own files: no other user can read them. The data is stored in Europe and you can download it or delete everything whenever you want from your account page. The app shows numbers and gives no medical advice.",
-    "leggiInformativa": "Read the privacy notice"
+    "leggiInformativa": "Read the privacy notice",
+    "fermaAnimazione": "Pause animation",
+    "riprendiAnimazione": "Resume animation"
   },
   "guidaPagina": {
     "metaTitolo": "Guide – Datahue",
@@ -614,7 +636,7 @@
     "p4Titolo": "Read the statistics",
     "p4Testo": "The “Statistics” tab summarises the file: number of rows, period, averages, trend over time, a summary of each column, a comparison between groups (for example the average by time of day) and the columns that move together. In “Column by column” you can drag the cards into the order you like (the app remembers it; “Reset order” goes back to the file's order) and open one larger with the magnifying glass.",
     "p5Titolo": "Build charts",
-    "p5Testo": "In the “Charts” tab, choose the type (bars, lines, pie, scatter, histogram, box plot…), the columns and the calculation. The chart updates with every choice. “Save chart” keeps it for next time, among the dataset's “Saved charts”; under each chart you can download it as an image (PNG), as a PDF (one landscape A4 page, ready to print or share) or as data (CSV). The downloaded file follows the active filters and shows, under the title, the dataset name, the filters used and the date.",
+    "p5Testo": "In the “Charts” tab, choose the type (bars, lines, pie, scatter, histogram, box plot…), the columns and the calculation. The chart updates with every choice. “Save chart” keeps it for next time, among the dataset's “Saved charts”; under each chart you can download it as an image (PNG), as a PDF (landscape A4, ready to print or share: the chart on the first page and its values in a table on the following ones, readable with screen readers too) or as data (CSV). The downloaded file follows the active filters and shows, under the title, the dataset name, the filters used and the date.",
     "p6Titolo": "Build your dashboard",
     "p6Testo": "Under a saved chart, press “Pin to dashboard”: you'll find it in the “Dashboard” menu, together with the charts pinned from your other datasets. There you can drag them into the order you prefer (also from the keyboard, with the arrows on the handle), open one larger with the magnifier, or take it off with “Remove from dashboard”: the chart stays saved in its dataset. At the top, “Search a dataset…” suggests the names of your datasets and opens the charts of the one you pick. On the dashboard, charts use all the rows, with no filters; you can download them as PNG, PDF or CSV from there too.",
     "p7Titolo": "Share with a link",

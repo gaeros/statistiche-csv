@@ -43,7 +43,7 @@ export async function Intestazione({ id, nome, nomeOriginale, foglio, createdAt,
           {t("info", { data: f.dataOra(createdAt), righe: f.numero(righe), colonne })}
         </p>
       </div>
-      <nav className="flex gap-6 border-b border-slate-200">
+      <nav aria-label={t("sezioni")} className="flex gap-6 border-b border-slate-200">
         {scheda("dati", `/dataset/${id}${query}`, t("schedaDati"))}
         {scheda("statistiche", `/dataset/${id}/statistiche${query}`, t("schedaStatistiche"))}
         {scheda("grafici", `/dataset/${id}/grafici${query}`, t("schedaGrafici"))}

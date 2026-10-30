@@ -26,6 +26,7 @@ import {
   type Periodo,
   type Statistiche,
 } from "./tipi";
+import { titoloDataset } from "../titolo";
 
 function scelta<T extends string>(valore: unknown, ammessi: readonly T[], predefinito: T): T {
   return typeof valore === "string" && (ammessi as readonly string[]).includes(valore) ? (valore as T) : predefinito;
@@ -76,6 +77,10 @@ function Seleziona({
       </select>
     </label>
   );
+}
+
+export async function generateMetadata({ params }: PageProps<"/dataset/[id]/statistiche">) {
+  return titoloDataset((await params).id, "statistiche");
 }
 
 export default async function PaginaStatistiche({ params, searchParams }: PageProps<"/dataset/[id]/statistiche">) {
@@ -312,6 +317,7 @@ export default async function PaginaStatistiche({ params, searchParams }: PagePr
           {periodiTempo.length > 0 && (
             <>
               <Linee
+                conDati={false}
                 descrizione={t("descAndamento", { nomi: serieTempo.map((x) => x.nome).join(", ") })}
                 etichette={periodiTempo.map((p) => f.periodo(p, periodoTempo))}
                 serie={serieTempo.map((x, i) => ({
@@ -398,6 +404,7 @@ export default async function PaginaStatistiche({ params, searchParams }: PagePr
                           <Colonne
                             descrizione={t("descRighePer", { periodo: tg(`per_${periodo}`), colonna: c.originale })}
                             nomeValore={t("righe")}
+                            nomeEtichette={t("periodo")}
                             etichette={conteggio.map((x) => f.periodo(x.periodo, periodo))}
                             valori={conteggio.map((x) => x.conteggio)}
                           />
