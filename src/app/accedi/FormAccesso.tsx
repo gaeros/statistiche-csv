@@ -31,9 +31,9 @@ export function FormAccesso({ errore, ok }: { errore?: string; ok?: string }) {
         </form>
 
         <div className="flex items-center gap-3 text-xs text-slate-500">
-          <span className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
+          <span className="h-px flex-1 bg-slate-200" />
           {t("oppureEmail")}
-          <span className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
+          <span className="h-px flex-1 bg-slate-200" />
         </div>
         </>
       )}

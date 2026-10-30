@@ -88,6 +88,7 @@
     "cookie1": "Cookie di accesso (il nome inizia con «sb-»): mantengono la sessione dopo il login e vengono rimossi quando esci.",
     "cookie2": "Cookie della lingua («lingua»): ricorda se hai scelto italiano o inglese e dura un anno.",
     "cookie3": "Se accedi con Google, Google può impostare propri cookie sulla sua pagina di accesso, secondo la sua informativa.",
+    "cookie4": "Preferenze salvate solo nel tuo browser (localStorage, non arrivano al server): il tema chiaro o scuro scelto e la chiusura di questo avviso. Se installi l'app sul telefono, il browser conserva anche una pagina «sei offline» e l'icona: nessuna pagina con i tuoi dati viene salvata sul dispositivo.",
     "dirittiH": "I tuoi diritti",
     "dirittiP": "Puoi scaricare i tuoi dati in CSV o Excel ed eliminare il tuo account con tutti i dati dalla pagina <account>Il mio account</account>. Hai inoltre i diritti di accesso, rettifica, limitazione e opposizione, e puoi presentare reclamo al Garante per la protezione dei dati personali (www.garanteprivacy.it).",
     "medicoH": "Nessun consiglio medico",
@@ -604,7 +605,13 @@
     "p8Titolo": "Scarica o elimina i tuoi dati",
     "p8Testo": "In «Il mio account» puoi scaricare tutti i tuoi dati o eliminare l'account con tutto ciò che hai caricato. I tuoi file sono visibili solo a te.",
     "nota": "L'app mostra i tuoi dati e non fornisce consigli medici.",
-    "inizia": "Importa il primo file"
+    "inizia": "Importa il primo file",
+    "aspettoTitolo": "Tema chiaro o scuro",
+    "aspettoTesto": "In alto, accanto a IT | EN, scegli il tema: automatico (segue il telefono o il computer, anche quando passa al tema scuro la sera), chiaro o scuro. La scelta resta in questo browser. I file PNG e PDF scaricati sono sempre chiari, pronti da stampare.",
+    "appTitolo": "Installa l'app sul telefono",
+    "appTesto": "Datahue si può aggiungere alla schermata Home e aprire come un'app, a tutto schermo. Su Android con Chrome: menu ⋮ → «Installa app» (o il pulsante qui sotto, se compare). Su iPhone con Safari: pulsante Condividi → «Aggiungi alla schermata Home». Sul computer con Chrome o Edge: icona di installazione nella barra degli indirizzi. L'app mostra sempre i dati aggiornati e serve internet: senza connessione compare solo un avviso.",
+    "installa": "Installa Datahue",
+    "installata": "Datahue è già installata su questo dispositivo."
   },
   "confermaElimina": {
     "parola": "ELIMINA",
@@ -697,5 +704,11 @@
     "privacy": "Informativa privacy",
     "nonValidoTitolo": "Link non disponibile",
     "nonValido": "Il link non esiste, è scaduto o è stato revocato da chi l'ha creato. Se ti serve ancora, chiedine uno nuovo a chi te l'ha mandato."
+  },
+  "tema": {
+    "etichetta": "Tema",
+    "auto": "Automatico (come il sistema)",
+    "chiaro": "Tema chiaro",
+    "scuro": "Tema scuro"
   }
 }

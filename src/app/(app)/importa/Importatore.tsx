@@ -171,8 +171,8 @@ export function Importatore() {
         }}
         className={`flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed px-4 py-10 text-center transition ${
           trascinamento
-            ? "border-foreground bg-slate-100 dark:bg-blue-950/40"
-            : "border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-900"
+            ? "border-foreground bg-slate-100"
+            : "border-slate-300 bg-white"
         }`}
       >
         <p className="font-medium">{t("trascina")}</p>
@@ -313,7 +313,7 @@ export function Importatore() {
 
           {(voce.stato === "importazione" || voce.stato === "interrotta") && voce.progresso && (
             <div className="space-y-2">
-              <div className="h-3 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
+              <div className="h-3 overflow-hidden rounded-full bg-slate-200">
                 <div
                   className="h-full bg-foreground transition-all"
                   style={{

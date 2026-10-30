@@ -32,7 +32,7 @@ export default async function PaginaAccount() {
       <section className="scheda space-y-3">
         <h2 className="text-lg font-semibold">{t("scaricaH")}</h2>
         {dataset && dataset.length > 0 ? (
-          <ul className="divide-y divide-slate-100 text-sm dark:divide-slate-800">
+          <ul className="divide-y divide-slate-100 text-sm">
             {dataset.map((d) => (
               <li key={d.id} className="flex flex-wrap items-center justify-between gap-2 py-2">
                 <span className="font-mono break-all">{d.nome}</span>
@@ -49,9 +49,9 @@ export default async function PaginaAccount() {
         )}
       </section>
 
-      <section className="scheda space-y-3 border-red-200 dark:border-red-900">
-        <h2 className="text-lg font-semibold text-red-700 dark:text-red-400">{t("eliminaH")}</h2>
-        <p className="text-sm text-slate-600 dark:text-slate-300">
+      <section className="scheda space-y-3 border-red-200">
+        <h2 className="text-lg font-semibold text-red-700">{t("eliminaH")}</h2>
+        <p className="text-sm text-slate-600">
           {t("eliminaP")}
         </p>
         <FormElimina />

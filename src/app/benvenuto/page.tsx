@@ -5,6 +5,7 @@ import { Colonne } from "@/components/grafici/Colonne";
 import { Linee } from "@/components/grafici/Linee";
 import { Torta } from "@/components/grafici/Torta";
 import { SelettoreLingua } from "@/components/SelettoreLingua";
+import { SelettoreTema } from "@/components/SelettoreTema";
 import { HeroScorrimento } from "@/components/HeroScorrimento";
 import { creaFormati } from "@/lib/formato";
 import { createClient } from "@/lib/supabase/server";
@@ -32,7 +33,7 @@ function Esempio({ titolo, testo, children }: { titolo: string; testo: string; c
   return (
     <section className="scheda space-y-2">
       <h3 className="font-semibold">{titolo}</h3>
-      <p className="text-sm text-slate-600 dark:text-slate-400">{testo}</p>
+      <p className="text-sm text-slate-600">{testo}</p>
       {children}
     </section>
   );
@@ -52,6 +53,7 @@ export default async function PaginaBenvenuto() {
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
           <Link href="/benvenuto" className="text-foreground"><Logo className="h-11 w-auto sm:h-14" /></Link>
           <div className="flex items-center gap-3">
+            <SelettoreTema className="hidden sm:inline-flex" />
             <SelettoreLingua nero />
             <Link href={collegato ? "/dataset" : "/accedi"} className="bottone-nero">
               {collegato ? t("vaiDati") : t("accedi")}
@@ -87,7 +89,7 @@ export default async function PaginaBenvenuto() {
             <li key={p} className="scheda space-y-1">
               <span className="text-sm font-semibold text-slate-400">{t("passo", { n: i + 1 })}</span>
               <h3 className="font-semibold">{t(`${p}T`)}</h3>
-              <p className="text-sm text-slate-600 dark:text-slate-400">{t(p)}</p>
+              <p className="text-sm text-slate-600">{t(p)}</p>
             </li>
           ))}
         </ol>
@@ -150,7 +152,7 @@ export default async function PaginaBenvenuto() {
 
       <section aria-labelledby="privacy" className="scheda space-y-2">
         <h2 id="privacy" className="text-3xl font-semibold tracking-normal sm:text-4xl">{t("privacyT")}</h2>
-        <p className="text-sm text-slate-600 dark:text-slate-400">
+        <p className="text-sm text-slate-600">
           {t("privacy")}{" "}
           <Link href="/privacy" className="link">{t("leggiInformativa")}</Link>.
         </p>

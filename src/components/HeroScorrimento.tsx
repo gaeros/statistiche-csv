@@ -193,7 +193,7 @@ export function HeroScorrimento({ a, b, descrizione, scorri }: { a: string; b: s
                       left: `${n.x}%`,
                       top: `${n.y}%`,
                       fontSize: n.dim,
-                      color: n.scuro ? "#09090b" : "#94a3b8",
+                      color: n.scuro ? "var(--foreground)" : "var(--color-slate-400, #94a3b8)",
                       animationDuration: `${n.dur}s`,
                       animationDelay: `${n.ritardo}s`,
                       ["--dx" as string]: `${n.dx}px`,

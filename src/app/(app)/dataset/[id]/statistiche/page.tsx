@@ -223,7 +223,7 @@ export default async function PaginaStatistiche({ params, searchParams }: PagePr
       {stat.error && <p className="text-red-600">{t("errore", { dettaglio: stat.error.message })}</p>}
 
       {statistiche && statistiche.totale === 0 && (
-        <p className="scheda text-slate-600 dark:text-slate-300">
+        <p className="scheda text-slate-600">
           {t("nessunaRiga")}
         </p>
       )}
@@ -292,7 +292,7 @@ export default async function PaginaStatistiche({ params, searchParams }: PagePr
               <button type="submit" className="bottone">{t("aggiorna")}</button>
             </div>
             <details className="text-sm" open={numeriche.some((c) => soglia(c.nome) !== undefined)}>
-              <summary className="cursor-pointer text-slate-500 select-none hover:text-slate-700 dark:hover:text-slate-300">
+              <summary className="cursor-pointer text-slate-500 select-none hover:text-slate-700">
                 {t("soglie")}
               </summary>
               <div className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
@@ -318,12 +318,12 @@ export default async function PaginaStatistiche({ params, searchParams }: PagePr
                 }))}
               />
               <details className="text-sm">
-                <summary className="cursor-pointer text-slate-500 select-none hover:text-slate-700 dark:hover:text-slate-300">
+                <summary className="cursor-pointer text-slate-500 select-none hover:text-slate-700">
                   {t("vediTabella")}
                 </summary>
                 <div className="mt-2 max-h-96 overflow-auto">
                   <table className="w-full text-left text-sm">
-                    <thead className="sticky top-0 bg-white text-slate-500 dark:bg-slate-900">
+                    <thead className="sticky top-0 bg-white text-slate-500">
                       <tr>
                         <th className="py-1 pr-3 font-medium">{t("periodo")}</th>
                         {serieTempo.map((x) => (
@@ -333,7 +333,7 @@ export default async function PaginaStatistiche({ params, searchParams }: PagePr
                     </thead>
                     <tbody>
                       {periodiTempo.map((p) => (
-                        <tr key={p} className="border-t border-slate-100 dark:border-slate-800">
+                        <tr key={p} className="border-t border-slate-100">
                           <td className="py-1 pr-3">{f.periodo(p, periodoTempo)}</td>
                           {serieTempo.map((x) => (
                             <td key={x.nome} className="py-1 pr-3 text-right tabular-nums">{f.statistica(x.punti.get(p))}</td>
@@ -385,7 +385,7 @@ export default async function PaginaStatistiche({ params, searchParams }: PagePr
                                   key={p}
                                   href={linkPeriodo(p)}
                                   scroll={false}
-                                  className={p === periodo ? "font-semibold text-foreground dark:text-blue-300" : "link"}
+                                  className={p === periodo ? "font-semibold text-foreground" : "link"}
                                 >
                                   {tg(`per_${p}`)}
                                 </Link>

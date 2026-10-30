@@ -58,8 +58,8 @@ export async function TabellaDati({
               totale: f.numero(totale),
             })}
           </caption>
-          <thead className="border-b-2 border-slate-300 dark:border-slate-600">
-            <tr className="bg-slate-100 dark:bg-slate-800">
+          <thead className="border-b-2 border-slate-300">
+            <tr className="bg-slate-100">
               {mostrate.map((c, i) => {
                 const attiva = ordina === c.nome;
                 return (
@@ -88,7 +88,7 @@ export async function TabellaDati({
             {righe.map((r) => (
               <tr
                 key={String(r.id)}
-                className="border-b border-slate-200 bg-white last:border-0 even:bg-slate-50 hover:bg-slate-100 focus-within:bg-slate-100 dark:border-slate-700 dark:bg-transparent dark:even:bg-slate-800/40 dark:hover:bg-slate-800"
+                className="border-b border-slate-200 bg-white last:border-0 even:bg-slate-50 hover:bg-slate-100 focus-within:bg-slate-100"
               >
                 {mostrate.map((c, i) => {
                   const valore = f.valore(r[c.nome], c.tipo);
@@ -111,7 +111,7 @@ export async function TabellaDati({
       </div>
 
       {nascoste.length > 0 && (
-        <p className="text-sm text-slate-600 dark:text-slate-300">
+        <p className="text-sm text-slate-600">
           {t("colonneNascoste", { n: nascoste.length, nomi: nascoste.map((c) => c.originale).join(", ") })}
         </p>
       )}

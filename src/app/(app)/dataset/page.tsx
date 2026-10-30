@@ -37,7 +37,7 @@ export default async function PaginaDataset({ searchParams }: PageProps<"/datase
       {error && <p className="text-red-600">{t("errore", { dettaglio: error.message })}</p>}
 
       {elenco && elenco.length === 0 && (
-        <div className="scheda text-slate-600 dark:text-slate-300">
+        <div className="scheda text-slate-600">
           {ricerca ? (
             t("nessunRisultato")
           ) : (

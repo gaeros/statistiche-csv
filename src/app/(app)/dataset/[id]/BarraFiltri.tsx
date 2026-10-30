@@ -28,7 +28,7 @@ function elenco(sp: Parametri, k: string): string[] {
 
 function Gruppo({ titolo, children }: { titolo: string; children: React.ReactNode }) {
   return (
-    <fieldset className="min-w-0 space-y-2 rounded-lg border border-slate-200 p-3 dark:border-slate-800">
+    <fieldset className="min-w-0 space-y-2 rounded-lg border border-slate-200 p-3">
       <legend className="px-1 text-sm font-medium">{titolo}</legend>
       {children}
     </fieldset>
@@ -83,7 +83,7 @@ export async function BarraFiltri({
           </span>
         </summary>
 
-        <FormPulito className="space-y-4 border-t border-slate-200 p-4 dark:border-slate-800">
+        <FormPulito className="space-y-4 border-t border-slate-200 p-4">
           <CampiNascosti sp={sp} tieni={(k) => !k.startsWith("f.") && k !== "pagina"} />
           <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
             {colonne.map((c) => {
@@ -195,7 +195,7 @@ export async function BarraFiltri({
             <Link
               key={e.testo}
               href={conParametri(sp, Object.fromEntries([...e.chiavi, "pagina"].map((x) => [x, null])))}
-              className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-slate-900 hover:bg-slate-200 dark:bg-blue-950 dark:text-blue-200 dark:hover:bg-blue-900"
+              className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-slate-900 hover:bg-slate-200"
               title={t("togli")}
             >
               {e.testo}

@@ -75,7 +75,7 @@ export default async function PaginaDettaglio({ params, searchParams }: PageProp
       {avvisi.length > 0 && (
         <details className="scheda text-sm">
           <summary className="cursor-pointer font-medium">{t("avvisi", { n: avvisi.length })}</summary>
-          <ul className="mt-2 list-inside list-disc text-slate-600 dark:text-slate-300">
+          <ul className="mt-2 list-inside list-disc text-slate-600">
             {avvisi.map((a) => <li key={a}>{a}</li>)}
           </ul>
         </details>

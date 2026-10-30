@@ -88,6 +88,7 @@
     "cookie1": "Sign-in cookies (the name starts with “sb-”): they keep your session after login and are removed when you sign out.",
     "cookie2": "Language cookie (“lingua”): remembers whether you chose Italian or English and lasts one year.",
     "cookie3": "If you sign in with Google, Google may set its own cookies on its sign-in page, under its own policy.",
+    "cookie4": "Preferences saved only in your browser (localStorage, never sent to the server): the light or dark theme you chose and the dismissal of this notice. If you install the app on your phone, the browser also keeps a \"you are offline\" page and the icon: no page with your data is stored on the device.",
     "dirittiH": "Your rights",
     "dirittiP": "You can download your data as CSV or Excel and delete your account with all its data from the <account>My account</account> page. You also have the rights of access, rectification, restriction and objection, and you can lodge a complaint with the Italian data protection authority, the Garante (www.garanteprivacy.it), or with the authority of your country.",
     "medicoH": "No medical advice",
@@ -604,7 +605,13 @@
     "p8Titolo": "Download or delete your data",
     "p8Testo": "In “My account” you can download all your data or delete the account along with everything you uploaded. Your files are visible only to you.",
     "nota": "The app shows your data and does not give medical advice.",
-    "inizia": "Import your first file"
+    "inizia": "Import your first file",
+    "aspettoTitolo": "Light or dark theme",
+    "aspettoTesto": "At the top, next to IT | EN, choose the theme: automatic (follows your phone or computer, even when it switches to dark mode in the evening), light or dark. The choice stays in this browser. Downloaded PNG and PDF files are always light, ready to print.",
+    "appTitolo": "Install the app on your phone",
+    "appTesto": "Datahue can be added to your home screen and opened like an app, full screen. On Android with Chrome: menu ⋮ → \"Install app\" (or the button below, if it appears). On iPhone with Safari: Share button → \"Add to Home Screen\". On a computer with Chrome or Edge: the install icon in the address bar. The app always shows up-to-date data and needs internet: without a connection you only see a notice.",
+    "installa": "Install Datahue",
+    "installata": "Datahue is already installed on this device."
   },
   "confermaElimina": {
     "parola": "DELETE",
@@ -697,5 +704,11 @@
     "privacy": "Privacy notice",
     "nonValidoTitolo": "Link not available",
     "nonValido": "The link does not exist, has expired or was revoked by whoever created it. If you still need it, ask the sender for a new one."
+  },
+  "tema": {
+    "etichetta": "Theme",
+    "auto": "Automatic (same as the system)",
+    "chiaro": "Light theme",
+    "scuro": "Dark theme"
   }
 }

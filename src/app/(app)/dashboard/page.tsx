@@ -61,7 +61,7 @@ export default async function PaginaDashboard() {
             </header>
             {e && <p className="text-sm text-red-600">{e.message}</p>}
             {data && <GraficoLibero titolo={g.titolo} preparato={prepara(c, data, colonne, f, tg)} altezza={300} sottotitolo={tc("sottotitoloTutte", { nome: g.dataset?.nome ?? "" })} />}
-            <footer className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-slate-100 pt-3 text-sm dark:border-slate-800">
+            <footer className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-slate-100 pt-3 text-sm">
               <Link href={`/dataset/${g.dataset_id}/grafici${conParametri({}, parametriConfigurazione(c))}#costruttore`} className="link">
                 {t("apriDataset")}
               </Link>
@@ -120,7 +120,7 @@ export default async function PaginaDashboard() {
         {intestazione}
         <div className="scheda space-y-2">
           <h2 className="text-xl font-semibold">{t("vuotaTitolo")}</h2>
-          <p className="text-slate-600 dark:text-slate-300">{elenco && elenco.length === 0 ? t("nessunDataset") : t("vuota")}</p>
+          <p className="text-slate-600">{elenco && elenco.length === 0 ? t("nessunDataset") : t("vuota")}</p>
           {elenco && elenco.length === 0 && <Link href="/importa" className="bottone">{t("importaPrimo")}</Link>}
         </div>
       </div>
