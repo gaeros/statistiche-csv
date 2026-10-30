@@ -44,3 +44,6 @@ grant select, insert, delete on storage.objects to authenticated;
 grant usage on schema public to anon, authenticated;
 alter default privileges in schema public grant all on tables to anon, authenticated;
 alter default privileges in schema public grant all on functions to anon, authenticated;
+
+-- Come su Supabase: la chiave di servizio non ha la RLS.
+alter role service_role bypassrls;

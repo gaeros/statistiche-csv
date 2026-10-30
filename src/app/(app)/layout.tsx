@@ -19,10 +19,11 @@ export default async function LayoutApp({ children }: LayoutProps<"/">) {
           <Link href="/dataset">
             <Logo className="h-11 w-auto" />
           </Link>
-          <nav className="flex gap-4 text-sm">
+          <nav className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
             <Link href="/dashboard" className="link">{t("dashboard")}</Link>
             <Link href="/dataset" className="link">{t("iMieiDataset")}</Link>
             <Link href="/importa" className="link">{t("importa")}</Link>
+            <Link href="/condivisioni" className="link">{t("condivisi")}</Link>
             <Link href="/guida" className="link">{t("guida")}</Link>
             {amministratore && (
               <Link href="/admin/inviti" className="link">{t("inviti")}</Link>

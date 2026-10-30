@@ -2,8 +2,9 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { supabaseAnonKey, supabaseUrl } from "@/lib/env";
 
-// Pagine raggiungibili senza essere collegati. /api/cron si controlla da sé con il suo segreto.
-const PUBBLICHE = ["/", "/accedi", "/password-dimenticata", "/auth", "/privacy", "/benvenuto", "/api/cron"];
+// Pagine raggiungibili senza essere collegati. Si controllano da sé /condiviso (il codice del link)
+// e /api/cron (il suo segreto).
+const PUBBLICHE = ["/", "/accedi", "/password-dimenticata", "/auth", "/privacy", "/benvenuto", "/condiviso", "/api/cron"];
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
