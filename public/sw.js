@@ -2,7 +2,7 @@
 // Regola: non si salvano MAI pagine, risposte del server o dati dell'utente (sono personali e
 // dietro login). In cache vanno solo la pagina statica "sei offline" e l'icona che usa.
 // Le richieste normali passano dritte alla rete, come senza service worker.
-const CACHE = "datahue-statico-v1";
+const CACHE = "datahue-statico-v2";
 const OFFLINE = "/offline.html";
 
 self.addEventListener("install", (evento) => {

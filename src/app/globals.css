@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* Tema: <html data-theme="light|dark"> lo imposta lo script in testa a src/app/layout.tsx
-   (scelta salvata o, in automatico, quella del sistema). */
+   (scelta salvata; senza scelta chiaro; con "automatico" quella del sistema). */
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 :root {
