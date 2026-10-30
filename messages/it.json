@@ -252,7 +252,8 @@
     "applica": "Applica i filtri",
     "azzera": "Azzera filtri",
     "togli": "Togli questo filtro",
-    "tolgoSr": "(togli)"
+    "tolgoSr": "(togli)",
+    "applicaESalva": "Applica e salva…"
   },
   "statistiche": {
     "errore": "Impossibile calcolare le statistiche: {dettaglio}",
@@ -595,7 +596,7 @@
     "p2Titolo": "Guarda i dati",
     "p2Testo": "In «I miei dataset» trovi i file importati, con una ricerca per nome. Aprine uno: la scheda «Dati» mostra la tabella a pagine. Da lì puoi anche rinominarlo, scaricarlo in CSV o in Excel (.xlsx, con numeri e date già pronti per i calcoli) o eliminarlo: per eliminarlo ti chiediamo di scrivere ELIMINA, così non succede per sbaglio.",
     "p3Titolo": "Filtra",
-    "p3Testo": "Sopra ai dati scegli un periodo (anche con le scorciatoie «ultimi 7 giorni», «ultimi 30 giorni»…), le categorie o i valori che ti interessano, o cerca un testo. Statistiche e grafici seguono sempre i filtri scelti; «Azzera filtri» li toglie tutti. Una combinazione che usi spesso la salvi con «Salva questi filtri…» e un nome: la ritrovi in «Filtri salvati», nelle schede Dati, Statistiche e Grafici del dataset, e la riapri con un clic. Le scorciatoie restano aggiornate («ultimi 30 giorni» vuol dire sempre gli ultimi 30 giorni). Da «Rinomina o elimina i filtri salvati» cambi il nome o la elimini (scrivendo ELIMINA); i dati non cambiano.",
+    "p3Testo": "Sopra ai dati scegli un periodo (anche con le scorciatoie «ultimi 7 giorni», «ultimi 30 giorni»…), le categorie o i valori che ti interessano, o cerca un testo. Statistiche e grafici seguono sempre i filtri scelti; «Azzera filtri» li toglie tutti. Una combinazione che usi spesso la salvi con «Applica e salva…» (nel riquadro dei filtri) e un nome: la ritrovi in «Filtri salvati», nelle schede Dati, Statistiche e Grafici del dataset, e la riapri con un clic. Le scorciatoie restano aggiornate («ultimi 30 giorni» vuol dire sempre gli ultimi 30 giorni). Da «Rinomina o elimina i filtri salvati» cambi il nome o la elimini (scrivendo ELIMINA); i dati non cambiano.",
     "p4Titolo": "Leggi le statistiche",
     "p4Testo": "La scheda «Statistiche» riassume il file: numero di righe, periodo, medie, andamento nel tempo, un riepilogo di ogni colonna, il confronto fra gruppi (per esempio la media per momento della giornata) e le colonne che vanno insieme. Nel riepilogo «Colonna per colonna» puoi trascinare le schede per metterle nell'ordine che preferisci (l'app lo ricorda; «Ripristina ordine» torna a quello del file) e aprirne una più grande con la lente.",
     "p5Titolo": "Costruisci i grafici",
@@ -715,10 +716,10 @@
   },
   "filtriSalvati": {
     "titolo": "Filtri salvati",
-    "salvaQuesti": "Salva questi filtri…",
+    "salvaQuesti": "Salva questi filtri con un nome",
     "nome": "Nome dei filtri",
     "esempio": "es. Mattina, ultimi 30 giorni",
-    "salva": "Salva",
+    "salva": "Salva i filtri",
     "salvato": "Filtri salvati come «{nome}». Li riapri con un clic qui sopra.",
     "gestisci": "Rinomina o elimina i filtri salvati",
     "nomeDi": "Nome di «{nome}»",
@@ -733,6 +734,7 @@
     "nomeDuplicato": "C'è già un filtro salvato con questo nome in questo dataset: scegline un altro.",
     "nessunFiltro": "Non ci sono filtri attivi da salvare.",
     "troppi": "Hai già 50 filtri salvati per questo dataset: eliminane qualcuno.",
-    "nonRiuscito": "Non è stato possibile salvare: {dettaglio}"
+    "nonRiuscito": "Non è stato possibile salvare: {dettaglio}",
+    "suggerimento": "Puoi salvare una combinazione di filtri con un nome: apri «Filtra i dati», scegli i filtri e premi «Applica e salva…»."
   }
 }

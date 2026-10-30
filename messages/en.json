@@ -252,7 +252,8 @@
     "applica": "Apply filters",
     "azzera": "Clear filters",
     "togli": "Remove this filter",
-    "tolgoSr": "(remove)"
+    "tolgoSr": "(remove)",
+    "applicaESalva": "Apply and save…"
   },
   "statistiche": {
     "errore": "Could not calculate the statistics: {dettaglio}",
@@ -595,7 +596,7 @@
     "p2Titolo": "Look at the data",
     "p2Testo": "“My datasets” lists the files you imported, with a search by name. Open one: the “Data” tab shows the table, page by page. From there you can also rename it, download it as CSV or Excel (.xlsx, with numbers and dates ready for calculations) or delete it: to delete it you type DELETE, so it never happens by mistake.",
     "p3Titolo": "Filter",
-    "p3Testo": "Above the data, choose a period (also with shortcuts such as “last 7 days” or “last 30 days”), the categories or values you care about, or search for some text. Statistics and charts always follow the chosen filters; “Clear filters” removes them all. Save a combination you use often with “Save these filters…” and a name: you find it under “Saved filters” in the dataset's Data, Statistics and Charts tabs and reopen it with one click. Shortcuts stay up to date (“last 30 days” always means the last 30 days). From “Rename or delete saved filters” you can rename it or delete it (by typing DELETE); the data does not change.",
+    "p3Testo": "Above the data, choose a period (also with shortcuts such as “last 7 days” or “last 30 days”), the categories or values you care about, or search for some text. Statistics and charts always follow the chosen filters; “Clear filters” removes them all. Save a combination you use often with “Apply and save…” (in the filter panel) and a name: you find it under “Saved filters” in the dataset's Data, Statistics and Charts tabs and reopen it with one click. Shortcuts stay up to date (“last 30 days” always means the last 30 days). From “Rename or delete saved filters” you can rename it or delete it (by typing DELETE); the data does not change.",
     "p4Titolo": "Read the statistics",
     "p4Testo": "The “Statistics” tab summarises the file: number of rows, period, averages, trend over time, a summary of each column, a comparison between groups (for example the average by time of day) and the columns that move together. In “Column by column” you can drag the cards into the order you like (the app remembers it; “Reset order” goes back to the file's order) and open one larger with the magnifying glass.",
     "p5Titolo": "Build charts",
@@ -715,10 +716,10 @@
   },
   "filtriSalvati": {
     "titolo": "Saved filters",
-    "salvaQuesti": "Save these filters…",
+    "salvaQuesti": "Save these filters with a name",
     "nome": "Name of the filters",
     "esempio": "e.g. Morning, last 30 days",
-    "salva": "Save",
+    "salva": "Save filters",
     "salvato": "Filters saved as “{nome}”. Reopen them with one click above.",
     "gestisci": "Rename or delete saved filters",
     "nomeDi": "Name of “{nome}”",
@@ -733,6 +734,7 @@
     "nomeDuplicato": "There is already a saved filter with this name in this dataset: choose another one.",
     "nessunFiltro": "There are no active filters to save.",
     "troppi": "You already have 50 saved filters for this dataset: delete some.",
-    "nonRiuscito": "Could not save: {dettaglio}"
+    "nonRiuscito": "Could not save: {dettaglio}",
+    "suggerimento": "You can save a combination of filters with a name: open “Filter the data”, choose the filters and press “Apply and save…”."
   }
 }
