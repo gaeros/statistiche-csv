@@ -49,18 +49,19 @@ export default async function PaginaBenvenuto() {
 
   return (
     <div className="flex flex-1 flex-col bg-white">
-      <div className="sticky top-0 z-10 border-b border-slate-100 bg-white/90 backdrop-blur">
+      <header className="sticky top-0 z-10 border-b border-slate-100 bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
           <Link href="/benvenuto" className="text-foreground"><Logo className="h-11 w-auto sm:h-14" /></Link>
-          <div className="flex items-center gap-3">
-            <SelettoreTema className="hidden sm:inline-flex" />
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Sul telefono il tema non ci sta nella barra (si sceglie dopo l'accesso): niente scorrimento di lato */}
+            <span className="hidden sm:contents"><SelettoreTema /></span>
             <SelettoreLingua nero />
             <Link href={collegato ? "/dataset" : "/accedi"} className="bottone-nero">
               {collegato ? t("vaiDati") : t("accedi")}
             </Link>
           </div>
         </div>
-      </div>
+      </header>
       <HeroScorrimento a={t("titoloA")} b={t("titoloB")} descrizione={t("titoloAnimazione")} scorri={t("scorri")} />
     <main className="mx-auto w-full max-w-5xl flex-1 space-y-16 px-4 pb-16 pt-4 [&_.scheda]:rounded-3xl [&_.scheda]:border-slate-200 [&_.scheda]:shadow-none">
       <header className="space-y-8 text-center">

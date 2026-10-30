@@ -6,6 +6,10 @@ import { revocaInvito } from "./actions";
 import { BottoneElimina } from "./BottoneElimina";
 import { FormInvito } from "./FormInvito";
 
+export async function generateMetadata() {
+  return { title: `${(await getTranslations("inviti"))("titolo")} – Datahue` };
+}
+
 export default async function PaginaInviti() {
   const t = await getTranslations("inviti");
   const f = await formatiUtente();
@@ -28,7 +32,7 @@ export default async function PaginaInviti() {
             <tr>
               <th className="px-4 py-2 font-medium">{t("email")}</th>
               <th className="px-4 py-2 font-medium">{t("invitatoIl")}</th>
-              <th className="px-4 py-2" />
+              <th className="px-4 py-2"><span className="sr-only">{t("azioni")}</span></th>
             </tr>
           </thead>
           <tbody>

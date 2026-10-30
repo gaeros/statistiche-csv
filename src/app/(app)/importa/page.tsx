@@ -1,6 +1,10 @@
 import { getTranslations } from "next-intl/server";
 import { Importatore } from "./Importatore";
 
+export async function generateMetadata() {
+  return { title: `${(await getTranslations("importa"))("titolo")} – Datahue` };
+}
+
 export default async function PaginaImporta() {
   const t = await getTranslations("importa");
   return (

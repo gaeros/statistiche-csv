@@ -55,7 +55,11 @@
     "vaiAccesso": "Go to sign in"
   },
   "meta": {
-    "descrizione": "Upload CSV and Excel files and see your data as charts."
+    "descrizione": "Upload CSV and Excel files and see your data as charts.",
+    "titoloDataset": "{nome} · {scheda} – Datahue",
+    "scheda_dati": "Data",
+    "scheda_statistiche": "Statistics",
+    "scheda_grafici": "Charts"
   },
   "cookieBanner": {
     "titolo": "We use cookies",
@@ -201,7 +205,9 @@
     "esci": "Sign out",
     "privacy": "Privacy notice",
     "nota": "The app shows your data and does not give medical advice.",
-    "condivisi": "Shared links"
+    "condivisi": "Shared links",
+    "vaiAlContenuto": "Skip to content",
+    "menuPrincipale": "Main menu"
   },
   "elenco": {
     "titolo": "My datasets",
@@ -214,7 +220,8 @@
     "importaPrimo": "Import your first file",
     "foglio": "sheet {nome}",
     "righeColonne": "{righe} rows · {colonne} columns",
-    "importatoIl": "Imported on {data}"
+    "importatoIl": "Imported on {data}",
+    "cercaEtichetta": "Search your datasets"
   },
   "dettaglio": {
     "tornaElenco": "← My datasets",
@@ -248,7 +255,9 @@
     "nomeLungo": "The name can be at most 100 characters long.",
     "nomeDuplicato": "You already have a dataset with this name.",
     "nomeAggiornato": "Name updated.",
-    "eliminazioneFallita": "Deletion failed: {dettaglio}"
+    "eliminazioneFallita": "Deletion failed: {dettaglio}",
+    "sezioni": "Dataset sections",
+    "navigazionePagine": "Table pages"
   },
   "barraFiltri": {
     "titolo": "Filter the data",
@@ -351,7 +360,11 @@
     "sottotitoloFiltri": "Dataset “{nome}” · filters: {filtri}",
     "sottotitoloTutte": "Dataset “{nome}” · all rows, no filters",
     "scaricaCsv": "Download data (CSV)",
-    "grafico": "chart"
+    "grafico": "chart",
+    "descrizione": "Chart “{titolo}”. The values are in the “Show data” table below.",
+    "mostraDati": "Show data",
+    "datiDi": "Data of the chart “{titolo}”",
+    "primeRighe": "Showing the first {n} rows of {totale}: you get all of them with “Download data (CSV)”."
   },
   "graficiPagina": {
     "dashboard": "Saved charts",
@@ -551,7 +564,8 @@
     "autorizzato": "{email} is authorised.",
     "eliminaTitolo": "Delete {email} completely?",
     "eliminaAvviso": "The account, datasets, charts and uploaded files will be erased. This cannot be undone.",
-    "eliminaConferma": "Delete permanently"
+    "eliminaConferma": "Delete permanently",
+    "azioni": "Actions"
   },
   "benvenuto": {
     "metaTitolo": "Welcome – Datahue",

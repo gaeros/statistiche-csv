@@ -26,6 +26,7 @@ import {
   type Periodo,
   type Statistiche,
 } from "./tipi";
+import { titoloDataset } from "../titolo";
 
 function scelta<T extends string>(valore: unknown, ammessi: readonly T[], predefinito: T): T {
   return typeof valore === "string" && (ammessi as readonly string[]).includes(valore) ? (valore as T) : predefinito;
@@ -76,6 +77,10 @@ function Seleziona({
       </select>
     </label>
   );
+}
+
+export async function generateMetadata({ params }: PageProps<"/dataset/[id]/statistiche">) {
+  return titoloDataset((await params).id, "statistiche");
 }
 
 export default async function PaginaStatistiche({ params, searchParams }: PageProps<"/dataset/[id]/statistiche">) {

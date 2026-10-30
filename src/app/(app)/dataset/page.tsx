@@ -3,6 +3,10 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { formatiUtente } from "@/lib/utente";
 
+export async function generateMetadata() {
+  return { title: `${(await getTranslations("elenco"))("titolo")} – Datahue` };
+}
+
 export default async function PaginaDataset({ searchParams }: PageProps<"/dataset">) {
   const t = await getTranslations("elenco");
   const f = await formatiUtente();
@@ -30,7 +34,7 @@ export default async function PaginaDataset({ searchParams }: PageProps<"/datase
       </div>
 
       <form className="flex gap-2">
-        <input name="q" defaultValue={ricerca} placeholder={t("cerca")} className="campo max-w-sm" />
+        <input name="q" defaultValue={ricerca} placeholder={t("cerca")} aria-label={t("cercaEtichetta")} className="campo max-w-sm" />
         <button type="submit" className="bottone-secondario">{t("cercaBtn")}</button>
       </form>
 

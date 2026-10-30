@@ -55,7 +55,11 @@
     "vaiAccesso": "Vai all'accesso"
   },
   "meta": {
-    "descrizione": "Carica file CSV ed Excel e guarda i tuoi dati in grafici."
+    "descrizione": "Carica file CSV ed Excel e guarda i tuoi dati in grafici.",
+    "titoloDataset": "{nome} · {scheda} – Datahue",
+    "scheda_dati": "Dati",
+    "scheda_statistiche": "Statistiche",
+    "scheda_grafici": "Grafici"
   },
   "cookieBanner": {
     "titolo": "Utilizziamo i cookie",
@@ -201,7 +205,9 @@
     "esci": "Esci",
     "privacy": "Informativa privacy",
     "nota": "L'app mostra i tuoi dati e non fornisce consigli medici.",
-    "condivisi": "Link condivisi"
+    "condivisi": "Link condivisi",
+    "vaiAlContenuto": "Vai al contenuto",
+    "menuPrincipale": "Menu principale"
   },
   "elenco": {
     "titolo": "I miei dataset",
@@ -214,7 +220,8 @@
     "importaPrimo": "Importa il primo file",
     "foglio": "foglio {nome}",
     "righeColonne": "{righe} righe · {colonne} colonne",
-    "importatoIl": "Importato il {data}"
+    "importatoIl": "Importato il {data}",
+    "cercaEtichetta": "Cerca tra i tuoi dataset"
   },
   "dettaglio": {
     "tornaElenco": "← I miei dataset",
@@ -248,7 +255,9 @@
     "nomeLungo": "Il nome può avere al massimo 100 caratteri.",
     "nomeDuplicato": "Hai già un dataset con questo nome.",
     "nomeAggiornato": "Nome aggiornato.",
-    "eliminazioneFallita": "Eliminazione non riuscita: {dettaglio}"
+    "eliminazioneFallita": "Eliminazione non riuscita: {dettaglio}",
+    "sezioni": "Sezioni del dataset",
+    "navigazionePagine": "Pagine della tabella"
   },
   "barraFiltri": {
     "titolo": "Filtra i dati",
@@ -351,7 +360,11 @@
     "sottotitoloFiltri": "Dataset «{nome}» · filtri: {filtri}",
     "sottotitoloTutte": "Dataset «{nome}» · tutte le righe, senza filtri",
     "scaricaCsv": "Scarica dati (CSV)",
-    "grafico": "grafico"
+    "grafico": "grafico",
+    "descrizione": "Grafico «{titolo}». I valori sono nella tabella «Mostra i dati» qui sotto.",
+    "mostraDati": "Mostra i dati",
+    "datiDi": "Dati del grafico «{titolo}»",
+    "primeRighe": "Sono mostrate le prime {n} righe di {totale}: le trovi tutte in «Scarica dati (CSV)»."
   },
   "graficiPagina": {
     "dashboard": "Grafici salvati",
@@ -551,7 +564,8 @@
     "autorizzato": "{email} è autorizzato.",
     "eliminaTitolo": "Eliminare del tutto {email}?",
     "eliminaAvviso": "Si cancellano l'account, i dataset, i grafici e i file caricati. Non si può annullare.",
-    "eliminaConferma": "Elimina definitivamente"
+    "eliminaConferma": "Elimina definitivamente",
+    "azioni": "Azioni"
   },
   "benvenuto": {
     "metaTitolo": "Benvenuto – Datahue",
