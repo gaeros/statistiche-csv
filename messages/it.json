@@ -591,7 +591,7 @@
     "p1Titolo": "Importa un file",
     "p1Testo": "Dal menu «Importa» trascina un file CSV o Excel (fino a 50 MB). Se il file ha più fogli scegli quali importare. L'app riconosce da sola codifica e separatore; se vedi caratteri strani, cambiali a mano. Prima di importare ti guida in quattro passi: nome della tabella, colonne e tipi (numero, data, testo…), valori da controllare e riepilogo. I valori che non vanno bene per il tipo scelto sono segnati in rosso con il numero di riga: puoi correggerli, lasciarli vuoti o non importare quelle righe. Ogni file (o foglio) diventa un dataset con il suo nome.",
     "p2Titolo": "Guarda i dati",
-    "p2Testo": "«I miei dataset», la pagina che si apre dopo l'accesso, mostra i file importati, con una ricerca per nome. Un clic su un dataset apre subito la scheda «Grafici»; la scheda «Dati» mostra la tabella a pagine. Da lì puoi anche rinominarlo, scaricarlo in CSV o in Excel (.xlsx, con numeri e date già pronti per i calcoli) o eliminarlo: per eliminarlo ti chiediamo di scrivere ELIMINA, così non succede per sbaglio.",
+    "p2Testo": "In «I miei dataset» trovi i file importati, con una ricerca per nome. Aprine uno: la scheda «Dati» mostra la tabella a pagine. Da lì puoi anche rinominarlo, scaricarlo in CSV o in Excel (.xlsx, con numeri e date già pronti per i calcoli) o eliminarlo: per eliminarlo ti chiediamo di scrivere ELIMINA, così non succede per sbaglio.",
     "p3Titolo": "Filtra",
     "p3Testo": "Sopra ai dati scegli un periodo (anche con le scorciatoie «ultimi 7 giorni», «ultimi 30 giorni»…), le categorie o i valori che ti interessano, o cerca un testo. Statistiche e grafici seguono sempre i filtri scelti; «Azzera filtri» li toglie tutti.",
     "p4Titolo": "Leggi le statistiche",
