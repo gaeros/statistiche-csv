@@ -26,7 +26,7 @@ export async function accedi(_prev: StatoForm, formData: FormData): Promise<Stat
   const { error } = await supabase.auth.signInWithPassword(dati.data);
   if (error) return { errore: erroreAuth(te, error.message) };
 
-  redirect("/dashboard");
+  redirect("/dataset");
 }
 
 export async function accediConGoogle() {

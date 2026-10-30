@@ -17,5 +17,5 @@ export async function daiConsenso(_prev: StatoForm, formData: FormData): Promise
     data: { consenso_privacy: { versione: VERSIONE_INFORMATIVA, data: new Date().toISOString() } },
   });
   if (error) return { errore: t("nonSalvato") };
-  redirect("/dashboard");
+  redirect("/dataset");
 }
