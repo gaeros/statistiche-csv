@@ -1,12 +1,13 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useRef } from "react";
 import type { ECharts } from "echarts/core";
-import type { Traduttore } from "@/i18n/lingue";
+import { LINGUA_BASE, LOCALE_INTL, èLingua, type Traduttore } from "@/i18n/lingue";
 import { csvPreparato, type Preparato } from "@/lib/grafici";
+import { pdfDaJpeg } from "@/lib/pdf";
 import { Grafico } from "./Grafico";
-import { colori, stileAssi, stileTooltip, type Colori } from "./tema";
+import { colori, FONT_GRAFICI, stileAssi, stileTooltip, type Colori } from "./tema";
 
 function scarica(nome: string, url: string) {
   const a = document.createElement("a");
@@ -119,10 +120,69 @@ function opzioni(p: Preparato, c: Colori, t: Traduttore) {
   }
 }
 
-// Grafico del costruttore, con esportazione in PNG e dei suoi dati in CSV.
-export function GraficoLibero({ titolo, preparato, altezza = 340 }: { titolo: string; preparato: Preparato; altezza?: number }) {
+// Va a capo sulle parole perché la riga stia nella larghezza data.
+function righe(ctx: CanvasRenderingContext2D, testo: string, larghezza: number): string[] {
+  const out: string[] = [];
+  let riga = "";
+  for (const parola of testo.split(" ")) {
+    const prova = riga ? `${riga} ${parola}` : parola;
+    if (riga && ctx.measureText(prova).width > larghezza) {
+      out.push(riga);
+      riga = parola;
+    } else riga = prova;
+  }
+  return riga ? [...out, riga] : out;
+}
+
+// Il grafico è in SVG: lo si ridisegna su una tela, con sfondo bianco, titolo e sottotitolo
+// (dataset e filtri attivi) sopra e una riga con app e data sotto. Serve sia al PNG sia al PDF.
+async function disegnaTela(g: ECharts, titolo: string, sottotitolo: string | undefined, piede: string) {
+  const img = new Image();
+  img.src = g.getDataURL({ type: "svg" });
+  await img.decode();
+  const scala = 2;
+  const lato = 16;
+  const tema = colori(false);
+  const misura = document.createElement("canvas").getContext("2d")!;
+  misura.font = `400 13px ${FONT_GRAFICI}`;
+  const sotto = sottotitolo ? righe(misura, sottotitolo, img.width - 2 * lato) : [];
+  const sopra = 40 + sotto.length * 18 + 8;
+  const fondo = 32;
+  const tela = document.createElement("canvas");
+  tela.width = img.width * scala;
+  tela.height = (img.height + sopra + fondo) * scala;
+  const ctx = tela.getContext("2d")!;
+  ctx.scale(scala, scala);
+  ctx.fillStyle = tema.sfondo;
+  ctx.fillRect(0, 0, img.width, img.height + sopra + fondo);
+  ctx.fillStyle = tema.testo;
+  ctx.font = `600 16px ${FONT_GRAFICI}`;
+  ctx.fillText(titolo, lato, 28);
+  ctx.fillStyle = tema.testoTenue;
+  ctx.font = `400 13px ${FONT_GRAFICI}`;
+  sotto.forEach((r, i) => ctx.fillText(r, lato, 48 + i * 18));
+  ctx.drawImage(img, 0, sopra);
+  ctx.font = `400 11px ${FONT_GRAFICI}`;
+  ctx.fillText(piede, lato, sopra + img.height + 20);
+  return tela;
+}
+
+// Grafico del costruttore, con esportazione in PNG o PDF e dei suoi dati in CSV.
+// `sottotitolo` finisce solo nei file esportati: dice da dove vengono i dati e con quali filtri.
+export function GraficoLibero({
+  titolo,
+  preparato,
+  altezza = 340,
+  sottotitolo,
+}: {
+  titolo: string;
+  preparato: Preparato;
+  altezza?: number;
+  sottotitolo?: string;
+}) {
   const t = useTranslations("chart");
   const tg = useTranslations("grafici");
+  const lingua = useLocale();
   const grafico = useRef<ECharts | null>(null);
   const riferimento = useCallback((g: ECharts | null) => {
     grafico.current = g;
@@ -134,29 +194,27 @@ export function GraficoLibero({ titolo, preparato, altezza = 340 }: { titolo: st
     (preparato.forma === "istogramma" && preparato.valori.length === 0) ||
     (preparato.forma === "box" && preparato.scatole.length === 0);
 
-  async function esportaPng() {
+  const tela = () => {
     const g = grafico.current;
-    if (!g) return;
-    // Il grafico è in SVG: lo si ridisegna su una tela per avere un PNG, con sfondo e titolo.
-    const svg = g.getDataURL({ type: "svg" });
-    const img = new Image();
-    img.src = svg;
-    await img.decode();
-    const scala = 2;
-    const margine = 48;
-    const tela = document.createElement("canvas");
-    tela.width = img.width * scala;
-    tela.height = (img.height + margine) * scala;
-    const ctx = tela.getContext("2d")!;
-    const tema = colori(false);
-    ctx.scale(scala, scala);
-    ctx.fillStyle = tema.sfondo;
-    ctx.fillRect(0, 0, img.width, img.height + margine);
-    ctx.fillStyle = tema.testo;
-    ctx.font = "600 16px system-ui, sans-serif";
-    ctx.fillText(titolo, 8, 28);
-    ctx.drawImage(img, 0, margine);
-    scarica(`${nomeFile(titolo, t("grafico"))}.png`, tela.toDataURL("image/png"));
+    if (!g) return null;
+    const quando = new Intl.DateTimeFormat(LOCALE_INTL[èLingua(lingua) ? lingua : LINGUA_BASE], { dateStyle: "long", timeStyle: "short" }).format(new Date());
+    return disegnaTela(g, titolo, sottotitolo, t("piede", { quando }));
+  };
+
+  async function esportaPng() {
+    const c = await tela();
+    if (c) scarica(`${nomeFile(titolo, t("grafico"))}.png`, c.toDataURL("image/png"));
+  }
+
+  async function esportaPdf() {
+    const c = await tela();
+    if (!c) return;
+    const jpeg = await new Promise<Blob | null>((ok) => c.toBlob(ok, "image/jpeg", 0.92));
+    if (!jpeg) return;
+    const pdf = pdfDaJpeg(new Uint8Array(await jpeg.arrayBuffer()), c.width, c.height, titolo);
+    const url = URL.createObjectURL(new Blob([pdf as BlobPart], { type: "application/pdf" }));
+    scarica(`${nomeFile(titolo, t("grafico"))}.pdf`, url);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
   function esportaCsv() {
@@ -172,6 +230,7 @@ export function GraficoLibero({ titolo, preparato, altezza = 340 }: { titolo: st
       <Grafico descrizione={titolo} altezza={altezza} riferimento={riferimento} opzioni={(c) => opzioni(preparato, c, t)} />
       <div className="flex flex-wrap justify-end gap-3 text-sm">
         <button type="button" onClick={esportaPng} className="link">{t("scaricaPng")}</button>
+        <button type="button" onClick={esportaPdf} className="link">{t("scaricaPdf")}</button>
         <button type="button" onClick={esportaCsv} className="link">{t("scaricaCsv")}</button>
       </div>
     </div>

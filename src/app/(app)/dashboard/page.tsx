@@ -22,6 +22,7 @@ type GraficoSalvato = {
 export default async function PaginaDashboard() {
   const t = await getTranslations("dashboard");
   const tg = await getTranslations("grafici");
+  const tc = await getTranslations("chart");
   const f = creaFormati(await getLocale());
 
   const supabase = await createClient();
@@ -50,7 +51,7 @@ export default async function PaginaDashboard() {
               <p className="text-sm text-slate-500 break-all">{t("daDataset", { nome: g.dataset?.nome ?? "" })}</p>
             </header>
             {e && <p className="text-sm text-red-600">{e.message}</p>}
-            {data && <GraficoLibero titolo={g.titolo} preparato={prepara(c, data, colonne, f, tg)} altezza={300} />}
+            {data && <GraficoLibero titolo={g.titolo} preparato={prepara(c, data, colonne, f, tg)} altezza={300} sottotitolo={tc("sottotitoloTutte", { nome: g.dataset?.nome ?? "" })} />}
             <footer className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-slate-100 pt-3 text-sm dark:border-slate-800">
               <Link href={`/dataset/${g.dataset_id}/grafici${conParametri({}, parametriConfigurazione(c))}#costruttore`} className="link">
                 {t("apriDataset")}

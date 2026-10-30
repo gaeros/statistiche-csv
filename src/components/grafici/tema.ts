@@ -26,7 +26,9 @@ export function colori(scuro: boolean, locale = "it-IT"): Colori {
     : { formatta, serie: SERIE_CHIARO, sfondo: "#ffffff", testo: "#0f172a", testoTenue: "#64748b", griglia: "#e2e8f0", tooltip: "#ffffff" };
 }
 
-export const FONT_GRAFICI = '"Inter Tight Variable", "Helvetica Neue", Helvetica, Arial, sans-serif';
+// Virgolette semplici: il nome del font finisce dentro attributi style="…" dell'SVG esportato,
+// e le doppie lo renderebbero illeggibile (immagine PNG/PDF che non si decodifica).
+export const FONT_GRAFICI = "'Inter Tight Variable', 'Helvetica Neue', Helvetica, Arial, sans-serif";
 
 export function stileTooltip(c: Colori) {
   return {
