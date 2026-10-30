@@ -1,10 +1,11 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
-import { ElencoDataset } from "@/components/ElencoDataset";
+import { creaFormati } from "@/lib/formato";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function PaginaDataset({ searchParams }: PageProps<"/dataset">) {
   const t = await getTranslations("elenco");
+  const f = creaFormati(await getLocale());
   const { q } = await searchParams;
   const ricerca = typeof q === "string" ? q.trim() : "";
 
@@ -48,7 +49,25 @@ export default async function PaginaDataset({ searchParams }: PageProps<"/datase
         </div>
       )}
 
-      {elenco && elenco.length > 0 && <ElencoDataset elenco={elenco} />}
+      {elenco && elenco.length > 0 && (
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {elenco.map((d) => (
+            <li key={d.id}>
+              <Link href={`/dataset/${d.id}/grafici`} className="scheda block h-full space-y-2 hover:border-foreground">
+                <p className="font-mono font-medium break-all">{d.nome}</p>
+                <p className="text-sm text-slate-500 break-all">
+                  {d.nome_originale}
+                  {d.foglio ? ` · ${t("foglio", { nome: d.foglio })}` : ""}
+                </p>
+                <p className="text-sm">
+                  {t("righeColonne", { righe: f.numero(d.righe), colonne: (d.colonne as unknown[]).length })}
+                </p>
+                <p className="text-xs text-slate-500">{t("importatoIl", { data: f.dataOra(d.created_at) })}</p>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
