@@ -1,10 +1,10 @@
 import { getTranslations } from "next-intl/server";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { conParametri } from "@/lib/filtri";
 import { createClient } from "@/lib/supabase/server";
 import { Azioni } from "./Azioni";
 import { BarraFiltri } from "./BarraFiltri";
+import { BottonePagina } from "./BottonePagina";
 import { filtriDataset } from "./filtri-dataset";
 import { Intestazione } from "./Intestazione";
 import { TabellaDati } from "./TabellaDati";
@@ -103,10 +103,21 @@ export default async function PaginaDettaglio({ params, searchParams }: PageProp
         hrefOrdina={(c, dir) => link({ ordina: c, dir, pagina: 1 })}
       />
 
-      <nav aria-label={t("navigazionePagine")} className="flex flex-wrap items-center justify-between gap-3 text-sm">
-        <span className="text-slate-500">
-          {etichette.length > 0 && t("conFiltri", { n: f.numero(totale) })}{t("pagina", { pagina, pagine })}
-        </span>
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-4 text-sm">
+        <nav aria-label={t("navigazionePagine")} className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+          {pagine > 1 && (
+            <>
+              <BottonePagina href={pagina > 1 ? link({ pagina: 1 }) : null} freccia="«" breve testo={t("primaPagina")} />
+              <BottonePagina href={pagina > 1 ? link({ pagina: pagina - 1 }) : null} freccia="←" testo={t("precedente")} />
+            </>
+          )}
+          <span className="px-1 text-slate-500 max-sm:order-first max-sm:basis-full">
+            {etichette.length > 0 && t("conFiltri", { n: f.numero(totale) })}{t("pagina", { pagina, pagine })}
+          </span>
+          {pagine > 1 && (
+            <BottonePagina href={pagina < pagine ? link({ pagina: pagina + 1 }) : null} freccia="→" dopo testo={t("successiva")} />
+          )}
+        </nav>
         <div className="flex flex-wrap gap-2">
           <a href={`/dataset/${id}/esporta${queryFiltri}`} className="bottone-secondario px-3 py-1" download>
             {etichette.length ? t("scaricaCsvFiltri") : t("scaricaCsv")}
@@ -114,10 +125,8 @@ export default async function PaginaDettaglio({ params, searchParams }: PageProp
           <a href={`/dataset/${id}/excel${queryFiltri}`} className="bottone-secondario px-3 py-1" download>
             {etichette.length ? t("scaricaExcelFiltri") : t("scaricaExcel")}
           </a>
-          {pagina > 1 && <Link href={link({ pagina: pagina - 1 })} className="bottone-secondario px-3 py-1">{t("precedente")}</Link>}
-          {pagina < pagine && <Link href={link({ pagina: pagina + 1 })} className="bottone-secondario px-3 py-1">{t("successiva")}</Link>}
         </div>
-      </nav>
+      </div>
 
       <Azioni id={d.id} nome={d.nome} />
     </div>
