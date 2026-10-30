@@ -1,4 +1,4 @@
-// Link di sola lettura per un grafico salvato o per la dashboard (tabella public.condivisioni, SPEC §6.4).
+// Link di sola lettura per un grafico salvato o per la dashboard (tabella public.condivisioni, SPEC §6.5).
 
 // Scadenze proposte, in giorni; "mai" = finché non si revoca. La prima è quella proposta.
 export const SCADENZE = ["30", "7", "1", "90", "mai"] as const;

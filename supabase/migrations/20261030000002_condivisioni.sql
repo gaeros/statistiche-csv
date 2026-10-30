@@ -1,4 +1,4 @@
--- Link di sola lettura per condividere un grafico salvato o la dashboard (SPEC §6.4).
+-- Link di sola lettura per condividere un grafico salvato o la dashboard (SPEC §6.5).
 --
 -- Chi ha il link vede i grafici senza accedere e senza poterli cambiare. Il link contiene un
 -- codice casuale di 64 caratteri (244 bit casuali, impossibile da indovinare) che crea il

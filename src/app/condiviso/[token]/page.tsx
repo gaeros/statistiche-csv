@@ -26,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-// Pagina pubblica di un link di sola lettura (SPEC §6.4): nessun accesso, nessuna modifica.
+// Pagina pubblica di un link di sola lettura (SPEC §6.5): nessun accesso, nessuna modifica.
 // Gira solo sul server: con la chiave di servizio legge il link e calcola i grafici con la
 // configurazione salvata. Al browser arrivano solo i valori già calcolati dei grafici.
 export default async function PaginaCondivisa({ params }: PageProps<"/condiviso/[token]">) {
