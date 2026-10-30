@@ -1,7 +1,8 @@
 // Colori dei grafici: otto tinte in ordine fisso, scelte per restare distinguibili anche da chi
 // non vede bene i colori; la versione scura ha le stesse tinte adattate allo sfondo scuro.
 // Gli sfondi scuri sono quelli del tema scuro (globals.css: --color-white, slate-200, slate-100).
-export const SERIE_CHIARO = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"];
+// Nel tema chiaro ogni tinta ha almeno 3:1 sul bianco (WCAG 1.4.11): verde, giallo e rosa sono più scuri dal 30/10/2026.
+export const SERIE_CHIARO = ["#2a78d6", "#eb6834", "#16a06e", "#c58200", "#d9558c", "#008300", "#6250d6", "#e34948"];
 const SERIE_SCURO = ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#008300", "#9085e9", "#e66767"];
 
 export type Colori = {

@@ -209,7 +209,7 @@ export function SchedeRiordinabili({
                 aria-label={t("spostaScheda", { nome: v.nome })}
                 aria-describedby="istruzioni-schede"
                 title={t("trascinaPerSpostare")}
-                className="absolute top-1.5 left-1/2 flex h-6 w-10 -translate-x-1/2 touch-none items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-700 focus-visible:ring-2 focus-visible:ring-foreground focus-visible:outline-none"
+                className="absolute top-1.5 left-1/2 flex h-6 w-10 -translate-x-1/2 touch-none items-center justify-center rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-700 focus-visible:ring-2 focus-visible:ring-foreground focus-visible:outline-none"
               >
                 <svg width="16" height="10" viewBox="0 0 16 10" aria-hidden="true" fill="currentColor">
                   {[2, 8, 14].flatMap((x) => [2, 8].map((y) => <circle key={`${x}-${y}`} cx={x} cy={y} r="1.6" />))}

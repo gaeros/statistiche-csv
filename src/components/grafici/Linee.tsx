@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { DatiGrafico } from "./DatiGrafico";
 import { Grafico } from "./Grafico";
 import { stileAssi, stileTooltip } from "./tema";
 
@@ -11,15 +12,19 @@ export function Linee({
   etichette,
   serie,
   descrizione,
+  conDati = true,
 }: {
   etichette: string[];
   serie: { nome: string; valori: (number | null)[]; soglia?: number }[];
   descrizione: string;
+  // false dove la pagina mostra già i numeri in una tabella sua
+  conDati?: boolean;
 }) {
   const t = useTranslations("chart");
   const zoom = etichette.length > 60;
   const soglie = serie.flatMap((s) => (s.soglia === undefined ? [] : [s.soglia]));
   return (
+    <div className="space-y-2">
     <Grafico
       descrizione={descrizione}
       altezza={zoom ? 380 : 340}
@@ -74,5 +79,12 @@ export function Linee({
         })),
       })}
     />
+    {conDati && (
+      <DatiGrafico
+        nome={descrizione}
+        tabella={() => ({ intestazione: [t("colPeriodo"), ...serie.map((s) => s.nome)], righe: etichette.map((e, i) => [e, ...serie.map((s) => s.valori[i])]) })}
+      />
+    )}
+    </div>
   );
 }

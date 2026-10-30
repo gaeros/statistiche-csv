@@ -364,7 +364,12 @@
     "descrizione": "Chart “{titolo}”. The values are in the “Show data” table below.",
     "mostraDati": "Show data",
     "datiDi": "Data of the chart “{titolo}”",
-    "primeRighe": "Showing the first {n} rows of {totale}: you get all of them with “Download data (CSV)”."
+    "primeRighe": "Showing the first {n} rows of {totale}.",
+    "colPeriodo": "Period",
+    "colCategoria": "Category",
+    "colValore": "Value",
+    "colPercentuale": "%",
+    "colFascia": "Value range"
   },
   "graficiPagina": {
     "dashboard": "Saved charts",
@@ -612,7 +617,9 @@
     "cosa4": "Download charts as images (PNG) or PDF and filtered data as CSV or Excel.",
     "privacyT": "Your data stays yours",
     "privacy": "You only see your own files: no other user can read them. The data is stored in Europe and you can download it or delete everything whenever you want from your account page. The app shows numbers and gives no medical advice.",
-    "leggiInformativa": "Read the privacy notice"
+    "leggiInformativa": "Read the privacy notice",
+    "fermaAnimazione": "Pause animation",
+    "riprendiAnimazione": "Resume animation"
   },
   "guidaPagina": {
     "metaTitolo": "Guide – Datahue",

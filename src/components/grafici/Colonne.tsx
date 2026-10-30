@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+import { DatiGrafico } from "./DatiGrafico";
 import { Grafico } from "./Grafico";
 import { stileAssi, stileTooltip } from "./tema";
 
@@ -11,6 +13,7 @@ export function Colonne({
   descrizione,
   orizzontale = false,
   altezza,
+  nomeEtichette,
 }: {
   etichette: string[];
   valori: (number | null)[];
@@ -18,9 +21,13 @@ export function Colonne({
   descrizione: string;
   orizzontale?: boolean;
   altezza?: number;
+  // Intestazione della prima colonna nella tabella «Mostra i dati» (predefinita: «Categoria»)
+  nomeEtichette?: string;
 }) {
+  const t = useTranslations("chart");
   const h = altezza ?? (orizzontale ? Math.max(160, etichette.length * 28 + 40) : 240);
   return (
+    <div className="space-y-2">
     <Grafico
       descrizione={descrizione}
       altezza={h}
@@ -71,5 +78,10 @@ export function Colonne({
         };
       }}
     />
+    <DatiGrafico
+      nome={descrizione}
+      tabella={() => ({ intestazione: [nomeEtichette ?? t("colCategoria"), nomeValore], righe: etichette.map((e, i) => [e, valori[i]]) })}
+    />
+    </div>
   );
 }

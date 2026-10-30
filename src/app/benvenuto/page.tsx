@@ -62,7 +62,16 @@ export default async function PaginaBenvenuto() {
           </div>
         </div>
       </header>
-      <HeroScorrimento a={t("titoloA")} b={t("titoloB")} descrizione={t("titoloAnimazione")} scorri={t("scorri")} />
+      <section aria-label={t("titoloAnimazione")}>
+      <HeroScorrimento
+        a={t("titoloA")}
+        b={t("titoloB")}
+        descrizione={t("titoloAnimazione")}
+        scorri={t("scorri")}
+        ferma={t("fermaAnimazione")}
+        riprendi={t("riprendiAnimazione")}
+      />
+      </section>
     <main className="mx-auto w-full max-w-5xl flex-1 space-y-16 px-4 pb-16 pt-4 [&_.scheda]:rounded-3xl [&_.scheda]:border-slate-200 [&_.scheda]:shadow-none">
       <header className="space-y-8 text-center">
         <p className="mx-auto max-w-2xl text-lg text-slate-600 sm:text-2xl">
@@ -88,7 +97,7 @@ export default async function PaginaBenvenuto() {
         <ol className="grid gap-4 sm:grid-cols-3">
           {PASSI.map((p, i) => (
             <li key={p} className="scheda space-y-1">
-              <span className="text-sm font-semibold text-slate-400">{t("passo", { n: i + 1 })}</span>
+              <span className="text-sm font-semibold text-slate-500">{t("passo", { n: i + 1 })}</span>
               <h3 className="font-semibold">{t(`${p}T`)}</h3>
               <p className="text-sm text-slate-600">{t(p)}</p>
             </li>
