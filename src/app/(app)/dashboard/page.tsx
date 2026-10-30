@@ -1,6 +1,7 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { GraficoLibero } from "@/components/grafici/GraficoLibero";
+import { ScegliDataset } from "@/components/ScegliDataset";
 import { SchedeRiordinabili } from "@/components/SchedeRiordinabili";
 import { DASHBOARD } from "@/lib/condivisioni";
 import { conParametri, type Colonna } from "@/lib/filtri";
@@ -20,6 +21,7 @@ type GraficoSalvato = {
 // Dashboard personale: i grafici salvati che l'utente ha fissato, da tutti i suoi dataset,
 // nell'ordine scelto da lui (trascinamento, tastiera, lente come in «Colonna per colonna»).
 // I grafici si calcolano su tutte le righe: i filtri valgono solo nella pagina del dataset.
+// In alto una ricerca compatta (solo i nomi) apre i grafici di un dataset: lo spazio resta ai grafici.
 export default async function PaginaDashboard() {
   const t = await getTranslations("dashboard");
   const tg = await getTranslations("grafici");
@@ -27,7 +29,13 @@ export default async function PaginaDashboard() {
   const f = creaFormati(await getLocale());
 
   const supabase = await createClient();
-  const { data: riga, error } = await supabase.from("dashboard").select("grafici").maybeSingle();
+  const [{ data: elenco, error: errDataset }, { data: riga, error }] = await Promise.all([
+    supabase
+      .from("dataset")
+      .select("id, nome")
+      .order("nome"),
+    supabase.from("dashboard").select("grafici").maybeSingle(),
+  ]);
   const ids = (riga?.grafici as string[] | undefined) ?? [];
 
   const { data: trovati, error: errGrafici } = ids.length
@@ -68,7 +76,7 @@ export default async function PaginaDashboard() {
   );
 
   const intestazione = (
-    <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
+    <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-3">
       <div>
         <h1 className="text-3xl font-semibold tracking-normal">{t("titolo")}</h1>
         {schede.length > 0 && (
@@ -77,39 +85,48 @@ export default async function PaginaDashboard() {
           </p>
         )}
       </div>
-      {schede.length > 0 && (
-        <Link href={`/condivisioni?grafico=${DASHBOARD}`} className="bottone-secondario text-sm" title={t("condividiAiuto")}>
-          {t("condividi")}
-        </Link>
-      )}
+      <div className="flex flex-wrap items-center gap-2">
+        {elenco && elenco.length > 0 && (
+          <ScegliDataset
+            voci={elenco}
+            etichetta={t("cercaEtichetta")}
+            segnaposto={t("cercaDataset")}
+            apri={t("apriGrafici")}
+            nessuno={t("nessunRisultato")}
+          />
+        )}
+        {schede.length > 0 && (
+          <Link href={`/condivisioni?grafico=${DASHBOARD}`} className="bottone-secondario py-2 text-sm" title={t("condividiAiuto")}>
+            {t("condividi")}
+          </Link>
+        )}
+      </div>
+      {errDataset && <p className="w-full text-red-600">{t("errore", { dettaglio: errDataset.message })}</p>}
     </div>
   );
 
   const errore = error ?? errGrafici;
+  let grafici;
   if (errore) {
-    return (
+    grafici = (
       <div className="space-y-6">
         {intestazione}
         <p className="text-red-600">{t("errore", { dettaglio: errore.message })}</p>
       </div>
     );
-  }
-
-  if (schede.length === 0) {
-    return (
+  } else if (schede.length === 0) {
+    grafici = (
       <div className="space-y-6">
         {intestazione}
-        <div className="scheda space-y-3">
+        <div className="scheda space-y-2">
           <h2 className="text-xl font-semibold">{t("vuotaTitolo")}</h2>
-          <p className="text-slate-600 dark:text-slate-300">{t("vuota")}</p>
-          <Link href="/dataset" className="bottone">{t("vaiAiDataset")}</Link>
+          <p className="text-slate-600 dark:text-slate-300">{elenco && elenco.length === 0 ? t("nessunDataset") : t("vuota")}</p>
+          {elenco && elenco.length === 0 && <Link href="/importa" className="bottone">{t("importaPrimo")}</Link>}
         </div>
       </div>
     );
-  }
-
-  return (
-    <div className="space-y-4">
+  } else {
+    grafici = (
       <SchedeRiordinabili
         voci={schede}
         salvato={fissati.map((g) => g.id)}
@@ -118,6 +135,8 @@ export default async function PaginaDashboard() {
         ripristinabile={false}
         griglia="lg:grid-cols-2"
       />
-    </div>
-  );
+    );
+  }
+
+  return <div className="space-y-4">{grafici}</div>;
 }
