@@ -32,7 +32,7 @@ export default async function PaginaDettaglio({ params, searchParams }: PageProp
   if (!d) notFound();
 
   const colonne = d.colonne as Colonna[];
-  const { filtri, etichette, valori, queryFiltri } = await filtriDataset(supabase, id, colonne, sp);
+  const { filtri, etichette, valori, queryFiltri, salvati: filtriSalvati } = await filtriDataset(supabase, id, colonne, sp);
   const { data: risultato, error } = await supabase.rpc("leggi_righe", {
     p_filtri: filtri,
     p_dataset: id,
@@ -64,6 +64,9 @@ export default async function PaginaDettaglio({ params, searchParams }: PageProp
       />
 
       <BarraFiltri
+        id={id}
+        percorso={`/dataset/${id}`}
+        salvati={filtriSalvati}
         colonne={colonne}
         sp={sp}
         etichette={etichette}

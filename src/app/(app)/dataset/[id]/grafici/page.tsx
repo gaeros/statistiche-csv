@@ -68,7 +68,7 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
   const { filtri } = leggiFiltri(sp, colonne);
   const config = leggiConfigurazione(sp, colonne);
 
-  const [{ etichette, valori, queryFiltri }, { data: salvati }, anteprima, { data: pannello }] = await Promise.all([
+  const [{ etichette, valori, queryFiltri, salvati: filtriSalvati }, { data: salvati }, anteprima, { data: pannello }] = await Promise.all([
     filtriDataset(supabase, id, colonne, sp),
     supabase.from("grafici").select("id, titolo, configurazione").eq("dataset_id", id).order("created_at"),
     supabase.rpc("dati_grafico", { p_dataset: id, p_config: config, p_filtri: filtri }),
@@ -111,7 +111,7 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
         query={queryFiltri}
       />
 
-      <BarraFiltri colonne={colonne} sp={sp} etichette={etichette} valori={valori} />
+      <BarraFiltri id={id} percorso={`/dataset/${id}/grafici`} salvati={filtriSalvati} colonne={colonne} sp={sp} etichette={etichette} valori={valori} />
 
       {/* Grafici salvati per questo dataset (si possono fissare nella dashboard personale) */}
       <section id="dashboard" className="space-y-4">

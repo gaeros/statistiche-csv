@@ -9,10 +9,13 @@ import {
   GIORNI,
   SCORCIATOIE,
   senzaFiltri,
+  soloFiltri,
   type Colonna,
   type Etichetta,
   type Parametri,
 } from "@/lib/filtri";
+import { normalizza, stessiFiltri, type FiltroSalvato } from "@/lib/filtri-salvati";
+import { FiltriSalvati } from "./filtri-salvati/FiltriSalvati";
 
 type Valore = { valore: string; conteggio: number };
 
@@ -45,7 +48,11 @@ function Casella({ nome, valore, etichetta, scelta }: { nome: string; valore: st
 }
 
 // Barra dei filtri: vale per tutte le schede del dataset (dati, statistiche e grafici).
+// "percorso" è la scheda attuale (/dataset/<id>, …/statistiche, …/grafici): i filtri salvati si riaprono lì.
 export async function BarraFiltri({
+  id,
+  percorso,
+  salvati,
   colonne,
   sp,
   etichette,
@@ -53,6 +60,9 @@ export async function BarraFiltri({
   totale,
   complessivo,
 }: {
+  id: string;
+  percorso: string;
+  salvati: FiltroSalvato[] | null;
   colonne: Colonna[];
   sp: Parametri;
   etichette: Etichetta[];
@@ -65,6 +75,13 @@ export async function BarraFiltri({
   const f = creaFormati(await getLocale());
   const attivi = etichette.length > 0;
   const campo = "campo py-1.5 text-sm";
+  const correnti = normalizza(sp);
+  const filtriSalvati = (salvati ?? []).map((s) => ({
+    id: s.id,
+    nome: s.nome,
+    href: `${percorso}${conParametri(senzaFiltri(sp), { pagina: null, ...s.parametri })}`,
+    attivo: stessiFiltri(correnti, s.parametri),
+  }));
 
   return (
     <section className="space-y-3">
@@ -207,6 +224,18 @@ export async function BarraFiltri({
             {t("azzera")}
           </Link>
         </div>
+      )}
+
+      {salvati && (
+        <FiltriSalvati
+          // Cambiando i filtri i messaggi di prima spariscono.
+          key={conParametri(soloFiltri(sp), {})}
+          id={id}
+          salvati={filtriSalvati}
+          attivi={attivi}
+          query={conParametri(soloFiltri(sp), {})}
+          ritorno={`${percorso}${conParametri(sp, { pagina: null })}`}
+        />
       )}
     </section>
   );
