@@ -55,7 +55,7 @@ export default async function PaginaBenvenuto() {
           <div className="flex items-center gap-2 sm:gap-3">
             {/* Sul telefono il tema non ci sta nella barra (si sceglie dopo l'accesso): niente scorrimento di lato */}
             <span className="hidden sm:contents"><SelettoreTema /></span>
-            <SelettoreLingua nero />
+            <SelettoreLingua />
             <Link href={collegato ? "/dataset" : "/accedi"} className="bottone-nero">
               {collegato ? t("vaiDati") : t("accedi")}
             </Link>

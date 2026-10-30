@@ -5,13 +5,13 @@ import { useTransition } from "react";
 import { impostaLingua } from "@/i18n/azioni";
 import { LINGUE } from "@/i18n/lingue";
 
-// Due pulsanti IT | EN: scelgono la lingua per tutto il sito.
-export function SelettoreLingua({ className = "", nero = true }: { className?: string; nero?: boolean }) {
+// Due pulsanti IT | EN, ognuno una pillola come «Esci»: scelgono la lingua per tutto il sito.
+export function SelettoreLingua({ className = "" }: { className?: string }) {
   const attuale = useLocale();
   const t = useTranslations("lingua");
   const [, avvia] = useTransition();
   return (
-    <div role="group" aria-label={t("etichetta")} className={`inline-flex h-9 overflow-hidden ${nero ? "rounded-full" : "rounded-md"} border border-slate-300 text-sm ${className}`}>
+    <div role="group" aria-label={t("etichetta")} className={`inline-flex items-center gap-1 text-sm ${className}`}>
       {LINGUE.map((l) => (
         <button
           key={l}
@@ -20,7 +20,7 @@ export function SelettoreLingua({ className = "", nero = true }: { className?: s
           aria-pressed={l === attuale}
           title={t(l)}
           onClick={() => avvia(() => impostaLingua(l))}
-          className={`flex w-10 items-center justify-center font-medium uppercase ${l === attuale ? (nero ? "bg-foreground text-white" : "bg-foreground text-white") : "bg-white text-slate-700 hover:bg-slate-100"}`}
+          className={`flex h-9 w-10 items-center justify-center rounded-full border focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground sm:w-11 font-semibold uppercase ${l === attuale ? "border-foreground bg-foreground text-white" : "border-slate-300 bg-white text-foreground hover:bg-slate-100"}`}
         >
           {l}
         </button>
