@@ -102,7 +102,7 @@ export default async function PaginaStatistiche({ params, searchParams }: PagePr
   const originale = (nome: string) => colonne.find((c) => c.nome === nome)?.originale ?? nome;
 
   const { filtri } = leggiFiltri(sp, colonne, { t: tf, f });
-  const [{ etichette, valori: valoriFiltri, queryFiltri }, stat, ordine] = await Promise.all([
+  const [{ etichette, valori: valoriFiltri, queryFiltri, salvati: filtriSalvati }, stat, ordine] = await Promise.all([
     filtriDataset(supabase, id, colonne, sp),
     supabase.rpc("statistiche_colonne", { p_dataset: id, p_barre: 10, p_filtri: filtri }),
     // A parte: se la colonna non c'è ancora nel database, la pagina funziona lo stesso con l'ordine del file.
@@ -212,6 +212,9 @@ export default async function PaginaStatistiche({ params, searchParams }: PagePr
       />
 
       <BarraFiltri
+        id={id}
+        percorso={`/dataset/${id}/statistiche`}
+        salvati={filtriSalvati}
         colonne={colonne}
         sp={sp}
         etichette={etichette}
