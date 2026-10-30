@@ -177,7 +177,6 @@
   "app": {
     "dashboard": "Dashboard",
     "iMieiDataset": "My datasets",
-    "importa": "Import",
     "guida": "Guide",
     "inviti": "Invitations",
     "account": "My account",
@@ -589,7 +588,7 @@
     "intro": "Datahue turns a file of numbers into statistics and charts. You use it in eight steps.",
     "accesso": "To sign in use your email and password, or “Sign in with Google” with the same address the invitation was sent to. A Google account with a different address cannot get in.",
     "p1Titolo": "Import a file",
-    "p1Testo": "From the “Import” menu drag a CSV or Excel file (up to 50 MB). If the file has several sheets, choose which to import. The app detects encoding and separator on its own; if you see odd characters, change them by hand. Before importing it guides you in four steps: table name, columns and types (number, date, text…), values to check and summary. Values that don't fit the chosen type are marked in red with their row number: you can correct them, leave them empty or skip those rows. Each file (or sheet) becomes a dataset with its own name.",
+    "p1Testo": "In “My datasets” press “Import file” and drag a CSV or Excel file (up to 50 MB). If the file has several sheets, choose which to import. The app detects encoding and separator on its own; if you see odd characters, change them by hand. Before importing it guides you in four steps: table name, columns and types (number, date, text…), values to check and summary. Values that don't fit the chosen type are marked in red with their row number: you can correct them, leave them empty or skip those rows. Each file (or sheet) becomes a dataset with its own name.",
     "p2Titolo": "Look at the data",
     "p2Testo": "“My datasets” lists the files you imported, with a search by name. Open one: the “Data” tab shows the table, page by page. From there you can also rename it, download it as CSV or Excel (.xlsx, with numbers and dates ready for calculations) or delete it: to delete it you type DELETE, so it never happens by mistake.",
     "p3Titolo": "Filter",
