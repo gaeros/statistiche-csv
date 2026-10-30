@@ -232,7 +232,7 @@
     "schedaGrafici": "Grafici",
     "avvisi": "Avvisi dell'importazione ({n})",
     "erroreRighe": "Impossibile leggere le righe: {dettaglio}",
-    "didascalia": "Righe di «{nome}»: da {da} a {a} di {totale}. Usa le intestazioni per ordinare.",
+    "didascalia": "Righe di «{nome}»: da {da} a {a} di {totale}. Usa le frecce nelle intestazioni per ordinare.",
     "colonneNascoste": "{n, plural, one {Colonna nascosta perché vuota} other {Colonne nascoste perché vuote}} in tutto il dataset: {nomi}. Restano nei file CSV ed Excel scaricati.",
     "conFiltri": "{n} righe con i filtri · ",
     "pagina": "Pagina {pagina} di {pagine}",
@@ -258,7 +258,15 @@
     "nomeAggiornato": "Nome aggiornato.",
     "eliminazioneFallita": "Eliminazione non riuscita: {dettaglio}",
     "sezioni": "Sezioni del dataset",
-    "navigazionePagine": "Pagine della tabella"
+    "navigazionePagine": "Pagine della tabella",
+    "ordinaCrescente": "Ordina in senso crescente",
+    "ordinaDecrescente": "Ordina in senso decrescente",
+    "ordineOriginale": "Torna all'ordine originale",
+    "ordinamento": {
+      "crescente": "ordinata in senso crescente",
+      "decrescente": "ordinata in senso decrescente",
+      "nessuno": "non ordinata"
+    }
   },
   "barraFiltri": {
     "titolo": "Filtra i dati",
@@ -631,7 +639,7 @@
     "p1Titolo": "Importa un file",
     "p1Testo": "In «I miei dataset» premi «Importa file» e trascina un file CSV o Excel (fino a 50 MB). Se il file ha più fogli scegli quali importare. L'app riconosce da sola codifica e separatore; se vedi caratteri strani, cambiali a mano. Prima di importare ti guida in quattro passi: nome della tabella, colonne e tipi (numero, data, testo…), valori da controllare e riepilogo. I valori che non vanno bene per il tipo scelto sono segnati in rosso con il numero di riga: puoi correggerli, lasciarli vuoti o non importare quelle righe. Ogni file (o foglio) diventa un dataset con il suo nome.",
     "p2Titolo": "Guarda i dati",
-    "p2Testo": "In «I miei dataset» trovi i file importati, con una ricerca per nome. Aprine uno: la scheda «Dati» mostra la tabella a pagine: sotto la tabella, accanto a «Pagina 1 di N», trovi le frecce « (prima pagina), ← (precedente) e → (successiva); a destra i pulsanti per scaricare. Da lì puoi anche rinominarlo, scaricarlo in CSV o in Excel (.xlsx, con numeri e date già pronti per i calcoli) o eliminarlo: per eliminarlo ti chiediamo di scrivere ELIMINA, così non succede per sbaglio.",
+    "p2Testo": "In «I miei dataset» trovi i file importati, con una ricerca per nome. Aprine uno: la scheda «Dati» mostra la tabella a pagine. Ogni intestazione di colonna ha le frecce per ordinare: un clic ordina in senso crescente (dal più piccolo, dalla data più vecchia, dalla A), un secondo clic in senso decrescente, un terzo torna all'ordine originale; l'ordine vale su tutte le righe (non solo sulla pagina che vedi) e resta con i filtri. sotto la tabella, accanto a «Pagina 1 di N», trovi le frecce « (prima pagina), ← (precedente) e → (successiva); a destra i pulsanti per scaricare. Da lì puoi anche rinominarlo, scaricarlo in CSV o in Excel (.xlsx, con numeri e date già pronti per i calcoli) o eliminarlo: per eliminarlo ti chiediamo di scrivere ELIMINA, così non succede per sbaglio.",
     "p3Titolo": "Filtra",
     "p3Testo": "Sopra ai dati scegli un periodo (anche con le scorciatoie «ultimi 7 giorni», «ultimi 30 giorni»…), le categorie o i valori che ti interessano, o cerca un testo. Statistiche e grafici seguono sempre i filtri scelti; «Azzera filtri» li toglie tutti. Una combinazione che usi spesso la salvi con «Applica e salva…» (nel riquadro dei filtri) e un nome: la ritrovi in «Filtri salvati», nelle schede Dati, Statistiche e Grafici del dataset, e la riapri con un clic. Le scorciatoie restano aggiornate («ultimi 30 giorni» vuol dire sempre gli ultimi 30 giorni). Da «Rinomina o elimina i filtri salvati» cambi il nome o la elimini (scrivendo ELIMINA); i dati non cambiano.",
     "p4Titolo": "Leggi le statistiche",

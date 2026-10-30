@@ -13,6 +13,21 @@ const stickyPrima = "sticky left-0 bg-inherit shadow-[1px_0_0_var(--color-slate-
 const vuota = (c: Colonna, valori: Record<string, unknown[] | null>) =>
   Array.isArray(valori[c.nome]) && valori[c.nome]!.length === 0;
 
+// Frecce su ogni intestazione: le due frecce chiare dicono che la colonna si può ordinare,
+// la freccia scura e spessa dice in che senso è ordinata ora (su = crescente, giù = decrescente).
+function FrecceOrdine({ stato }: { stato: "crescente" | "decrescente" | "nessuno" }) {
+  const tratto = { fill: "none", stroke: "currentColor", strokeLinecap: "round", strokeLinejoin: "round" } as const;
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 shrink-0">
+      {stato === "nessuno" ? (
+        <path d="M7 9.5l5-5 5 5M7 14.5l5 5 5-5" strokeWidth={2.25} className="text-slate-500" {...tratto} />
+      ) : (
+        <path d={stato === "crescente" ? "M12 20V4M6 10l6-6 6 6" : "M12 4v16M6 14l6 6 6-6"} strokeWidth={3} {...tratto} />
+      )}
+    </svg>
+  );
+}
+
 // Tabella delle righe del dataset: le colonne vuote sono nascoste solo qui, i dati restano (e nei file CSV ed Excel).
 export async function TabellaDati({
   nome,
@@ -33,7 +48,7 @@ export async function TabellaDati({
   totale: number;
   ordina: string;
   discendente: boolean;
-  hrefOrdina: (colonna: string, dir: "asc" | "desc") => string;
+  hrefOrdina: (colonna: string, dir: "asc" | "desc" | null) => string;
 }) {
   const t = await getTranslations("dettaglio");
   const f = await formatiUtente();
@@ -62,22 +77,31 @@ export async function TabellaDati({
             <tr className="bg-slate-100">
               {mostrate.map((c, i) => {
                 const attiva = ordina === c.nome;
+                // Ciclo a ogni clic: crescente → decrescente → ordine originale.
+                const prossimo = !attiva ? "asc" : discendente ? null : "desc";
+                const stato = attiva ? (discendente ? "decrescente" : "crescente") : "nessuno";
+                const azione = prossimo === "asc" ? "ordinaCrescente" : prossimo === "desc" ? "ordinaDecrescente" : "ordineOriginale";
                 return (
                   <th
                     key={c.nome}
                     scope="col"
                     aria-sort={attiva ? (discendente ? "descending" : "ascending") : undefined}
-                    className={`whitespace-nowrap px-3 py-2.5 font-semibold text-foreground ${
+                    className={`whitespace-nowrap p-1 font-semibold text-foreground ${
                       numerica(c) ? "text-right" : ""
                     } ${i === 0 ? stickyPrima : ""}`}
                   >
                     <Link
-                      href={hrefOrdina(c.nome, attiva && !discendente ? "desc" : "asc")}
-                      className="rounded-sm underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
-                      title={`${c.nome} (${c.tipo})`}
+                      href={hrefOrdina(c.nome, prossimo)}
+                      className={`inline-flex min-h-10 items-center gap-1.5 rounded-md px-2 py-1.5 hover:bg-slate-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground ${
+                        numerica(c) ? "flex-row-reverse" : ""
+                      } ${attiva ? "bg-slate-200" : ""}`}
+                      title={`${t(azione)} (${c.tipo})`}
                     >
-                      {c.originale}
-                      {attiva && <span aria-hidden="true">{discendente ? " ↓" : " ↑"}</span>}
+                      <span>{c.originale}</span>
+                      <span className="sr-only">
+                        {`, ${t(`ordinamento.${stato}`)}. ${t(azione)}`}
+                      </span>
+                      <FrecceOrdine stato={stato} />
                     </Link>
                   </th>
                 );
