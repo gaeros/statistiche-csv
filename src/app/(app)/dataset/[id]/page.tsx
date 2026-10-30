@@ -104,18 +104,18 @@ export default async function PaginaDettaglio({ params, searchParams }: PageProp
       />
 
       <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-4 text-sm">
-        <nav aria-label={t("navigazionePagine")} className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+        <nav aria-label={t("navigazionePagine")} className="flex flex-wrap items-center gap-2">
           {pagine > 1 && (
             <>
-              <BottonePagina href={pagina > 1 ? link({ pagina: 1 }) : null} freccia="«" breve testo={t("primaPagina")} />
+              <BottonePagina href={pagina > 1 ? link({ pagina: 1 }) : null} freccia="«" testo={t("primaPagina")} />
               <BottonePagina href={pagina > 1 ? link({ pagina: pagina - 1 }) : null} freccia="←" testo={t("precedente")} />
             </>
           )}
-          <span className="px-1 text-slate-500 max-sm:order-first max-sm:basis-full">
+          <span className="px-1 text-slate-500">
             {etichette.length > 0 && t("conFiltri", { n: f.numero(totale) })}{t("pagina", { pagina, pagine })}
           </span>
           {pagine > 1 && (
-            <BottonePagina href={pagina < pagine ? link({ pagina: pagina + 1 }) : null} freccia="→" dopo testo={t("successiva")} />
+            <BottonePagina href={pagina < pagine ? link({ pagina: pagina + 1 }) : null} freccia="→" testo={t("successiva")} />
           )}
         </nav>
         <div className="flex flex-wrap gap-2">
