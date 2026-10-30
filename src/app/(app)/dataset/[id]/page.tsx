@@ -51,8 +51,8 @@ export default async function PaginaDettaglio({ params, searchParams }: PageProp
   const pagine = Math.max(1, Math.ceil(totale / PER_PAGINA));
   const avvisi = (d.avvisi as string[]) ?? [];
 
-  const link = (modifiche: Record<string, string | number>) =>
-    `/dataset/${id}${conParametri(sp, Object.fromEntries(Object.entries(modifiche).map(([k, v]) => [k, String(v)])))}`;
+  const link = (modifiche: Record<string, string | number | null>) =>
+    `/dataset/${id}${conParametri(sp, Object.fromEntries(Object.entries(modifiche).map(([k, v]) => [k, v === null ? null : String(v)])))}`;
 
   return (
     <div className="space-y-6">
@@ -100,7 +100,7 @@ export default async function PaginaDettaglio({ params, searchParams }: PageProp
         totale={totale}
         ordina={ordina}
         discendente={discendente}
-        hrefOrdina={(c, dir) => link({ ordina: c, dir, pagina: 1 })}
+        hrefOrdina={(c, dir) => link(dir ? { ordina: c, dir, pagina: 1 } : { ordina: null, dir: null, pagina: null })}
       />
 
       <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-4 text-sm">
