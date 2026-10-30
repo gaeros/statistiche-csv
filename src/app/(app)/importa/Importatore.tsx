@@ -1,9 +1,10 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { creaFormati, type Formati } from "@/lib/formato";
+import { useFormati } from "@/components/FormatiUtente";
+import type { Formati } from "@/lib/formato";
 import type { Traduttore } from "@/i18n/lingue";
 import { Messaggio } from "@/components/Messaggio";
 import { creaAnteprima, riepilogo, type Anteprima, type Riepilogo } from "@/lib/import/anteprima";
@@ -63,7 +64,7 @@ function nuoveSchede(letto: FileLetto, file: File): Scheda[] {
 
 export function Importatore() {
   const t = useTranslations("importa");
-  const f = creaFormati(useLocale());
+  const f = useFormati();
   const supabase = useMemo(() => createClient(), []);
   const [voci, setVoci] = useState<Voce[]>([]);
   const [esistenti, setEsistenti] = useState<DatasetEsistente[]>([]);

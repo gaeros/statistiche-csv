@@ -1,10 +1,9 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CampiNascosti } from "@/components/CampiNascosti";
 import { FormPulito } from "@/components/FormPulito";
 import { GraficoLibero } from "@/components/grafici/GraficoLibero";
-import { creaFormati } from "@/lib/formato";
 import { conParametri, leggiFiltri, type Colonna } from "@/lib/filtri";
 import {
   AGGREGAZIONI,
@@ -23,6 +22,7 @@ import { filtriDataset } from "../filtri-dataset";
 import { Intestazione } from "../Intestazione";
 import { ConfermaElimina } from "@/components/ConfermaElimina";
 import { eliminaGrafico, fissaInDashboard, salvaGrafico } from "./actions";
+import { formatiUtente } from "@/lib/utente";
 
 const SERIE = ["barre", "barre_impilate", "linee", "area"];
 
@@ -53,7 +53,7 @@ export default async function PaginaGrafici({ params, searchParams }: PageProps<
   const t = await getTranslations("graficiPagina");
   const tg = await getTranslations("grafici");
   const tc = await getTranslations("chart");
-  const f = creaFormati(await getLocale());
+  const f = await formatiUtente();
   const sp = await searchParams;
 
   const supabase = await createClient();

@@ -1,11 +1,11 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CampiNascosti } from "@/components/CampiNascosti";
 import { FormPulito } from "@/components/FormPulito";
 import { conParametri, leggiFiltri, type Parametri } from "@/lib/filtri";
-import { creaFormati } from "@/lib/formato";
 import { createClient } from "@/lib/supabase/server";
+import { formatiUtente } from "@/lib/utente";
 import { BarraFiltri } from "../BarraFiltri";
 import { filtriDataset } from "../filtri-dataset";
 import { Intestazione } from "../Intestazione";
@@ -83,7 +83,7 @@ export default async function PaginaStatistiche({ params, searchParams }: PagePr
   const t = await getTranslations("statistiche");
   const tg = await getTranslations("grafici");
   const tf = await getTranslations("filtri");
-  const f = creaFormati(await getLocale());
+  const f = await formatiUtente();
   const sp: Parametri = await searchParams;
 
   const supabase = await createClient();

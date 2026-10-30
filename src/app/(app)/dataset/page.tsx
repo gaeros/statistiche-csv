@@ -1,11 +1,11 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
-import { creaFormati } from "@/lib/formato";
 import { createClient } from "@/lib/supabase/server";
+import { formatiUtente } from "@/lib/utente";
 
 export default async function PaginaDataset({ searchParams }: PageProps<"/dataset">) {
   const t = await getTranslations("elenco");
-  const f = creaFormati(await getLocale());
+  const f = await formatiUtente();
   const { q } = await searchParams;
   const ricerca = typeof q === "string" ? q.trim() : "";
 

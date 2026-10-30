@@ -1,8 +1,7 @@
 "use client";
 
-import { useLocale } from "next-intl";
 import { useEffect, useRef } from "react";
-import { LOCALE_INTL, LINGUA_BASE, èLingua } from "@/i18n/lingue";
+import { useFormati } from "@/components/FormatiUtente";
 import * as echarts from "echarts/core";
 import { BarChart, BoxplotChart, LineChart, PieChart, ScatterChart } from "echarts/charts";
 import { DataZoomComponent, GridComponent, LegendComponent, MarkLineComponent, TooltipComponent } from "echarts/components";
@@ -41,8 +40,7 @@ export function Grafico({
   const riquadro = useRef<HTMLDivElement>(null);
   const grafico = useRef<echarts.ECharts | null>(null);
   const scuro = useTemaScuro();
-  const lingua = useLocale();
-  const locale = LOCALE_INTL[èLingua(lingua) ? lingua : LINGUA_BASE];
+  const locale = useFormati().localeNumeri;
 
   useEffect(() => {
     const el = riquadro.current;

@@ -1,6 +1,6 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
-import { creaFormati } from "@/lib/formato";
+import { formatiUtente } from "@/lib/utente";
 
 type Props = {
   id: string;
@@ -17,7 +17,7 @@ type Props = {
 
 export async function Intestazione({ id, nome, nomeOriginale, foglio, createdAt, righe, colonne, attiva, query = "" }: Props) {
   const t = await getTranslations("dettaglio");
-  const f = creaFormati(await getLocale());
+  const f = await formatiUtente();
   const scheda = (valore: Props["attiva"], href: string, etichetta: string) => (
     <Link
       href={href}

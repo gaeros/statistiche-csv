@@ -1,9 +1,10 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useId, useMemo, useState } from "react";
 import { tradotto, type Traduttore } from "@/i18n/lingue";
-import { creaFormati, type Formati } from "@/lib/formato";
+import { useFormati } from "@/components/FormatiUtente";
+import type { Formati } from "@/lib/formato";
 import {
   avvisiColonna,
   conforme,
@@ -53,7 +54,7 @@ export function SchedaAnteprima({
   onChange: (s: Scheda) => void;
 }) {
   const t = useTranslations("importa");
-  const f = creaFormati(useLocale());
+  const f = useFormati();
   const idBase = useId();
   const [soloDaControllare, setSoloDaControllare] = useState(false);
   const a = scheda.anteprima;

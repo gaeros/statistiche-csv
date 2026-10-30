@@ -1,8 +1,8 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { Colonne } from "@/components/grafici/Colonne";
 import { Torta } from "@/components/grafici/Torta";
-import { creaFormati } from "@/lib/formato";
 import { DATE, NUMERICI, type StatColonna } from "./tipi";
+import { formatiUtente } from "@/lib/utente";
 
 // Oltre questo numero di valori diversi la torta diventa illeggibile: si passa alle barre.
 const MAX_FETTE = 8;
@@ -51,7 +51,7 @@ export async function SchedaColonna({
   conteggioPeriodi?: React.ReactNode;
 }) {
   const t = await getTranslations("colonna");
-  const f = creaFormati(await getLocale());
+  const f = await formatiUtente();
   const numerica = NUMERICI.includes(c.tipo);
   const data = DATE.includes(c.tipo);
   const categorie = c.tipo === "testo" || c.tipo === "booleano";

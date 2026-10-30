@@ -2,6 +2,7 @@
 // quindi i difetti noti di xlsx 0.18.5 (tutti nella lettura) non riguardano questa parte.
 import * as XLSX from "xlsx";
 import type { Colonna } from "./filtri";
+import type { FormatoData } from "./preferenze";
 
 type Cella = XLSX.CellObject;
 
@@ -34,9 +35,24 @@ function serialeData(s: string): number | null {
   return m ? Date.UTC(+m[1], +m[2] - 1, +m[3]) / GIORNO + EPOCA_EXCEL : null;
 }
 
+// Formato di visualizzazione delle date in Excel, come scelto in «Il mio account». Il separatore
+// decimale invece lo decide Excel con la lingua del computer: i numeri restano numeri.
+const FORMATO_EXCEL: Record<Exclude<FormatoData, "auto">, string> = {
+  "gg/mm/aaaa": "dd/mm/yyyy",
+  "mm/gg/aaaa": "mm/dd/yyyy",
+  "aaaa-mm-gg": "yyyy-mm-dd",
+};
+
 // Valore di una colonna del dataset come cella Excel: numeri e date restano numeri e date,
 // così in Excel si possono sommare e ordinare. I testi sono sempre testo, mai formule.
-export function cellaExcel(valore: unknown, tipo: string, si = "Sì", no = "No"): Cella | null {
+export function cellaExcel(
+  valore: unknown,
+  tipo: string,
+  si = "Sì",
+  no = "No",
+  formatoData: Exclude<FormatoData, "auto"> = "gg/mm/aaaa",
+): Cella | null {
+  const z = FORMATO_EXCEL[formatoData];
   if (valore === null || valore === undefined || valore === "") return null;
   switch (tipo) {
     case "intero":
@@ -46,11 +62,11 @@ export function cellaExcel(valore: unknown, tipo: string, si = "Sì", no = "No")
     }
     case "data": {
       const v = serialeData(String(valore));
-      return v === null ? { t: "s", v: String(valore) } : { t: "n", v, z: "dd/mm/yyyy" };
+      return v === null ? { t: "s", v: String(valore) } : { t: "n", v, z };
     }
     case "data_ora": {
       const v = serialeDataOra(String(valore));
-      return v === null ? { t: "s", v: String(valore) } : { t: "n", v, z: "dd/mm/yyyy hh:mm" };
+      return v === null ? { t: "s", v: String(valore) } : { t: "n", v, z: `${z} hh:mm` };
     }
     case "booleano":
       return { t: "s", v: valore ? si : no };
@@ -73,6 +89,7 @@ export function creaExcel(
   righe: Record<string, unknown>[],
   si = "Sì",
   no = "No",
+  formatoData: Exclude<FormatoData, "auto"> = "gg/mm/aaaa",
 ): Uint8Array {
   const foglio: XLSX.WorkSheet = {};
   const larghezze = colonne.map((c) => Math.max(8, c.originale.length));
@@ -82,7 +99,7 @@ export function creaExcel(
   });
   righe.forEach((r, y) => {
     colonne.forEach((c, x) => {
-      const cella = cellaExcel(r[c.nome], c.tipo, si, no);
+      const cella = cellaExcel(r[c.nome], c.tipo, si, no, formatoData);
       if (!cella) return;
       foglio[XLSX.utils.encode_cell({ r: y + 1, c: x })] = cella;
       const lunghezza = String(cella.z ?? cella.v).length;

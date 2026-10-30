@@ -1,8 +1,8 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { creaExcel } from "@/lib/excel";
-import { creaFormati } from "@/lib/formato";
 import { leggiFiltri, type Colonna } from "@/lib/filtri";
 import { createClient } from "@/lib/supabase/server";
+import { formatiUtente } from "@/lib/utente";
 
 const BLOCCO = 500;
 
@@ -11,7 +11,7 @@ const BLOCCO = 500;
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const t = await getTranslations("dettaglio");
-  const f = creaFormati(await getLocale());
+  const f = await formatiUtente();
   const supabase = await createClient();
   const { data: d } = await supabase.from("dataset").select("nome, colonne").eq("id", id).maybeSingle();
   if (!d) return new Response(t("nonTrovato"), { status: 404 });
@@ -37,7 +37,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     if (blocco.length < BLOCCO) break;
   }
 
-  const file = creaExcel(d.nome, colonne, righe, f.si, f.no);
+  const file = creaExcel(d.nome, colonne, righe, f.si, f.no, f.formatoData);
   return new Response(file as BodyInit, {
     headers: {
       "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",

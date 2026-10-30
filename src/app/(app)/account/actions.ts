@@ -1,9 +1,11 @@
 "use server";
 
 import { getTranslations } from "next-intl/server";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { StatoForm } from "@/app/accedi/actions";
 import { confermaScritta } from "@/lib/conferma";
+import { leggiPreferenze } from "@/lib/preferenze";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
@@ -33,4 +35,15 @@ export async function eliminaAccount(_prev: StatoForm, formData: FormData): Prom
 
   await supabase.auth.signOut();
   redirect("/accedi?eliminato=1");
+}
+
+// Salva i formati di data e decimali nei metadati dell'utente (SPEC §6.3); valgono subito in tutta l'app.
+export async function salvaFormati(_prev: StatoForm, formData: FormData): Promise<StatoForm> {
+  const t = await getTranslations("account");
+  const formati = leggiPreferenze({ formati: { data: formData.get("data"), decimali: formData.get("decimali") } });
+  const supabase = await createClient();
+  const { error } = await supabase.auth.updateUser({ data: { formati } });
+  if (error) return { errore: t("erroreFormati", { dettaglio: error.message }) };
+  revalidatePath("/", "layout");
+  return { ok: t("formatiSalvati") };
 }

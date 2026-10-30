@@ -1,9 +1,9 @@
 import "server-only";
-import { getLocale, getTranslations } from "next-intl/server";
-import { creaFormati } from "@/lib/formato";
+import { getTranslations } from "next-intl/server";
 import { conParametri, leggiFiltri, soloFiltri, type Colonna, type Parametri } from "@/lib/filtri";
 import { leggiSalvati } from "@/lib/filtri-salvati";
 import type { createClient } from "@/lib/supabase/server";
+import { formatiUtente } from "@/lib/utente";
 
 // Oltre questo numero di valori diversi una colonna di testo si filtra con la ricerca, non con le caselle.
 const MAX_CASELLE = 30;
@@ -16,7 +16,7 @@ export async function filtriDataset(
   sp: Parametri,
 ) {
   const t = await getTranslations("filtri");
-  const f = creaFormati(await getLocale());
+  const f = await formatiUtente();
   const { filtri, etichette } = leggiFiltri(sp, colonne, { t, f });
   const categorie = colonne.filter((c) => c.tipo === "testo" || c.tipo === "booleano");
   const [risposte, salvati] = await Promise.all([
