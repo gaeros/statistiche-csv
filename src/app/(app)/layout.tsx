@@ -3,6 +3,7 @@ import { Logo } from "@/components/Logo";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { esci } from "@/app/accedi/actions";
+import { MenuAccount } from "@/components/MenuAccount";
 import { SelettoreLingua } from "@/components/SelettoreLingua";
 import { SelettoreTema } from "@/components/SelettoreTema";
 import { VERSIONE_INFORMATIVA } from "@/lib/privacy";
@@ -30,15 +31,12 @@ export default async function LayoutApp({ children }: LayoutProps<"/">) {
             )}
           </nav>
           <div className="ml-auto flex flex-wrap items-center justify-end gap-2 text-sm sm:gap-3">
-            <Link href="/account" className="text-slate-500 hover:underline" title={t("account")}>
-              <span className="hidden sm:inline">{utente.email}</span>
-              <span className="sm:hidden">{t("accountBreve")}</span>
-            </Link>
             <SelettoreTema />
             <SelettoreLingua />
             <form action={esci}>
-              <button type="submit" className="bottone-secondario px-3 py-1 text-sm">{t("esci")}</button>
+              <button type="submit" className="bottone-secondario h-9 px-4 py-0 text-sm">{t("esci")}</button>
             </form>
+            <MenuAccount email={utente.email ?? ""} />
           </div>
         </div>
       </header>
