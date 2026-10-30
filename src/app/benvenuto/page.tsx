@@ -53,7 +53,7 @@ export default async function PaginaBenvenuto() {
           <Link href="/benvenuto" className="text-foreground"><Logo className="h-11 w-auto sm:h-14" /></Link>
           <div className="flex items-center gap-3">
             <SelettoreLingua nero />
-            <Link href={collegato ? "/dataset" : "/accedi"} className="bottone-nero">
+            <Link href={collegato ? "/dashboard" : "/accedi"} className="bottone-nero">
               {collegato ? t("vaiDati") : t("accedi")}
             </Link>
           </div>
@@ -66,7 +66,7 @@ export default async function PaginaBenvenuto() {
           {t("intro")}
         </p>
         <div className="flex flex-wrap justify-center gap-3">
-          <Link href={collegato ? "/dataset" : "/accedi"} className="bottone-nero bottone-nero-grande">
+          <Link href={collegato ? "/dashboard" : "/accedi"} className="bottone-nero bottone-nero-grande">
             {collegato ? t("vaiDati") : t("accedi")}
           </Link>
           {collegato && (

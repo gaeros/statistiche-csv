@@ -16,7 +16,7 @@ export default async function LayoutApp({ children }: LayoutProps<"/">) {
     <>
       <header className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3">
-          <Link href="/dataset">
+          <Link href="/dashboard">
             <Logo className="h-11 w-auto" />
           </Link>
           <nav className="flex flex-wrap gap-x-4 gap-y-1 text-sm">

@@ -27,5 +27,5 @@ export async function impostaPassword(_prev: StatoForm, formData: FormData): Pro
   const { error } = await supabase.auth.updateUser({ password: dati.data.password });
   if (error) return { errore: erroreAuth(te, error.message) };
 
-  redirect("/dataset");
+  redirect("/dashboard");
 }
