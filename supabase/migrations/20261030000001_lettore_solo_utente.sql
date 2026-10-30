@@ -11,7 +11,7 @@
 -- Una nuova tabella in public con RLS ma senza regola «lettore» resta vuota per lui.
 --
 -- Il ruolo si crea qui senza login, se non c'è ancora; login e password si danno a mano
--- (docs/AVVIO-LOCALE.md, punto 9), così la password non finisce mai nel repository.
+-- nel SQL Editor, così la password non finisce mai nel repository.
 
 do $$
 begin
