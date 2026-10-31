@@ -38,7 +38,7 @@ export default async function LayoutApp({ children }: LayoutProps<"/">) {
               ...(amministratore ? [{ href: "/admin/inviti", testo: t("inviti") }] : []),
             ]}
           />
-          <div className="ml-auto flex flex-wrap items-center justify-end gap-1.5 text-sm sm:gap-3">
+          <div className="ml-auto flex flex-wrap items-center justify-end gap-2 text-sm sm:gap-3">
             <SelettoreTema />
             <SelettoreLingua />
             <form action={esci}>

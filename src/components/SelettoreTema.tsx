@@ -47,7 +47,7 @@ const ICONE: Record<Tema, React.ReactNode> = {
   scuro: <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" />,
 };
 
-// Tre pulsanti (automatico, chiaro, scuro), ognuno una pillola come «Esci»: stessa altezza, bordo e raggio.
+// Tre pulsanti (automatico, chiaro, scuro) nello stesso stile del selettore della lingua.
 export function SelettoreTema({ className = "" }: { className?: string }) {
   const t = useTranslations("tema");
   // Sul server non si conosce la scelta: si mostra "chiaro" (il predefinito) e si corregge appena carica la pagina.
@@ -57,7 +57,7 @@ export function SelettoreTema({ className = "" }: { className?: string }) {
     window.dispatchEvent(new Event(EVENTO));
   };
   return (
-    <div role="group" aria-label={t("etichetta")} className={`inline-flex items-center gap-1 text-sm ${className}`}>
+    <div role="group" aria-label={t("etichetta")} className={`inline-flex h-9 overflow-hidden rounded-full border border-slate-300 text-sm ${className}`}>
       {TEMI.map((tema) => (
         <button
           key={tema}
@@ -66,7 +66,7 @@ export function SelettoreTema({ className = "" }: { className?: string }) {
           aria-label={t(tema)}
           title={t(tema)}
           onClick={() => scegli(tema)}
-          className={`flex h-9 w-10 items-center justify-center rounded-full border focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground sm:w-11 ${tema === attuale ? "border-foreground bg-foreground text-white" : "border-slate-300 bg-white text-foreground hover:bg-slate-100"}`}
+          className={`flex w-[29px] items-center justify-center ${tema === attuale ? "bg-foreground text-white" : "bg-white text-slate-700 hover:bg-slate-100"}`}
         >
           <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             {ICONE[tema]}
