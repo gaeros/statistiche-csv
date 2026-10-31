@@ -56,7 +56,7 @@ export default async function PaginaBenvenuto() {
             {/* Sul telefono il tema non ci sta nella barra (si sceglie dopo l'accesso): niente scorrimento di lato */}
             <span className="hidden sm:contents"><SelettoreTema /></span>
             <SelettoreLingua nero />
-            <Link href={collegato ? "/dataset" : "/accedi"} className="bottone-nero">
+            <Link href={collegato ? "/dataset" : "/accedi"} className="bottone-nero h-9 py-0">
               {collegato ? t("vaiDati") : t("accedi")}
             </Link>
           </div>
